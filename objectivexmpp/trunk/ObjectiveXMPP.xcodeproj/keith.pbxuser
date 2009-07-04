@@ -1,0 +1,268 @@
+// !$*UTF8*$!
+{
+	0867D690FE84028FC02AAC07 /* Project object */ = {
+		activeArchitecturePreference = x86_64;
+		activeBuildConfigurationName = Debug;
+		activeTarget = 532A42DB0FB4B519006E409F /* ObjectiveXMPP Touch */;
+		addToTargets = (
+			532A42DB0FB4B519006E409F /* ObjectiveXMPP Touch */,
+			8DC2EF4F0486A6940098B216 /* ObjectiveXMPP */,
+		);
+		breakpoints = (
+			53D6A4560FF79E31002E05CC /* XMPPChatService.m:68 */,
+			53D6A4600FF79E3F002E05CC /* XMPPChatService.m:50 */,
+		);
+		codeSenseManager = 532A428B0FB4B48F006E409F /* Code sense */;
+		perUserDictionary = {
+			PBXConfiguration.PBXFileTableDataSource3.PBXFileTableDataSource = {
+				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
+				PBXFileTableDataSourceColumnSortingKey = PBXFileDataSource_Filename_ColumnID;
+				PBXFileTableDataSourceColumnWidthsKey = (
+					20,
+					863,
+					20,
+					48,
+					43,
+					43,
+					20,
+				);
+				PBXFileTableDataSourceColumnsKey = (
+					PBXFileDataSource_FiletypeID,
+					PBXFileDataSource_Filename_ColumnID,
+					PBXFileDataSource_Built_ColumnID,
+					PBXFileDataSource_ObjectSize_ColumnID,
+					PBXFileDataSource_Errors_ColumnID,
+					PBXFileDataSource_Warnings_ColumnID,
+					PBXFileDataSource_Target_ColumnID,
+				);
+			};
+			PBXConfiguration.PBXFileTableDataSource3.PBXFindDataSource = {
+				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
+				PBXFileTableDataSourceColumnSortingKey = PBXFindDataSource_LocationID;
+				PBXFileTableDataSourceColumnWidthsKey = (
+					200,
+					580,
+				);
+				PBXFileTableDataSourceColumnsKey = (
+					PBXFindDataSource_MessageID,
+					PBXFindDataSource_LocationID,
+				);
+			};
+			PBXConfiguration.PBXTargetDataSource.PBXTargetDataSource = {
+				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
+				PBXFileTableDataSourceColumnSortingKey = PBXTargetDataSource_PrimaryAttribute;
+				PBXFileTableDataSourceColumnWidthsKey = (
+					20,
+					823,
+					60,
+					20,
+					48,
+					43,
+					43,
+				);
+				PBXFileTableDataSourceColumnsKey = (
+					PBXFileDataSource_FiletypeID,
+					PBXFileDataSource_Filename_ColumnID,
+					PBXTargetDataSource_PrimaryAttribute,
+					PBXFileDataSource_Built_ColumnID,
+					PBXFileDataSource_ObjectSize_ColumnID,
+					PBXFileDataSource_Errors_ColumnID,
+					PBXFileDataSource_Warnings_ColumnID,
+				);
+			};
+			PBXPerProjectTemplateStateSaveDate = 268409204;
+			PBXWorkspaceStateSaveDate = 268409204;
+		};
+		perUserProjectItems = {
+			53D9CD220FFF9FC0006EF420 /* PBXTextBookmark */ = 53D9CD220FFF9FC0006EF420 /* PBXTextBookmark */;
+			53D9CD230FFF9FC0006EF420 /* PBXTextBookmark */ = 53D9CD230FFF9FC0006EF420 /* PBXTextBookmark */;
+			53D9CD240FFF9FC0006EF420 /* PBXTextBookmark */ = 53D9CD240FFF9FC0006EF420 /* PBXTextBookmark */;
+		};
+		sourceControlManager = 532A428A0FB4B48F006E409F /* Source Control */;
+		userBuildSettings = {
+		};
+	};
+	32DBCF5E0370ADEE00C91783 /* ObjectiveXMPP_Prefix.pch */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1041, 524}}";
+			sepNavSelRange = "{240, 0}";
+			sepNavVisRange = "{0, 248}";
+		};
+	};
+	532A428A0FB4B48F006E409F /* Source Control */ = {
+		isa = PBXSourceControlManager;
+		fallbackIsa = XCSourceControlManager;
+		isSCMEnabled = 0;
+		scmConfiguration = {
+			repositoryNamesForRoots = {
+				"" = "";
+			};
+		};
+	};
+	532A428B0FB4B48F006E409F /* Code sense */ = {
+		isa = PBXCodeSenseManager;
+		indexTemplatePath = "";
+	};
+	532A428C0FB4B495006E409F /* XMPPConnection.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1041, 2158}}";
+			sepNavSelRange = "{11, 10}";
+			sepNavVisRange = "{0, 975}";
+		};
+	};
+	532A428D0FB4B495006E409F /* XMPPConnection.m */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {820, 13247}}";
+			sepNavSelRange = "{4217, 76}";
+			sepNavVisRange = "{4445, 315}";
+		};
+	};
+	532A428E0FB4B495006E409F /* XMPPServer.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1181, 650}}";
+			sepNavSelRange = "{1129, 0}";
+			sepNavVisRange = "{20, 1121}";
+		};
+	};
+	532A428F0FB4B495006E409F /* XMPPServer.m */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {820, 2301}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 174}";
+		};
+	};
+	532A42900FB4B495006E409F /* XMPPDigestAuthentication.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {720, 546}}";
+			sepNavSelRange = "{51, 0}";
+			sepNavVisRange = "{0, 271}";
+		};
+	};
+	532A42910FB4B495006E409F /* XMPPDigestAuthentication.m */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1041, 1950}}";
+			sepNavSelRange = "{240, 0}";
+			sepNavVisRange = "{0, 1485}";
+		};
+	};
+	532A42980FB4B4A4006E409F /* XMPPRoster.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1041, 603}}";
+			sepNavSelRange = "{261, 0}";
+			sepNavVisRange = "{0, 930}";
+		};
+	};
+	532A42990FB4B4A4006E409F /* XMPPRoster.m */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1041, 1144}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 940}";
+		};
+	};
+	532A429D0FB4B4B3006E409F /* XMPPChatService.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {820, 780}}";
+			sepNavSelRange = "{184, 0}";
+			sepNavVisRange = "{0, 593}";
+		};
+	};
+	532A429E0FB4B4B3006E409F /* XMPPChatService.m */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1041, 1534}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 1168}";
+		};
+	};
+	532A42DB0FB4B519006E409F /* ObjectiveXMPP Touch */ = {
+		activeExec = 0;
+	};
+	532A44230FB4B80E006E409F /* ObjectiveXMPP.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1041, 382}}";
+			sepNavSelRange = "{430, 0}";
+			sepNavVisRange = "{0, 430}";
+		};
+	};
+	53D6A4560FF79E31002E05CC /* XMPPChatService.m:68 */ = {
+		isa = PBXFileBreakpoint;
+		actions = (
+		);
+		breakpointStyle = 0;
+		continueAfterActions = 0;
+		countType = 0;
+		delayBeforeContinue = 0;
+		fileReference = 532A429E0FB4B4B3006E409F /* XMPPChatService.m */;
+		hitCount = 0;
+		ignoreCount = 0;
+		lineNumber = 68;
+		location = Bonjour;
+		modificationTime = 268097132.605274;
+		originalNumberOfMultipleMatches = 1;
+		state = 0;
+	};
+	53D6A4600FF79E3F002E05CC /* XMPPChatService.m:50 */ = {
+		isa = PBXFileBreakpoint;
+		actions = (
+		);
+		breakpointStyle = 0;
+		continueAfterActions = 0;
+		countType = 0;
+		delayBeforeContinue = 0;
+		fileReference = 532A429E0FB4B4B3006E409F /* XMPPChatService.m */;
+		functionName = "-updatePresenceWithValuesForKeys:";
+		hitCount = 0;
+		ignoreCount = 0;
+		lineNumber = 50;
+		location = Bonjour;
+		modificationTime = 268097132.605306;
+		originalNumberOfMultipleMatches = 1;
+		state = 2;
+	};
+	53D9CD220FFF9FC0006EF420 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 32DBCF5E0370ADEE00C91783 /* ObjectiveXMPP_Prefix.pch */;
+		name = "ObjectiveXMPP_Prefix.pch: 9";
+		rLen = 0;
+		rLoc = 240;
+		rType = 0;
+		vrLen = 248;
+		vrLoc = 0;
+	};
+	53D9CD230FFF9FC0006EF420 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 532A428D0FB4B495006E409F /* XMPPConnection.m */;
+		name = "XMPPConnection.m: 19";
+		rLen = 0;
+		rLoc = 418;
+		rType = 0;
+		vrLen = 911;
+		vrLoc = 42;
+	};
+	53D9CD240FFF9FC0006EF420 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 532A428D0FB4B495006E409F /* XMPPConnection.m */;
+		name = "XMPPConnection.m: 29";
+		rLen = 0;
+		rLoc = 672;
+		rType = 0;
+		vrLen = 900;
+		vrLoc = 42;
+	};
+	53E10AAA0FF968E5006E39CF /* XMPPConstants.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1041, 603}}";
+			sepNavSelRange = "{220, 0}";
+			sepNavVisRange = "{0, 220}";
+		};
+	};
+	53E10AAB0FF968E5006E39CF /* XMPPConstants.m */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1041, 603}}";
+			sepNavSelRange = "{40, 0}";
+			sepNavVisRange = "{0, 226}";
+		};
+	};
+	8DC2EF4F0486A6940098B216 /* ObjectiveXMPP */ = {
+		activeExec = 0;
+	};
+}
