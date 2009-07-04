@@ -41,6 +41,28 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		5304545010000A2400EA4C1E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5304544710000A2400EA4C1E /* TouchXML.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 457940FF0D82217800EB2D22;
+			remoteInfo = TouchXML_UnitTests;
+		};
+		530454E310000A4C00EA4C1E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5304544710000A2400EA4C1E /* TouchXML.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 530454E010000A4C00EA4C1E;
+			remoteInfo = TouchXML;
+		};
+		5304569710000DD000EA4C1E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5304544710000A2400EA4C1E /* TouchXML.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 5304559C10000AD000EA4C1E /* lib/usr/local/include/TouchXML/private
+.a */;
+			remoteInfo = "TouchXML Touch";
+		};
 		530E26E10FC890E400DBAB3E /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 532A43FD0FB4B7A3006E409F /* Amber.xcodeproj */;
@@ -117,6 +139,7 @@
 		0867D69BFE84028FC02AAC07 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		089C1667FE841158C02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		32DBCF5E0370ADEE00C91783 /* ObjectiveXMPP_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjectiveXMPP_Prefix.pch; sourceTree = "<group>"; };
+		5304544710000A2400EA4C1E /* TouchXML.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = TouchXML.xcodeproj; path = ../TouchXML/TouchXML.xcodeproj; sourceTree = SOURCE_ROOT; };
 		532A428C0FB4B495006E409F /* XMPPConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMPPConnection.h; sourceTree = "<group>"; };
 		532A428D0FB4B495006E409F /* XMPPConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XMPPConnection.m; sourceTree = "<group>"; };
 		532A428E0FB4B495006E409F /* XMPPServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMPPServer.h; sourceTree = "<group>"; };
@@ -185,6 +208,7 @@
 			isa = PBXGroup;
 			children = (
 				532A43FD0FB4B7A3006E409F /* Amber.xcodeproj */,
+				5304544710000A2400EA4C1E /* TouchXML.xcodeproj */,
 				0867D69BFE84028FC02AAC07 /* Foundation.framework */,
 			);
 			name = Frameworks;
@@ -220,6 +244,17 @@
 				53E10AAB0FF968E5006E39CF /* XMPPConstants.m */,
 			);
 			name = "Other Sources";
+			sourceTree = "<group>";
+		};
+		5304544810000A2400EA4C1E /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				530454E410000A4C00EA4C1E /* TouchXML.framework */,
+				5304569810000DD000EA4C1E /* lib/usr/local/include/TouchXML/private
+.a */,
+				5304545110000A2400EA4C1E /* TouchXML_UnitTests.octest */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 		530E26D60FC890E400DBAB3E /* Products */ = {
@@ -336,6 +371,10 @@
 					ProductGroup = 530E26D60FC890E400DBAB3E /* Products */;
 					ProjectRef = 532A43FD0FB4B7A3006E409F /* Amber.xcodeproj */;
 				},
+				{
+					ProductGroup = 5304544810000A2400EA4C1E /* Products */;
+					ProjectRef = 5304544710000A2400EA4C1E /* TouchXML.xcodeproj */;
+				},
 			);
 			projectRoot = "";
 			targets = (
@@ -346,6 +385,28 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
+		5304545110000A2400EA4C1E /* TouchXML_UnitTests.octest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = TouchXML_UnitTests.octest;
+			remoteRef = 5304545010000A2400EA4C1E /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		530454E410000A4C00EA4C1E /* TouchXML.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = TouchXML.framework;
+			remoteRef = 530454E310000A4C00EA4C1E /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		5304569810000DD000EA4C1E /* lib/usr/local/include/TouchXML/private
+.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "lib/usr/local/include/TouchXML/private\n.a";
+			remoteRef = 5304569710000DD000EA4C1E /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		530E26E20FC890E400DBAB3E /* AmberKit.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
