@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		530456C910000E3900EA4C1E /* TouchXML.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 530454E410000A4C00EA4C1E /* TouchXML.framework */; };
 		532A42920FB4B495006E409F /* XMPPConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = 532A428C0FB4B495006E409F /* XMPPConnection.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		532A42930FB4B495006E409F /* XMPPConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 532A428D0FB4B495006E409F /* XMPPConnection.m */; };
 		532A42940FB4B495006E409F /* XMPPServer.h in Headers */ = {isa = PBXBuildFile; fileRef = 532A428E0FB4B495006E409F /* XMPPServer.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -59,8 +60,21 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = 5304544710000A2400EA4C1E /* TouchXML.xcodeproj */;
 			proxyType = 2;
-			remoteGlobalIDString = 5304559C10000AD000EA4C1E /* lib/usr/local/include/TouchXML/private
-.a */;
+			remoteGlobalIDString = 5304559C10000AD000EA4C1E;
+			remoteInfo = "TouchXML Touch";
+		};
+		530456C710000E3500EA4C1E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5304544710000A2400EA4C1E /* TouchXML.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 530454DF10000A4C00EA4C1E /* TouchXML */;
+			remoteInfo = TouchXML;
+		};
+		530456CA10000E4000EA4C1E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5304544710000A2400EA4C1E /* TouchXML.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 5304559B10000AD000EA4C1E /* TouchXML Touch */;
 			remoteInfo = "TouchXML Touch";
 		};
 		530E26E10FC890E400DBAB3E /* PBXContainerItemProxy */ = {
@@ -172,6 +186,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				530456C910000E3900EA4C1E /* TouchXML.framework in Frameworks */,
 				53D6A3410FEE701100800C37 /* AmberFoundation.framework in Frameworks */,
 				53D6A3360FEE6FEE00800C37 /* CoreNetworking.framework in Frameworks */,
 				532A442B0FB4B850006E409F /* Foundation.framework in Frameworks */,
@@ -250,8 +265,7 @@
 			isa = PBXGroup;
 			children = (
 				530454E410000A4C00EA4C1E /* TouchXML.framework */,
-				5304569810000DD000EA4C1E /* lib/usr/local/include/TouchXML/private
-.a */,
+				5304569810000DD000EA4C1E /* libTouchXML.a */,
 				5304545110000A2400EA4C1E /* TouchXML_UnitTests.octest */,
 			);
 			name = Products;
@@ -328,6 +342,7 @@
 			dependencies = (
 				530E26F20FC890F400DBAB3E /* PBXTargetDependency */,
 				53D6A3430FEE701A00800C37 /* PBXTargetDependency */,
+				530456CB10000E4000EA4C1E /* PBXTargetDependency */,
 			);
 			name = "ObjectiveXMPP Touch";
 			productName = "AmberXMPP Touch";
@@ -348,6 +363,7 @@
 			dependencies = (
 				53D6A3350FEE6FE700800C37 /* PBXTargetDependency */,
 				53D6A3400FEE700D00800C37 /* PBXTargetDependency */,
+				530456C810000E3500EA4C1E /* PBXTargetDependency */,
 			);
 			name = ObjectiveXMPP;
 			productInstallPath = "$(HOME)/Library/Frameworks";
@@ -399,11 +415,10 @@
 			remoteRef = 530454E310000A4C00EA4C1E /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		5304569810000DD000EA4C1E /* lib/usr/local/include/TouchXML/private
-.a */ = {
+		5304569810000DD000EA4C1E /* libTouchXML.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
-			path = "lib/usr/local/include/TouchXML/private\n.a";
+			path = libTouchXML.a;
 			remoteRef = 5304569710000DD000EA4C1E /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
@@ -492,6 +507,16 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		530456C810000E3500EA4C1E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = TouchXML;
+			targetProxy = 530456C710000E3500EA4C1E /* PBXContainerItemProxy */;
+		};
+		530456CB10000E4000EA4C1E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "TouchXML Touch";
+			targetProxy = 530456CA10000E4000EA4C1E /* PBXContainerItemProxy */;
+		};
 		530E26F20FC890F400DBAB3E /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = "CoreNetworking Touch";
@@ -604,14 +629,11 @@
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				HEADER_SEARCH_PATHS = (
-					"\"$CONFIGURATION_BUILD_DIR\"/usr//**",
-					"/usr/include/libxml2/**",
-				);
+				HEADER_SEARCH_PATHS = "\"$CONFIGURATION_BUILD_DIR\"/usr/**";
 				PREBINDING = NO;
 				PRIVATE_HEADERS_FOLDER_PATH = $PUBLIC_HEADERS_FOLDER_PATH/private;
 				PRODUCT_NAME = ObjectiveXMPP;
-				PUBLIC_HEADERS_FOLDER_PATH = /usr/local/include/AmberXMPP;
+				PUBLIC_HEADERS_FOLDER_PATH = "/usr/local/include/$(PRODUCT_NAME)";
 			};
 			name = Debug;
 		};
@@ -622,14 +644,11 @@
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				HEADER_SEARCH_PATHS = (
-					"\"$CONFIGURATION_BUILD_DIR\"/usr//**",
-					"/usr/include/libxml2/**",
-				);
+				HEADER_SEARCH_PATHS = "\"$CONFIGURATION_BUILD_DIR\"/usr/**";
 				PREBINDING = NO;
 				PRIVATE_HEADERS_FOLDER_PATH = $PUBLIC_HEADERS_FOLDER_PATH/private;
 				PRODUCT_NAME = ObjectiveXMPP;
-				PUBLIC_HEADERS_FOLDER_PATH = /usr/local/include/AmberXMPP;
+				PUBLIC_HEADERS_FOLDER_PATH = "/usr/local/include/$(PRODUCT_NAME)";
 				ZERO_LINK = NO;
 			};
 			name = Release;
