@@ -128,8 +128,7 @@
 		45D114E30EC9F658005193F9 /* CXMLNode_Debugging.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CXMLNode_Debugging.m; sourceTree = "<group>"; };
 		530454E010000A4C00EA4C1E /* TouchXML.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = TouchXML.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		530454E110000A4C00EA4C1E /* TouchXML-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "TouchXML-Info.plist"; sourceTree = "<group>"; };
-		5304559C10000AD000EA4C1E /* lib/usr/local/include/TouchXML/private
-.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "lib/usr/local/include/TouchXML/private\n.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		5304559C10000AD000EA4C1E /* libTouchXML.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libTouchXML.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		5304564910000B7A00EA4C1E /* CXMLElement_ElementTreeExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CXMLElement_ElementTreeExtensions.h; sourceTree = "<group>"; };
 		5304564A10000B7A00EA4C1E /* CXMLElement_ElementTreeExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CXMLElement_ElementTreeExtensions.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -185,8 +184,7 @@
 			children = (
 				457940FF0D82217800EB2D22 /* TouchXML_UnitTests.octest */,
 				530454E010000A4C00EA4C1E /* TouchXML.framework */,
-				5304559C10000AD000EA4C1E /* lib/usr/local/include/TouchXML/private
-.a */,
+				5304559C10000AD000EA4C1E /* libTouchXML.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -427,8 +425,7 @@
 			);
 			name = "TouchXML Touch";
 			productName = "TouchXML Touch";
-			productReference = 5304559C10000AD000EA4C1E /* lib/usr/local/include/TouchXML/private
-.a */;
+			productReference = 5304559C10000AD000EA4C1E /* libTouchXML.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 /* End PBXNativeTarget section */
@@ -844,7 +841,8 @@
 					"/usr/include/libxml2/**",
 				);
 				PREBINDING = NO;
-				PRODUCT_NAME = "$(PUBLIC_HEADERS_FOLDER_PATH)/private\n";
+				PRIVATE_HEADERS_FOLDER_PATH = "$(PUBLIC_HEADERS_FOLDER_PATH)/private";
+				PRODUCT_NAME = TouchXML;
 				PUBLIC_HEADERS_FOLDER_PATH = /usr/local/include/TouchXML;
 			};
 			name = Debug;
@@ -861,7 +859,8 @@
 					"/usr/include/libxml2/**",
 				);
 				PREBINDING = NO;
-				PRODUCT_NAME = "$(PUBLIC_HEADERS_FOLDER_PATH)/private\n";
+				PRIVATE_HEADERS_FOLDER_PATH = "$(PUBLIC_HEADERS_FOLDER_PATH)/private";
+				PRODUCT_NAME = TouchXML;
 				PUBLIC_HEADERS_FOLDER_PATH = /usr/local/include/TouchXML;
 				ZERO_LINK = NO;
 			};
@@ -876,7 +875,8 @@
 					"/usr/include/libxml2/**",
 				);
 				PREBINDING = NO;
-				PRODUCT_NAME = "$(PUBLIC_HEADERS_FOLDER_PATH)/private\n";
+				PRIVATE_HEADERS_FOLDER_PATH = "$(PUBLIC_HEADERS_FOLDER_PATH)/private";
+				PRODUCT_NAME = TouchXML;
 				PUBLIC_HEADERS_FOLDER_PATH = /usr/local/include/TouchXML;
 			};
 			name = Coverage;
