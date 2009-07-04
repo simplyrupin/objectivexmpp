@@ -6,5 +6,7 @@
     #import <Cocoa/Cocoa.h>
 	
 	#import "AmberFoundation/AmberFoundation.h"
-	#import "CoreNetworking/CoreNetworking.h>
+	#import "CoreNetworking/CoreNetworking.h"
+
+	#import "TouchXML/TouchXML.h"
 #endif
