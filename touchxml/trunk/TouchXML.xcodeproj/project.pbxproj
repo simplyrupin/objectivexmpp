@@ -60,7 +60,7 @@
 		5304563310000B0F00EA4C1E /* CXMLNode_XPathExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 45AA86A40DAB1D08008827B0 /* CXMLNode_XPathExtensions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5304563410000B0F00EA4C1E /* CXMLNode_XPathExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 45AA86A50DAB1D08008827B0 /* CXMLNode_XPathExtensions.m */; };
 		5304563510000B1000EA4C1E /* TouchXML.h in Headers */ = {isa = PBXBuildFile; fileRef = 45AA24120E280F9700E12B55 /* TouchXML.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		5304564B10000B7A00EA4C1E /* CXMLElement_ElementTreeExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 5304564910000B7A00EA4C1E /* CXMLElement_ElementTreeExtensions.h */; };
+		5304564B10000B7A00EA4C1E /* CXMLElement_ElementTreeExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 5304564910000B7A00EA4C1E /* CXMLElement_ElementTreeExtensions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5304564C10000B7A00EA4C1E /* CXMLElement_ElementTreeExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 5304564A10000B7A00EA4C1E /* CXMLElement_ElementTreeExtensions.m */; };
 		5304564D10000B7A00EA4C1E /* CXMLElement_ElementTreeExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 5304564910000B7A00EA4C1E /* CXMLElement_ElementTreeExtensions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5304564E10000B7A00EA4C1E /* CXMLElement_ElementTreeExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 5304564A10000B7A00EA4C1E /* CXMLElement_ElementTreeExtensions.m */; };
