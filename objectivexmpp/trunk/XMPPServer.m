@@ -8,6 +8,9 @@
 
 #import "XMPPServer.h"
 
+#import "AmberFoundation/AmberFoundation.h"
+#import "TouchXML/TouchXML.h"
+
 #import "XMPPConnection.h"
 
 #warning this class should write to an error log, take a look at ASL
@@ -52,14 +55,14 @@
 }
 
 - (void)notifySubscribersForNode:(NSString *)nodeName withPayload:(NSArray *)itemElements {
-	DDXMLElement *itemsElement = [DDXMLElement elementWithName:@"items"];
+	CXMLElement *itemsElement = [CXMLElement elementWithName:@"items"];
 	[itemsElement addAttributeWithName:@"node" stringValue:nodeName];
 	[itemsElement setChildren:itemElements];
 	
-	DDXMLElement *eventElement = [DDXMLElement elementWithName:@"event" xmlns:@"http://jabber.org/protocol/pubsub#event"];
+	CXMLElement *eventElement = [CXMLElement elementWithName:@"event" xmlns:@"http://jabber.org/protocol/pubsub#event"];
 	[eventElement addChild:itemsElement];
 	
-	DDXMLElement *messageElement = [DDXMLElement elementWithName:@"message"];
+	CXMLElement *messageElement = [CXMLElement elementWithName:@"message"];
 	[messageElement addChild:eventElement];
 	
 	NSSet *subscribers = [self _subscriptionsForNodeName:nodeName];
@@ -96,14 +99,14 @@
 	[super layerDidClose:layer];
 }
 
-- (void)connection:(XMPPConnection *)layer didReceiveIQ:(id)iq {
+- (void)connection:(XMPPConnection *)layer didReceiveIQ:(CXMLElement *)iq {
 	NSMutableArray *pubsubElements = [[[iq children] mutableCopy] autorelease];
-	for (DDXMLElement *currentElement in [[pubsubElements copy] autorelease])
+	for (CXMLElement *currentElement in [[pubsubElements copy] autorelease])
 		if (![[currentElement name] isEqualToString:@"pubsub"]) continue;
 	
 	if ([pubsubElements count] != 1) return;
 	
-	DDXMLElement *pubsubChildElement = [pubsubElements objectAtIndex:0];
+	CXMLElement *pubsubChildElement = [pubsubElements objectAtIndex:0];
 	if (pubsubChildElement == nil) return;
 	
 	NSString *nodeName = [[pubsubChildElement attributeForName:@"node"] stringValue];
@@ -113,18 +116,16 @@
 	
 	if ([[[pubsubChildElement name] lowercaseString] isEqualToString:@"subscribe"]) {
 		[subscriptions addObject:subscribingNode];
-		
-		[layer awknowledgeElement:iq];
 	} else if ([[[pubsubChildElement name] lowercaseString] isEqualToString:@"unsubscribe"]) {
 		[subscriptions removeObject:subscribingNode];
-		
-		[layer awknowledgeElement:iq];
 	}
+	
+	[layer awknowledgeElement:iq];
 }
 
-- (void)connection:(XMPPConnection *)layer didReceiveMessage:(id)message {
+- (void)connection:(XMPPConnection *)layer didReceiveMessage:(CXMLElement *)message {
 	NSString *fromJID = nil;
-	DDXMLNode *fromAttribute = [message attributeForName:@"from"];
+	CXMLNode *fromAttribute = [message attributeForName:@"from"];
 	
 	if (fromAttribute != nil) {
 		fromJID = [fromAttribute stringValue];

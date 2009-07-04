@@ -8,7 +8,7 @@
 
 #import "CoreNetworking/AFNetworkConnection.h"
 
-@class DDXMLElement;
+@class CXMLElement;
 
 @protocol XMPPConnectionDelegate;
 
@@ -30,7 +30,7 @@ extern NSString *const XMPPAuthenticationSchemeDigestMD5;
 	NSString *_authUsername, *_authResource, *_tempPassword;
 	BOOL _authenticated;
 	
-	DDXMLElement *_rootElement;
+	CXMLElement *_rootElement;
 	
 	NSTimer *keepAliveTimer;
 }
@@ -61,7 +61,7 @@ extern NSString *const XMPPAuthenticationSchemeDigestMD5;
 	@result
 	See <tt>-sendElement:forTag:</tt>
  */
-- (NSString *)sendElement:(id)element;
+- (NSString *)sendElement:(CXMLElement *)element;
 
 /*! 
 	@brief
@@ -70,7 +70,7 @@ extern NSString *const XMPPAuthenticationSchemeDigestMD5;
 	@result
 	The id attribute of the message, allowing you to track the response.
  */
-- (NSString *)sendElement:(id)element forTag:(NSInteger)tag;
+- (NSString *)sendElement:(CXMLElement *)element forTag:(NSInteger)tag;
 
 /*!
 	@brief
@@ -79,7 +79,7 @@ extern NSString *const XMPPAuthenticationSchemeDigestMD5;
 	@param |JID|
 	If nil this sends the message to the connected endpoint.
  */
-- (void)sendMessage:(NSString *)content to:(NSString *)JID;
+- (CXMLElement *)sendMessage:(NSString *)content to:(NSString *)JID;
 
 /*!
 	@brief
@@ -101,17 +101,17 @@ extern NSString *const XMPPAuthenticationSchemeDigestMD5;
 	Given an IQ element, you'll typically return a response.
 	This is simply an awknowledgement, no other data is included in the stanza.
  */
-- (void)awknowledgeElement:(id)iq;
+- (void)awknowledgeElement:(CXMLElement *)iq;
 
 /*
  * Note: override points for XMPP extensions
  */
 
-- (void)connectionDidReceiveElement:(id)element; // Note: general override point, this where the element pattern matching is performed to call the specific handler methods
+- (void)connectionDidReceiveElement:(CXMLElement *)element; // Note: general override point, this where the element pattern matching is performed to call the specific handler methods
 
-- (void)connectionDidReceiveIQ:(id)iq;
-- (void)connectionDidReceiveMessage:(id)message;
-- (void)connectionDidReceivePresence:(id)presence; // Note: these attempt to call the specific delegate method and fallback to the general one
+- (void)connectionDidReceiveIQ:(CXMLElement *)iq;
+- (void)connectionDidReceiveMessage:(CXMLElement *)message;
+- (void)connectionDidReceivePresence:(CXMLElement *)presence; // Note: these attempt to call the specific delegate method and fallback to the general one
 
 @end
 
@@ -128,7 +128,7 @@ extern NSString *const XMPPAuthenticationSchemeDigestMD5;
 /**
  * This method is called if registration fails.
 **/
-- (void)connection:(XMPPConnection *)sender didNotRegister:(id)errorElement;
+- (void)connection:(XMPPConnection *)sender didNotRegister:(CXMLElement *)errorElement;
 
 /**
  * This method is called after authentication has successfully finished.
@@ -139,19 +139,19 @@ extern NSString *const XMPPAuthenticationSchemeDigestMD5;
 /**
  * This method is called if authentication fails.
 **/
-- (void)connection:(XMPPConnection *)sender didNotAuthenticate:(id)errorElement;
+- (void)connection:(XMPPConnection *)sender didNotAuthenticate:(CXMLElement *)errorElement;
 
 /**
  * These methods are called after an instance of their respective stanza is received.
 **/
-- (void)connection:(XMPPConnection *)layer didReceiveIQ:(id)iq;
-- (void)connection:(XMPPConnection *)layer didReceiveMessage:(id)message;
-- (void)connection:(XMPPConnection *)layer didReceivePresence:(id)presence;
+- (void)connection:(XMPPConnection *)layer didReceiveIQ:(CXMLElement *)iq;
+- (void)connection:(XMPPConnection *)layer didReceiveMessage:(CXMLElement *)message;
+- (void)connection:(XMPPConnection *)layer didReceivePresence:(CXMLElement *)presence;
 
 /*!
 	@brief
 	This is a fall through and is only called if the specific stanza handling methods aren't implemented.
  */
-- (void)connection:(XMPPConnection *)layer didReceiveElement:(id)element;
+- (void)connection:(XMPPConnection *)layer didReceiveElement:(CXMLElement *)element;
 
 @end

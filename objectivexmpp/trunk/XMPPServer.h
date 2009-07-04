@@ -10,7 +10,7 @@
 
 #import "CoreNetworking/AFNetworkServer.h"
 
-@class DDXMLElement;
+@class CXMLElement;
 @class XMPPConnection;
 
 @protocol XMPPServerDelegate;
@@ -44,6 +44,6 @@
 /*!
 	@brief
  */
-- (BOOL)server:(XMPPServer *)server shouldForwardMessage:(DDXMLElement *)message fromNode:(NSString *)JID toNode:(NSString *)JID; // Note: assumes YES if unimplemented
+- (BOOL)server:(XMPPServer *)server shouldForwardMessage:(CXMLElement *)message fromNode:(NSString *)JID toNode:(NSString *)JID; // Note: assumes YES if unimplemented
 
 @end

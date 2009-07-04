@@ -16,7 +16,7 @@
 #endif
 #import "AmberFoundation/AmberFoundation.h"
 #import "CoreNetworking/CoreNetworking.h"
-#import <libxml/>
+#import "TouchXML/TouchXML.h"
 
 NSString *const XMPPAuthenticationSchemePLAIN = @"PLAIN";
 NSString *const XMPPAuthenticationSchemeDigestMD5 = @"DIGEST-MD5";
@@ -60,7 +60,7 @@ enum {
 @interface XMPPConnection ()
 @property (readwrite, assign, getter=isAuthenticated) BOOL authenticated;
 @property (readwrite, copy) NSString *authenticatedUsername, *authenticatedResource, *temporaryPassword;
-- (NSString *)_sendElement:(DDXMLElement *)element tag:(NSInteger)tag;
+- (NSString *)_sendElement:(CXMLElement *)element tag:(NSInteger)tag;
 - (void)performRead;
 - (void)_readOpeningNegotiation;
 @end
@@ -69,12 +69,12 @@ enum {
 - (void)_streamDidOpen;
 - (void)_sendOpeningNegotiation;
 - (void)_handleStreamFeatures;
-- (void)_handleStartTLSResponse:(DDXMLElement *)response;
-- (void)_handleRegistration:(DDXMLElement *)response;
-- (void)_handleAuth1:(DDXMLElement *)response;
-- (void)_handleAuth2:(DDXMLElement *)response;
-- (void)_handleBinding:(DDXMLElement *)response;
-- (void)_handleStartSessionResponse:(DDXMLElement *)response;
+- (void)_handleStartTLSResponse:(CXMLElement *)response;
+- (void)_handleRegistration:(CXMLElement *)response;
+- (void)_handleAuth1:(CXMLElement *)response;
+- (void)_handleAuth2:(CXMLElement *)response;
+- (void)_handleBinding:(CXMLElement *)response;
+- (void)_handleStartSessionResponse:(CXMLElement *)response;
 - (void)_keepAlive:(NSTimer *)timer;
 @end
 
@@ -156,7 +156,7 @@ enum {
 #pragma mark -
 #pragma mark Stream Introspection
 
-- (DDXMLElement *)rootElement {
+- (CXMLElement *)rootElement {
 	return _rootElement;
 }
 
@@ -172,8 +172,8 @@ enum {
 - (BOOL)supportsInBandRegistration {
 	if (![self isOpen]) return NO;
 	
-	DDXMLElement *features = [_rootElement elementForName:@"stream:features"];
-	DDXMLElement *reg = [features elementForName:@"register" xmlns:@"http://jabber.org/features/iq-register"];
+	CXMLElement *features = [_rootElement elementForName:@"stream:features"];
+	CXMLElement *reg = [features elementForName:@"register" xmlns:@"http://jabber.org/features/iq-register"];
 	return (reg != nil);
 }
 
@@ -187,11 +187,11 @@ enum {
 		return;
 	}
 	
-	DDXMLElement *queryElement = [DDXMLElement elementWithName:@"query" xmlns:@"jabber:iq:register"];
-	[queryElement addChild:[DDXMLElement elementWithName:@"username" stringValue:username]];
-	[queryElement addChild:[DDXMLElement elementWithName:@"password" stringValue:password]];
+	CXMLElement *queryElement = [CXMLElement elementWithName:@"query" xmlns:@"jabber:iq:register"];
+	[queryElement addChild:[CXMLElement elementWithName:@"username" stringValue:username]];
+	[queryElement addChild:[CXMLElement elementWithName:@"password" stringValue:password]];
 	
-	DDXMLElement *iqElement = [DDXMLElement elementWithName:@"iq"];
+	CXMLElement *iqElement = [CXMLElement elementWithName:@"iq"];
 	[iqElement addAttributeWithName:@"type" stringValue:@"set"];
 	[iqElement addChild:queryElement];
 	
@@ -210,8 +210,8 @@ enum {
 	// are received, and TLS has been setup (if needed/required)
 	if (sendState > _StreamStartTLS) {
 #warning the stream:features should be cached and that queried, not the state
-		DDXMLElement *features = [_rootElement elementForName:@"stream:features"];
-		DDXMLElement *mech = [features elementForName:@"mechanisms" xmlns:@"urn:ietf:params:xml:ns:xmpp-sasl"];
+		CXMLElement *features = [_rootElement elementForName:@"stream:features"];
+		CXMLElement *mech = [features elementForName:@"mechanisms" xmlns:@"urn:ietf:params:xml:ns:xmpp-sasl"];
 		
 		NSArray *mechanisms = [mech elementsForName:@"mechanism"];
 		
@@ -259,7 +259,7 @@ enum {
 		NSString *payload = [NSString stringWithFormat:@"%C%@%C%@", 0, username, 0, password, nil];
 		NSString *base64 = [[payload dataUsingEncoding:NSUTF8StringEncoding] base64String];
 		
-		DDXMLElement *auth = [DDXMLElement elementWithName:@"auth" xmlns:@"urn:ietf:params:xml:ns:xmpp-sasl"];
+		CXMLElement *auth = [CXMLElement elementWithName:@"auth" xmlns:@"urn:ietf:params:xml:ns:xmpp-sasl"];
 		[auth addAttributeWithName:@"mechanism" stringValue:@"PLAIN"];
 		[auth setStringValue:base64];
 		
@@ -281,12 +281,12 @@ enum {
 		
 		NSString *digest = [[digestData SHA1Hash] hexString];
 		
-		DDXMLElement *queryElement = [DDXMLElement elementWithName:@"query" xmlns:@"jabber:iq:auth"];
-		[queryElement addChild:[DDXMLElement elementWithName:@"username" stringValue:username]];
-		[queryElement addChild:[DDXMLElement elementWithName:@"digest" stringValue:digest]];
-		[queryElement addChild:[DDXMLElement elementWithName:@"resource" stringValue:resource]];
+		CXMLElement *queryElement = [CXMLElement elementWithName:@"query" xmlns:@"jabber:iq:auth"];
+		[queryElement addChild:[CXMLElement elementWithName:@"username" stringValue:username]];
+		[queryElement addChild:[CXMLElement elementWithName:@"digest" stringValue:digest]];
+		[queryElement addChild:[CXMLElement elementWithName:@"resource" stringValue:resource]];
 		
-		DDXMLElement *iqElement = [DDXMLElement elementWithName:@"iq"];
+		CXMLElement *iqElement = [CXMLElement elementWithName:@"iq"];
 		[iqElement addAttributeWithName:@"type" stringValue:@"set"];
 		[iqElement addChild:queryElement];
 		
@@ -304,11 +304,11 @@ enum {
 #pragma mark -
 #pragma mark Writing Methods
 
-- (NSString *)sendElement:(DDXMLElement *)element {
+- (NSString *)sendElement:(CXMLElement *)element {
 	return [self sendElement:element forTag:XCWriteStreamTag];
 }
 
-- (NSString *)sendElement:(DDXMLElement *)element forTag:(NSInteger)tag {
+- (NSString *)sendElement:(CXMLElement *)element forTag:(NSInteger)tag {
 	if (![self isOpen]) {
 		NSDictionary *queuedElement = [NSDictionary dictionaryWithObjectsAndKeys:
 									   element, @"element",
@@ -327,7 +327,7 @@ enum {
 	This method should be used for internal writes, since it doesn't check to see if the stream is open.
 	External element sends are queued until the stream is opened.
  */
-- (NSString *)_sendElement:(DDXMLElement *)element tag:(NSInteger)tag {
+- (NSString *)_sendElement:(CXMLElement *)element tag:(NSInteger)tag {
 	NSString *identifier = [[element attributeForName:@"id"] stringValue];
 	
 	if (identifier == nil) {
@@ -344,18 +344,18 @@ enum {
 	return identifier;
 }
 
-- (void)awknowledgeElement:(DDXMLElement *)iq {
+- (void)awknowledgeElement:(CXMLElement *)iq {
 	NSAssert([[[iq name] lowercaseString] isEqualToString:@"iq"], ([NSString stringWithFormat:@"%@ shouldn't be attempting to awknowledge a stanza name %@", self, [iq name], nil]));
 	
-	DDXMLElement *response = [DDXMLElement elementWithName:[iq name]];
+	CXMLElement *response = [CXMLElement elementWithName:[iq name]];
 	[response addAttribute:[iq attributeForName:@"id"]];
 }
 
-- (DDXMLElement *)sendMessage:(NSString *)content to:(NSString *)JID {
-	DDXMLElement *bodyElement = [DDXMLElement elementWithName:@"body"];
+- (CXMLElement *)sendMessage:(NSString *)content to:(NSString *)JID {
+	CXMLElement *bodyElement = [CXMLElement elementWithName:@"body"];
 	[bodyElement setStringValue:content];
 	
-	DDXMLElement *messageElement = [DDXMLElement elementWithName:@"message"];
+	CXMLElement *messageElement = [CXMLElement elementWithName:@"message"];
 	if (JID != nil) [messageElement addAttributeWithName:@"to" stringValue:JID];
 	[messageElement addChild:bodyElement];
 	
@@ -364,17 +364,17 @@ enum {
 	return messageElement;
 }
 
-- (DDXMLElement *)_pubsubElement:(NSString *)method node:(NSString *)name {
+- (CXMLElement *)_pubsubElement:(NSString *)method node:(NSString *)name {
 	static NSString *const _XMPPNamespacePubSub = @"http://jabber.org/protocol/pubsub";
 	
-	DDXMLElement *methodElement = [DDXMLElement elementWithName:method];
+	CXMLElement *methodElement = [CXMLElement elementWithName:method];
 	[methodElement addAttributeWithName:@"node" stringValue:name];
 	[methodElement addAttributeWithName:@"jid" stringValue:self.local];
 	
-	DDXMLElement *pubsubElement = [DDXMLElement elementWithName:@"pubsub" xmlns:_XMPPNamespacePubSub];
+	CXMLElement *pubsubElement = [CXMLElement elementWithName:@"pubsub" xmlns:_XMPPNamespacePubSub];
 	[pubsubElement addChild:methodElement];
 	
-	DDXMLElement *iqElement = [DDXMLElement elementWithName:@"iq"];
+	CXMLElement *iqElement = [CXMLElement elementWithName:@"iq"];
 	[iqElement addAttributeWithName:@"type" stringValue:@"set"];
 	[iqElement addChild:pubsubElement];
 	
@@ -382,12 +382,12 @@ enum {
 }
 
 - (void)subscribe:(NSString *)nodeName {
-	DDXMLElement *subscribe = [self _pubsubElement:@"subscribe" node:nodeName];
+	CXMLElement *subscribe = [self _pubsubElement:@"subscribe" node:nodeName];
 	[self sendElement:subscribe];
 }
 
 - (void)unsubscribe:(NSString *)nodename {
-	DDXMLElement *unsubscribe = [self _pubsubElement:@"unsubscribe" node:nodename];
+	CXMLElement *unsubscribe = [self _pubsubElement:@"unsubscribe" node:nodename];
 	[self sendElement:unsubscribe];
 }
 
@@ -408,7 +408,7 @@ enum {
 
 #pragma mark -
 
-- (void)_connectionDidReceiveElement:(DDXMLElement *)element {
+- (void)_connectionDidReceiveElement:(CXMLElement *)element {
 	switch (receiveState) {
 		case _StreamConnected:
 		{
@@ -445,7 +445,7 @@ enum {
 	}
 }
 
-- (void)connectionDidReceiveElement:(DDXMLElement *)element {
+- (void)connectionDidReceiveElement:(CXMLElement *)element {
 	if ([[element name] isEqualToString:@"iq"]) {
 		[self connectionDidReceiveIQ:element];
 	} else if ([[element name] isEqualToString:@"message"]) {
@@ -458,7 +458,7 @@ enum {
 	}
 }
 
-- (void)_forwardElement:(DDXMLElement *)element selector:(SEL)selector {
+- (void)_forwardElement:(CXMLElement *)element selector:(SEL)selector {
 	if ([self.delegate respondsToSelector:selector]) {
 		NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:[(id)self.delegate methodSignatureForSelector:selector]];
 		
@@ -474,15 +474,15 @@ enum {
 	}
 }
 
-- (void)connectionDidReceiveIQ:(DDXMLElement *)iq {
+- (void)connectionDidReceiveIQ:(CXMLElement *)iq {
 	[self _forwardElement:iq selector:@selector(connection:didReceiveIQ:)];
 }
 
-- (void)connectionDidReceiveMessage:(DDXMLElement *)message {
+- (void)connectionDidReceiveMessage:(CXMLElement *)message {
 	[self _forwardElement:message selector:@selector(connection:didReceiveMessage:)];
 }
 
-- (void)connectionDidReceivePresence:(DDXMLElement *)presence {
+- (void)connectionDidReceivePresence:(CXMLElement *)presence {
 	[self _forwardElement:presence selector:@selector(connection:didReceivePresence:)];
 }
 
@@ -499,9 +499,9 @@ enum {
 		[super performWrite:[s1 dataUsingEncoding:NSUTF8StringEncoding] forTag:XCWriteStartTag withTimeout:TIMEOUT_WRITE];
 	}
 	
-	DDXMLElement *streamElement = [DDXMLElement elementWithName:@"stream:stream" xmlns:@"jabber:client"];
+	CXMLElement *streamElement = [CXMLElement elementWithName:@"stream:stream" xmlns:@"jabber:client"];
 	
-	DDXMLNode *streamNamespace = [DDXMLNode namespaceWithName:@"stream" stringValue:@"http://etherx.jabber.org/streams"];
+	CXMLNode *streamNamespace = [CXMLNode namespaceWithName:@"stream" stringValue:@"http://etherx.jabber.org/streams"];
 	[streamElement addNamespace:streamNamespace];
 	
 	NSMutableString *streamElementString = [[streamElement XMLString] mutableCopy];
@@ -535,11 +535,11 @@ enum {
  **/
 - (void)_handleStreamFeatures {
 	// Extract the stream features
-	DDXMLElement *features = [_rootElement elementForName:@"stream:features"];
+	CXMLElement *features = [_rootElement elementForName:@"stream:features"];
 	
 	// Check to see if TLS is required
-	// Don't forget about that DDXMLElement bug you reported to apple (xmlns is required or element won't be found)
-	DDXMLElement *f_starttls = [features elementForName:@"starttls" xmlns:@"urn:ietf:params:xml:ns:xmpp-tls"];
+	// Don't forget about that CXMLElement bug you reported to apple (xmlns is required or element won't be found)
+	CXMLElement *f_starttls = [features elementForName:@"starttls" xmlns:@"urn:ietf:params:xml:ns:xmpp-tls"];
 	
 	if (f_starttls != nil) {
 		if ([f_starttls elementForName:@"required"] != nil) {
@@ -554,8 +554,8 @@ enum {
 	}
 	
 	// Check to see if resource binding is required
-	// Don't forget about that DDXMLElement bug you reported to apple (xmlns is required or element won't be found)
-	DDXMLElement *f_bind = [features elementForName:@"bind" xmlns:@"urn:ietf:params:xml:ns:xmpp-bind"];
+	// Don't forget about that CXMLElement bug you reported to apple (xmlns is required or element won't be found)
+	CXMLElement *f_bind = [features elementForName:@"bind" xmlns:@"urn:ietf:params:xml:ns:xmpp-bind"];
 	
 	if (f_bind != nil) {
 		// Binding is required for this connection
@@ -564,22 +564,22 @@ enum {
 		if ([self.authenticatedResource length] > 0) {
 			// Ask the server to bind the user specified resource
 			
-			DDXMLElement *resource = [DDXMLElement elementWithName:@"resource"];
+			CXMLElement *resource = [CXMLElement elementWithName:@"resource"];
 			[resource setStringValue:self.authenticatedResource];
 			
-			DDXMLElement *bind = [DDXMLElement elementWithName:@"bind" xmlns:@"urn:ietf:params:xml:ns:xmpp-bind"];
+			CXMLElement *bind = [CXMLElement elementWithName:@"bind" xmlns:@"urn:ietf:params:xml:ns:xmpp-bind"];
 			[bind addChild:resource];
 			
-			DDXMLElement *iqElement = [DDXMLElement elementWithName:@"iq"];
+			CXMLElement *iqElement = [CXMLElement elementWithName:@"iq"];
 			[iqElement addAttributeWithName:@"type" stringValue:@"set"];
 			[iqElement addChild:bind];
 			
 			[self sendElement:iqElement forTag:XCWriteStreamTag];
 		} else {
 			// The user didn't specify a resource, so we ask the server to bind one for us
-			DDXMLElement *bind = [DDXMLElement elementWithName:@"bind" xmlns:@"urn:ietf:params:xml:ns:xmpp-bind"];
+			CXMLElement *bind = [CXMLElement elementWithName:@"bind" xmlns:@"urn:ietf:params:xml:ns:xmpp-bind"];
 			
-			DDXMLElement *iqElement = [DDXMLElement elementWithName:@"iq"];
+			CXMLElement *iqElement = [CXMLElement elementWithName:@"iq"];
 			[iqElement addAttributeWithName:@"type" stringValue:@"set"];
 			[iqElement addChild:bind];
 			
@@ -601,7 +601,7 @@ enum {
 	}
 }
 
-- (void)_handleStartTLSResponse:(DDXMLElement *)response {
+- (void)_handleStartTLSResponse:(CXMLElement *)response {
 	// We're expecting a proceed response
 	// If we get anything else we can safely assume it's the equivalent of a failure response
 	if (![[response name] isEqualToString:@"proceed"]) {
@@ -621,7 +621,7 @@ enum {
  * After the registerUser:withPassword: method is invoked, a registration message is sent to the server.
  * We're waiting for the result from this registration request.
  **/
-- (void)_handleRegistration:(DDXMLElement *)response {
+- (void)_handleRegistration:(CXMLElement *)response {
 	if ([[[response attributeForName:@"type"] stringValue] isEqualToString:@"error"]) {
 		// Revert back to connected state (from authenticating state)
 		receiveState = _StreamConnected;
@@ -645,7 +645,7 @@ enum {
  * Now if digest-md5 was used, we sent a challenge request, and we're waiting for a challenge response.
  * If plain sasl was used, we sent our authentication information, and we're waiting for a success response.
  **/
-- (void)_handleAuth1:(DDXMLElement *)response {
+- (void)_handleAuth1:(CXMLElement *)response {
 	if ([self supportsAuthentication:XMPPAuthenticationSchemeDigestMD5]) {
 		// We're expecting a challenge response
 		// If we get anything else we can safely assume it's the equivalent of a failure response
@@ -671,7 +671,7 @@ enum {
 			[auth setUsername:self.authenticatedUsername password:self.temporaryPassword];
 			
 			// Create and send challenge response element
-			DDXMLElement *cr = [DDXMLElement elementWithName:@"response" xmlns:@"urn:ietf:params:xml:ns:xmpp-sasl"];
+			CXMLElement *cr = [CXMLElement elementWithName:@"response" xmlns:@"urn:ietf:params:xml:ns:xmpp-sasl"];
 			[cr setStringValue:[auth base64EncodedFullResponse]];
 			
 			[self sendElement:cr forTag:XCWriteStreamTag];
@@ -720,7 +720,7 @@ enum {
 /**
  * This method handles the result of our challenge response we sent in handleAuth1 using digest-md5 sasl.
  **/
-- (void)_handleAuth2:(DDXMLElement *)response {
+- (void)_handleAuth2:(CXMLElement *)response {
 	if ([[response name] isEqualToString:@"challenge"]) {
 		XMPPDigestAuthentication *auth = [[[XMPPDigestAuthentication alloc] initWithChallenge:response] autorelease];
 		
@@ -739,7 +739,7 @@ enum {
 			// but many implementations incorrectly send it inside a second challenge request.
 			
 			// Create and send empty challenge response element
-			DDXMLElement *cr = [DDXMLElement elementWithName:@"response" xmlns:@"urn:ietf:params:xml:ns:xmpp-sasl"];
+			CXMLElement *cr = [CXMLElement elementWithName:@"response" xmlns:@"urn:ietf:params:xml:ns:xmpp-sasl"];
 			
 			[self sendElement:cr forTag:XCWriteStreamTag];
 			
@@ -762,9 +762,9 @@ enum {
 	}
 }
 
-- (void)_handleBinding:(DDXMLElement *)response {
-	DDXMLElement *r_bind = [response elementForName:@"bind"];
-	DDXMLElement *r_jid = [r_bind elementForName:@"jid"];
+- (void)_handleBinding:(CXMLElement *)response {
+	CXMLElement *r_bind = [response elementForName:@"bind"];
+	CXMLElement *r_jid = [r_bind elementForName:@"jid"];
 	
 	if (r_jid) {
 		// We're properly binded to a resource now
@@ -773,16 +773,16 @@ enum {
 		self.authenticatedResource = [fullJID lastPathComponent];
 		
 		// And we may now have to do one last thing before we're ready - start an IM session
-		DDXMLElement *features = [_rootElement elementForName:@"stream:features"];
+		CXMLElement *features = [_rootElement elementForName:@"stream:features"];
 		
 		// Check to see if a session is required
-		// Don't forget about that DDXMLElement bug you reported to apple (xmlns is required or element won't be found)
-		DDXMLElement *f_session = [features elementForName:@"session" xmlns:@"urn:ietf:params:xml:ns:xmpp-session"];
+		// Don't forget about that CXMLElement bug you reported to apple (xmlns is required or element won't be found)
+		CXMLElement *f_session = [features elementForName:@"session" xmlns:@"urn:ietf:params:xml:ns:xmpp-session"];
 		
 		if (f_session) {
-			DDXMLElement *session = [DDXMLElement elementWithName:@"session" xmlns:@"urn:ietf:params:xml:ns:xmpp-session"];
+			CXMLElement *session = [CXMLElement elementWithName:@"session" xmlns:@"urn:ietf:params:xml:ns:xmpp-session"];
 			
-			DDXMLElement *iqElement = [DDXMLElement elementWithName:@"iq"];
+			CXMLElement *iqElement = [CXMLElement elementWithName:@"iq"];
 			[iqElement addAttributeWithName:@"type" stringValue:@"set"];
 			[iqElement addChild:session];
 			
@@ -800,9 +800,9 @@ enum {
 	} else {
 		// It appears the server didn't allow our resource choice
 		// We'll simply let the server choose then
-		DDXMLElement *bind = [DDXMLElement elementWithName:@"bind" xmlns:@"urn:ietf:params:xml:ns:xmpp-bind"];
+		CXMLElement *bind = [CXMLElement elementWithName:@"bind" xmlns:@"urn:ietf:params:xml:ns:xmpp-bind"];
 		
-		DDXMLElement *iqElement = [DDXMLElement elementWithName:@"iq"];
+		CXMLElement *iqElement = [CXMLElement elementWithName:@"iq"];
 		[iqElement addAttributeWithName:@"type" stringValue:@"set"];
 		[iqElement addChild:bind];
 		
@@ -812,7 +812,7 @@ enum {
 	}
 }
 
-- (void)_handleStartSessionResponse:(DDXMLElement *)response {
+- (void)_handleStartSessionResponse:(CXMLElement *)response {
 	if ([[[response attributeForName:@"type"] stringValue] isEqualToString:@"result"]) {
 		// Revert back to connected state (from start session state)
 		sendState = _StreamConnected;
@@ -885,7 +885,7 @@ enum {
 		// Digest Access authentication requires us to know the ID attribute from the <stream:stream/> element.
 		
 		{	
-			DDXMLDocument *xmlDoc = [[[DDXMLDocument alloc] initWithData:_connectionBuffer options:0 error:nil] autorelease];
+			CXMLDocument *xmlDoc = [[[CXMLDocument alloc] initWithData:_connectionBuffer options:0 error:nil] autorelease];
 			
 			[_rootElement release];
 			_rootElement = [[xmlDoc rootElement] retain];
@@ -930,7 +930,7 @@ enum {
 	}
 	
 	NSError *parseError = nil;
-	DDXMLDocument *xmlDoc = [[[DDXMLDocument alloc] initWithXMLString:XMLString options:0 error:&parseError] autorelease];
+	CXMLDocument *xmlDoc = [[[CXMLDocument alloc] initWithXMLString:XMLString options:0 error:&parseError] autorelease];
 	NSParameterAssert(parseError == nil && xmlDoc != nil);
 	
 	[self connectionDidReceiveElement:[xmlDoc rootElement]];
