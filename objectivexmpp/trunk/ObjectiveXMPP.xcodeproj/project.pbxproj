@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		530456C910000E3900EA4C1E /* TouchXML.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 530454E410000A4C00EA4C1E /* TouchXML.framework */; };
+		530457561000122F00EA4C1E /* XMPPMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = 530457541000122F00EA4C1E /* XMPPMessage.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		530457571000122F00EA4C1E /* XMPPMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 530457551000122F00EA4C1E /* XMPPMessage.m */; };
+		530457581000122F00EA4C1E /* XMPPMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = 530457541000122F00EA4C1E /* XMPPMessage.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		530457591000122F00EA4C1E /* XMPPMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 530457551000122F00EA4C1E /* XMPPMessage.m */; };
 		532A42920FB4B495006E409F /* XMPPConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = 532A428C0FB4B495006E409F /* XMPPConnection.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		532A42930FB4B495006E409F /* XMPPConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 532A428D0FB4B495006E409F /* XMPPConnection.m */; };
 		532A42940FB4B495006E409F /* XMPPServer.h in Headers */ = {isa = PBXBuildFile; fileRef = 532A428E0FB4B495006E409F /* XMPPServer.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -154,6 +158,8 @@
 		089C1667FE841158C02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		32DBCF5E0370ADEE00C91783 /* ObjectiveXMPP_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjectiveXMPP_Prefix.pch; sourceTree = "<group>"; };
 		5304544710000A2400EA4C1E /* TouchXML.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = TouchXML.xcodeproj; path = ../TouchXML/TouchXML.xcodeproj; sourceTree = SOURCE_ROOT; };
+		530457541000122F00EA4C1E /* XMPPMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMPPMessage.h; sourceTree = "<group>"; };
+		530457551000122F00EA4C1E /* XMPPMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XMPPMessage.m; sourceTree = "<group>"; };
 		532A428C0FB4B495006E409F /* XMPPConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMPPConnection.h; sourceTree = "<group>"; };
 		532A428D0FB4B495006E409F /* XMPPConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XMPPConnection.m; sourceTree = "<group>"; };
 		532A428E0FB4B495006E409F /* XMPPServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMPPServer.h; sourceTree = "<group>"; };
@@ -247,6 +253,8 @@
 				532A42990FB4B4A4006E409F /* XMPPRoster.m */,
 				532A42900FB4B495006E409F /* XMPPDigestAuthentication.h */,
 				532A42910FB4B495006E409F /* XMPPDigestAuthentication.m */,
+				530457541000122F00EA4C1E /* XMPPMessage.h */,
+				530457551000122F00EA4C1E /* XMPPMessage.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -309,6 +317,7 @@
 				532A42F30FB4B544006E409F /* XMPPServer.h in Headers */,
 				532A44270FB4B80E006E409F /* ObjectiveXMPP.h in Headers */,
 				53E10AAC0FF968E5006E39CF /* XMPPConstants.h in Headers */,
+				530457581000122F00EA4C1E /* XMPPMessage.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -323,6 +332,7 @@
 				532A429F0FB4B4B3006E409F /* XMPPChatService.h in Headers */,
 				532A44250FB4B80E006E409F /* ObjectiveXMPP.h in Headers */,
 				53E10AAE0FF968E5006E39CF /* XMPPConstants.h in Headers */,
+				530457561000122F00EA4C1E /* XMPPMessage.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -488,6 +498,7 @@
 				532A42F20FB4B543006E409F /* XMPPRoster.m in Sources */,
 				532A42F40FB4B544006E409F /* XMPPServer.m in Sources */,
 				53E10AAD0FF968E5006E39CF /* XMPPConstants.m in Sources */,
+				530457591000122F00EA4C1E /* XMPPMessage.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -501,6 +512,7 @@
 				532A429B0FB4B4A4006E409F /* XMPPRoster.m in Sources */,
 				532A42A00FB4B4B3006E409F /* XMPPChatService.m in Sources */,
 				53E10AAF0FF968E5006E39CF /* XMPPConstants.m in Sources */,
+				530457571000122F00EA4C1E /* XMPPMessage.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

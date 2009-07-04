@@ -9,10 +9,11 @@
 #import <Foundation/Foundation.h>
 
 #import "ObjectiveXMPP/XMPPConstants.h"
+#import "ObjectiveXMPP/XMPPMessage.h"
+#import "ObjectiveXMPP/XMPPDigestAuthentication.h"
+
+#import "ObjectiveXMPP/XMPPServer.h"
 
 #import "ObjectiveXMPP/XMPPChatService.h"
-
-#import "ObjectiveXMPP/XMPPRoster.h"
 #import "ObjectiveXMPP/XMPPConnection.h"
-#import "ObjectiveXMPP/XMPPServer.h"
-#import "ObjectiveXMPP/XMPPDigestAuthentication.h"
+#import "ObjectiveXMPP/XMPPRoster.h"
