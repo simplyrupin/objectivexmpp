@@ -27,11 +27,19 @@
 //  OTHER DEALINGS IN THE SOFTWARE.
 //
 
-#import "CXMLDocument.h"
-#import "CXMLDocument_CreationExtensions.h"
-#import "CXMLElement.h"
-#import "CXMLElement_CreationExtensions.h"
-#import "CXMLElement_ElementTreeExtensions.h"
+//
+//	Modified by Keith Duncan on 04/07/2009
+//
+
+#import <Foundation/Foundation.h>
+
 #import "CXMLNode.h"
 #import "CXMLNode_CreationExtensions.h"
 #import "CXMLNode_XPathExtensions.h"
+
+#import "CXMLDocument.h"
+#import "CXMLDocument_CreationExtensions.h"
+
+#import "CXMLElement.h"
+#import "CXMLElement_CreationExtensions.h"
+#import "CXMLElement_ElementTreeExtensions.h"
