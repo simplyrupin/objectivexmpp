@@ -268,7 +268,7 @@ enum {
 		self.authenticatedUsername = username;
 		self.authenticatedResource = resource;
 		
-		[self sendElement:auth forTag:XCWriteStreamTag];
+		[self sendElement:authenticationElement forTag:XCWriteStreamTag];
 		sendState = _StreamAuth1;
 		
 		return;
@@ -316,6 +316,8 @@ enum {
 		
 		[_queuedMessages addObject:queuedElement];
 		return;
+		
+#error this doesn't return the identifier
 	}
 	
 	return [self _sendElement:element tag:tag];
