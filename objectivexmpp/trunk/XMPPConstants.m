@@ -8,4 +8,4 @@
 
 #import "XMPPConstants.h"
 
-NSString *const XMPPServiceType = @"_presence._tcp.";
+NSString *const XMPPServiceDiscoveryType = @"_presence._tcp.";

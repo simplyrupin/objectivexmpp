@@ -10,6 +10,7 @@
 
 #import "XMPPConstants.h"
 #import "XMPPDigestAuthentication.h"
+#import "XMPPMessage.h"
 
 #if TARGET_OS_IPHONE
 #import <CFNetwork/CFNetwork.h>
@@ -94,7 +95,7 @@ enum {
 }
 
 + (NSString *)serviceDiscoveryType {
-	return XMPPServiceType;
+	return XMPPServiceDiscoveryType;
 }
 
 - (id)init {

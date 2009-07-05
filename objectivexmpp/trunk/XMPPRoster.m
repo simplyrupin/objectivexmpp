@@ -50,7 +50,7 @@ NSString *const kXMPPRosterBonjourDomain = @"local.";
 }
 
 - (void)searchForBonjourServices {
-	[self.browser searchForServicesOfType:XMPPServiceType inDomain:kXMPPRosterBonjourDomain];
+	[self.browser searchForServicesOfType:XMPPServiceDiscoveryType inDomain:kXMPPRosterBonjourDomain];
 }
 
 - (void)addBonjourServicesObject:(XMPPChatService *)object {

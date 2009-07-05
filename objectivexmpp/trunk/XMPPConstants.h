@@ -8,4 +8,4 @@
 
 #import <Foundation/Foundation.h>
 
-extern NSString *const XMPPServiceType;
+extern NSString *const XMPPServiceDiscoveryType;

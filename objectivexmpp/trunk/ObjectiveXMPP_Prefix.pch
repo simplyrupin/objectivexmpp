@@ -3,7 +3,7 @@
 //
 
 #ifdef __OBJC__
-    #import <Cocoa/Cocoa.h>
+    #import <Foundation/Foundation.h>
 	
 	#import "AmberFoundation/AmberFoundation.h"
 	#import "CoreNetworking/CoreNetworking.h"
