@@ -160,11 +160,6 @@ enum {
 	return _rootElement;
 }
 
-/**
- * Returns the version attribute from the servers's <stream:stream/> element.
- * This should be at least 1.0 to be RFC 3920 compliant.
- * If no version number was set, the server is not RFC compliant, and 0 is returned.
- **/
 - (NSString *)serverConnectionVersion {
 	return [[_rootElement attributeForName:@"version"] stringValue];
 }
@@ -172,7 +167,7 @@ enum {
 - (BOOL)supportsInBandRegistration {
 	if (![self isOpen]) return NO;
 	
-	CXMLElement *features = [_rootElement elementForName:@"stream:features"];
+	CXMLElement *features = [[_rootElement elementsForName:XMPPStreamFeaturesElementName] objectAtIndex:0];
 	CXMLElement *reg = [features elementForName:@"register" xmlns:@"http://jabber.org/features/iq-register"];
 	return (reg != nil);
 }
@@ -238,17 +233,21 @@ enum {
 	if (![self isOpen]) return;
 	
 	if ([self supportsAuthentication:XMPPAuthenticationSchemeDigestMD5]) {
-		NSString *auth = @"<auth xmlns='urn:ietf:params:xml:ns:xmpp-sasl' mechanism='DIGEST-MD5'/>";			
-		[super performWrite:[auth dataUsingEncoding:NSUTF8StringEncoding] forTag:XCWriteStreamTag withTimeout:TIMEOUT_WRITE];
+		CXMLElement *authenticationElement = [CXMLElement elementWithName:@"auth" xmlns:@"urn:ietf:params:xml:ns:xmpp-sasl"];
+		[authenticationElement addAttrubute:@"mechanism" stringValue:XMPPAuthenticationSchemeDigestMD5];
 		
 		// Save authentication information
 		self.authenticatedUsername = username;
 		self.authenticatedResource = resource;
 		self.temporaryPassword = password;
 		
-		// Update state
+		[self sendElement:authenticationElement forTag:XCWriteStreamTag];
 		sendState = _StreamAuth1;
-	} else if ([self supportsAuthentication:XMPPAuthenticationSchemePLAIN]) {
+		
+		return;
+	}
+	
+	if ([self supportsAuthentication:XMPPAuthenticationSchemePLAIN]) {
 		// From RFC 4616 - PLAIN SASL Mechanism:
 		// [authzid] UTF8NUL authcid UTF8NUL passwd
 		// 
@@ -259,46 +258,45 @@ enum {
 		NSString *payload = [NSString stringWithFormat:@"%C%@%C%@", 0, username, 0, password, nil];
 		NSString *base64 = [[payload dataUsingEncoding:NSUTF8StringEncoding] base64String];
 		
-		CXMLElement *auth = [CXMLElement elementWithName:@"auth" xmlns:@"urn:ietf:params:xml:ns:xmpp-sasl"];
-		[auth addAttributeWithName:@"mechanism" stringValue:@"PLAIN"];
-		[auth setStringValue:base64];
+		CXMLElement *authenticationElement = [CXMLElement elementWithName:@"auth" xmlns:@"urn:ietf:params:xml:ns:xmpp-sasl"];
+		[authenticationElement setStringValue:base64];
+		
+		[authenticationElement addAttributeWithName:@"mechanism" stringValue:XMPPAuthenticationSchemePLAIN];
+		
+		// Save authentication information
+		self.authenticatedUsername = username;
+		self.authenticatedResource = resource;
 		
 		[self sendElement:auth forTag:XCWriteStreamTag];
-		
-		// Save authentication information
-		self.authenticatedUsername = username;
-		self.authenticatedResource = resource;
-		
-		// Update state
 		sendState = _StreamAuth1;
-	} else {
-		// The server does not appear to support SASL authentication (at least any type we can use)
-		// So we'll revert back to the old fashioned jabber:iq:auth mechanism
 		
-		NSString *rootID = [[_rootElement attributeForName:@"id"] stringValue];
-		NSString *digestStr = [NSString stringWithFormat:@"%@%@", rootID, password];
-		NSData *digestData = [digestStr dataUsingEncoding:NSUTF8StringEncoding];
-		
-		NSString *digest = [[digestData SHA1Hash] hexString];
-		
-		CXMLElement *queryElement = [CXMLElement elementWithName:@"query" xmlns:@"jabber:iq:auth"];
-		[queryElement addChild:[CXMLElement elementWithName:@"username" stringValue:username]];
-		[queryElement addChild:[CXMLElement elementWithName:@"digest" stringValue:digest]];
-		[queryElement addChild:[CXMLElement elementWithName:@"resource" stringValue:resource]];
-		
-		CXMLElement *iqElement = [CXMLElement elementWithName:@"iq"];
-		[iqElement addAttributeWithName:@"type" stringValue:@"set"];
-		[iqElement addChild:queryElement];
-		
-		[self sendElement:iqElement forTag:XCWriteStreamTag];
-		
-		// Save authentication information
-		self.authenticatedUsername = username;
-		self.authenticatedResource = resource;
-		
-		// Update state
-		sendState = _StreamAuth1;
+		return;
 	}
+	
+	// The server does not appear to support SASL authentication (at least any type we can use)
+	// So we'll revert back to the old fashioned jabber:iq:auth mechanism
+	
+	NSString *rootID = [[_rootElement attributeForName:@"id"] stringValue];
+	NSString *digestStr = [NSString stringWithFormat:@"%@%@", rootID, password];
+	NSData *digestData = [digestStr dataUsingEncoding:NSUTF8StringEncoding];
+	
+	NSString *digest = [[digestData SHA1Hash] hexString];
+	
+	CXMLElement *queryElement = [CXMLElement elementWithName:@"query" xmlns:@"jabber:iq:auth"];
+	[queryElement addChild:[CXMLElement elementWithName:@"username" stringValue:username]];
+	[queryElement addChild:[CXMLElement elementWithName:@"digest" stringValue:digest]];
+	[queryElement addChild:[CXMLElement elementWithName:@"resource" stringValue:resource]];
+	
+	CXMLElement *iqElement = [CXMLElement elementWithName:@"iq"];
+	[iqElement addAttributeWithName:@"type" stringValue:@"set"];
+	[iqElement addChild:queryElement];
+	
+	// Save authentication information
+	self.authenticatedUsername = username;
+	self.authenticatedResource = resource;
+	
+	[self sendElement:iqElement forTag:XCWriteStreamTag];
+	sendState = _StreamAuth1;
 }
 
 #pragma mark -
@@ -352,8 +350,7 @@ enum {
 }
 
 - (CXMLElement *)sendMessage:(NSString *)content to:(NSString *)JID {
-	CXMLElement *bodyElement = [CXMLElement elementWithName:@"body"];
-	[bodyElement setStringValue:content];
+	CXMLElement *bodyElement = [CXMLElement elementWithName:@"body" stringValue:content];
 	
 	CXMLElement *messageElement = [CXMLElement elementWithName:@"message"];
 	if (JID != nil) [messageElement addAttributeWithName:@"to" stringValue:JID];

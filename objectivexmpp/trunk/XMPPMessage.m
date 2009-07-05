@@ -8,4 +8,4 @@
 
 #import "XMPPMessage.h"
 
-
+NSString *const XMPPStreamFeaturesElementName = @"stream:features";

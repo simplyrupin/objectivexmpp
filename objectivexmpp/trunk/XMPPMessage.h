@@ -13,4 +13,8 @@
 	Exposes constants for the construction of XMPP stanza elements.
  */
 
-
+/*!
+	@brief
+	This element is transmitted after the opening of the XML stream to indicate which features the server supports.
+ */
+extern NSString *const XMPPStreamFeaturesElementName;
