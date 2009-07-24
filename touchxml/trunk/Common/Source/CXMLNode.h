@@ -31,7 +31,7 @@
 
 #include <libxml/tree.h>
 
-typedef enum {
+enum {
 	CXMLInvalidKind = 0,
 	CXMLElementKind = XML_ELEMENT_NODE,
 	CXMLAttributeKind = XML_ATTRIBUTE_NODE,
@@ -44,7 +44,8 @@ typedef enum {
 	CXMLAttributeDeclarationKind =  XML_ATTRIBUTE_DECL,
 	CXMLEntityDeclarationKind = XML_ENTITY_DECL,
 	CXMLNamespaceKind = XML_NAMESPACE_DECL,
-} CXMLNodeKind;
+};
+typedef NSInteger CXMLNodeKind;
 
 @class CXMLDocument;
 

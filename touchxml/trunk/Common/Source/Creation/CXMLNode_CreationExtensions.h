@@ -41,7 +41,7 @@
 + (id)elementWithName:(NSString *)name URI:(NSString *)URI;
 + (id)elementWithName:(NSString *)name stringValue:(NSString *)string;
 //+ (id)elementWithName:(NSString *)name children:(NSArray *)children attributes:(NSArray *)attributes;
-//+ (id)attributeWithName:(NSString *)name stringValue:(NSString *)stringValue;
++ (id)attributeWithName:(NSString *)name stringValue:(NSString *)stringValue;
 //+ (id)attributeWithName:(NSString *)name URI:(NSString *)URI stringValue:(NSString *)stringValue;
 + (id)namespaceWithName:(NSString *)name stringValue:(NSString *)stringValue;
 + (id)processingInstructionWithName:(NSString *)name stringValue:(NSString *)stringValue;
