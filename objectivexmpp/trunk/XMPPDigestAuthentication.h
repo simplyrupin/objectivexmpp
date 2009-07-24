@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@class DDXMLElement;
+@class CXMLElement;
 
 @interface XMPPDigestAuthentication : NSObject
 {
@@ -23,7 +23,7 @@
 	NSString *digestURI;
 }
 
-- (id)initWithChallenge:(DDXMLElement *)challenge;
+- (id)initWithChallenge:(CXMLElement *)challenge;
 
 - (NSString *)rspauth;
 

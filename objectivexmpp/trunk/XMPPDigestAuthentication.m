@@ -12,7 +12,7 @@
 
 @implementation XMPPDigestAuthentication
 
-- (id)initWithChallenge:(DDXMLElement *)challenge
+- (id)initWithChallenge:(CXMLElement *)challenge
 {
 	self = [self init];
 	if (self == nil) return nil;

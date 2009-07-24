@@ -98,6 +98,10 @@ enum {
 	return XMPPServiceDiscoveryType;
 }
 
++ (NSString *)connectionCompatabilityVersion {
+	return @"0.0";
+}
+
 - (id)init {
 	self = [super init];
 	if (self == nil) return nil;
@@ -179,7 +183,11 @@ enum {
 	// The only proper time to call this method is after we've connected to the server,
 	// and exchanged the opening XML stream headers
 	if (![self supportsInBandRegistration]) {
-		[NSException raise:NSInternalInconsistencyException format:@"%s, this stream doesn't support inband registration", __PRETTY_FUNCTION__, nil];
+		@"%s, this stream doesn't support inband registration", __PRETTY_FUNCTION__, nil;
+		
+#warning include the error in this callback
+		
+		[self.delegate connection:self didNotRegister:nil];
 		return;
 	}
 	
@@ -307,7 +315,22 @@ enum {
 	return [self sendElement:element forTag:XCWriteStreamTag];
 }
 
+- (NSString *)_stanzaIdentifer:(CXMLElement *)rootElement shouldAdd:(BOOL)shouldAdd {
+	NSString *identifier = [[rootElement attributeForName:@"id"] stringValue];
+	
+	if (identifier == nil && shouldAdd) {
+		identifier = [[NSProcessInfo processInfo] globallyUniqueString];
+		
+		CXMLNode *identifierAttribute = [CXMLNode attributeWithName:@"id" stringValue:identifier];
+		[rootElement addAttribute:identifierAttribute];
+	}
+	
+	return identifier;
+}
+
 - (NSString *)sendElement:(CXMLElement *)element forTag:(NSInteger)tag {
+	NSString *identifier = [self _stanzaIdentifer:element shouldAdd:YES];
+	
 	if (![self isOpen]) {
 		NSDictionary *queuedElement = [NSDictionary dictionaryWithObjectsAndKeys:
 									   element, @"element",
@@ -315,9 +338,7 @@ enum {
 									   nil];
 		
 		[_queuedMessages addObject:queuedElement];
-		return;
-		
-#error this doesn't return the identifier
+		return identifier;
 	}
 	
 	return [self _sendElement:element tag:tag];
@@ -329,12 +350,7 @@ enum {
 	External element sends are queued until the stream is opened.
  */
 - (NSString *)_sendElement:(CXMLElement *)element tag:(NSInteger)tag {
-	NSString *identifier = [[element attributeForName:@"id"] stringValue];
-	
-	if (identifier == nil) {
-		identifier = [[NSProcessInfo processInfo] globallyUniqueString];
-		[element addAttributeWithName:@"id" stringValue:identifier];
-	}
+	NSString *identifier = [self _stanzaIdentifer:element shouldAdd:YES];
 	
 	if ([element attributeForName:@"to"] == nil) {
 		[element addAttributeWithName:@"to" stringValue:self.peer];
@@ -356,8 +372,12 @@ enum {
 	CXMLElement *bodyElement = [CXMLElement elementWithName:@"body" stringValue:content];
 	
 	CXMLElement *messageElement = [CXMLElement elementWithName:@"message"];
-	if (JID != nil) [messageElement addAttributeWithName:@"to" stringValue:JID];
 	[messageElement addChild:bodyElement];
+	
+	if (JID != nil) {
+		CXMLElement *toAttribute = [CXMLElement attributeWithName:@"to" stringValue:JID];
+		[messageElement addAttribute:toAttribute];
+	}
 	
 	[self sendElement:messageElement];
 	
@@ -494,22 +514,20 @@ enum {
 
 - (void)_sendOpeningNegotiation {
 	if (sendState == _StreamConnecting) {
-		// TCP connection was just opened - we need to include the XML instruct
-		NSString *s1 = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
-		[super performWrite:[s1 dataUsingEncoding:NSUTF8StringEncoding] forTag:XCWriteStartTag withTimeout:TIMEOUT_WRITE];
+		CXMLElement *instruct = [CXMLElement processingInstructionWithName:@"xml" stringValue:nil];
+		[instruct addAttribute:[CXMLElement attributeWithName:@"version" stringValue:@"1.0"]];
+		[instruct addAttribute:[CXMLElement attributeWithName:@"encoding" stringValue:@"UTF-8"]];
+		
+		[self performWrite:instruct forTag:XCWriteStartTag withTimeout:TIMEOUT_WRITE];
 	}
 	
-	CXMLElement *streamElement = [CXMLElement elementWithName:@"stream:stream" xmlns:@"jabber:client"];
-	
-	CXMLNode *streamNamespace = [CXMLNode namespaceWithName:@"stream" stringValue:@"http://etherx.jabber.org/streams"];
-	[streamElement addNamespace:streamNamespace];
-	
-	NSMutableString *streamElementString = [[streamElement XMLString] mutableCopy];
-	[streamElementString replaceOccurrencesOfString:@"</stream:stream>" withString:@"" options:(NSStringCompareOptions)0 range:NSMakeRange(0, [streamElementString length])];
+	NSMutableString *streamElementString = [NSMutableString stringWithString:@"<stream:stream "];
+	[streamElementString appendString:@"xmlns=\"jabber:client\" "];
+	[streamElementString appendString:@"xmlns:stream=\"http://etherx.jabber.org/streams\" "];
+	[streamElementString appendFormat:@"version=\"%@\" ", [[self class] connectionCompatabilityVersion], nil];
+	[streamElementString appendString:@">"];
 	
 	[super performWrite:[streamElementString dataUsingEncoding:NSUTF8StringEncoding] forTag:XCWriteStartTag withTimeout:TIMEOUT_WRITE];
-	
-	[streamElementString release];
 }
 
 - (void)_streamDidOpen {

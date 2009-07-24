@@ -36,6 +36,12 @@ extern NSString *const XMPPAuthenticationSchemeDigestMD5;
 }
 
 /*!
+	@brief
+	The connection compatability version
+ */
++ (NSString *)connectionCompatabilityVersion;
+
+/*!
 	
  */
 @property (copy) NSString *peer, *local;

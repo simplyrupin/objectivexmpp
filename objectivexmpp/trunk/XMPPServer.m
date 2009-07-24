@@ -83,22 +83,6 @@
 
 @implementation XMPPServer (Delegate)
 
-- (void)layerDidOpen:(id <AFConnectionLayer>)layer {
-	[super layerDidOpen:layer];
-	
-	if ([self.delegate respondsToSelector:@selector(server:assignConnectionPeer:)])
-		[self.delegate server:self assignConnectionPeer:layer];
-	
-	NSString *peer = [layer peer];
-	[_connectedNodes setObject:layer forKey:peer];
-}
-
-- (void)layerDidClose:(id <AFConnectionLayer>)layer {
-	[_connectedNodes removeObjectsForKeys:[self.connectedNodes allKeysForObject:layer]];
-	
-	[super layerDidClose:layer];
-}
-
 - (void)connection:(XMPPConnection *)layer didReceiveIQ:(CXMLElement *)iq {
 	NSMutableArray *pubsubElements = [[[iq children] mutableCopy] autorelease];
 	for (CXMLElement *currentElement in [[pubsubElements copy] autorelease])

@@ -37,12 +37,6 @@
 
 /*!
 	@brief
-	This is included for P2P XMPP servers, where the endpoint/JID is the advertised service name
- */
-- (void)server:(XMPPServer *)server assignConnectionPeer:(XMPPConnection *)connection;
-
-/*!
-	@brief
  */
 - (BOOL)server:(XMPPServer *)server shouldForwardMessage:(CXMLElement *)message fromNode:(NSString *)JID toNode:(NSString *)JID; // Note: assumes YES if unimplemented
 
