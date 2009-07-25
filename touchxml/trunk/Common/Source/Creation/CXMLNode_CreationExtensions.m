@@ -82,7 +82,7 @@
 + (id)attributeWithName:(NSString *)name stringValue:(NSString *)stringValue {
 	xmlAttrPtr theAttr = xmlNewProp(NULL, (const xmlChar *)[name UTF8String], (const xmlChar *)[stringValue UTF8String]);
 	NSAssert(theAttr != NULL, @"xmlNewProp failed");
-	CXMLNode *theAttribute = [[[CXMLElement alloc] initWithLibXMLNode:theAttr] autorelease];
+	CXMLNode *theAttribute = [[[CXMLElement alloc] initWithLibXMLNode:(xmlNodePtr)theAttr] autorelease];
 	return(theAttribute);
 }
 
