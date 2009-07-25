@@ -45,7 +45,7 @@
 	NSParameterAssert(inAttribute != nil);
 	NSParameterAssert(inAttribute->_node != NULL);
 	
-	xmlAddChild(self->_node, (xmlNodePtr)inAttribute->_node);
+	xmlNodePtr result = xmlAddChild(self->_node, (xmlNodePtr)inAttribute->_node);
 }
 
 - (void)addNamespace:(CXMLNode *)inNamespace

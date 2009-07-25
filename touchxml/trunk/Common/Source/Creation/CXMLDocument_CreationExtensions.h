@@ -27,7 +27,7 @@
 //  OTHER DEALINGS IN THE SOFTWARE.
 //
 
-#import "CXMLDocument.h"
+#import "TouchXML/CXMLDocument.h"
 
 @interface CXMLDocument (CXMLDocument_CreationExtensions)
 

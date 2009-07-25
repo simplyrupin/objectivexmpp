@@ -27,7 +27,7 @@
 //  OTHER DEALINGS IN THE SOFTWARE.
 //
 
-#import "CXMLNode.h"
+#import "TouchXML/CXMLNode_CreationExtensions.h"
 
 @interface CXMLNode (CXMLNode_XPathExtensions)
 

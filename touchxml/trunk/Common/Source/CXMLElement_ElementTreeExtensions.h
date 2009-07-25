@@ -27,8 +27,7 @@
 //  OTHER DEALINGS IN THE SOFTWARE.
 //
 
-#import "CXMLElement.h"
-
+#import "TouchXML/CXMLElement.h"
 
 @interface CXMLElement (CXMLElement_ElementTreeExtensions)
 
