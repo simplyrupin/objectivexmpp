@@ -243,8 +243,8 @@
 			isa = PBXGroup;
 			children = (
 				45AA24120E280F9700E12B55 /* TouchXML.h */,
-				53E4EBB5101B630A0084C420 /* Document */,
 				53E4EBB4101B63010084C420 /* Node */,
+				53E4EBB5101B630A0084C420 /* Document */,
 				457940EA0D82214700EB2D22 /* Element */,
 				458CE9C90F9C12BB009EF591 /* Tidy */,
 			);
