@@ -27,7 +27,7 @@
 //  OTHER DEALINGS IN THE SOFTWARE.
 //
 
-#import "TouchXML/CXMLNode_CreationExtensions.h"
+#import "TouchXML/CXMLNode.h"
 
 @class CXMLElement;
 
