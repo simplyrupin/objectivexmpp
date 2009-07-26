@@ -21,6 +21,8 @@
 		534E2D05101CC7F200AF8170 /* DDXMLDocument+Private.m in Sources */ = {isa = PBXBuildFile; fileRef = 534E2CE5101CC6D600AF8170 /* DDXMLDocument+Private.m */; };
 		534E2D06101CC7F300AF8170 /* DDXMLDocument+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 534E2CE4101CC6D600AF8170 /* DDXMLDocument+Private.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		534E300D101CCF0500AF8170 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29B97325FDCFA39411CA2CEA /* Foundation.framework */; };
+		534E317C101CD5EC00AF8170 /* NSString+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = DC5442650E8F338300013051 /* NSString+Additions.m */; };
+		534E317D101CD5ED00AF8170 /* NSString+Additions.h in Headers */ = {isa = PBXBuildFile; fileRef = DC5442640E8F338300013051 /* NSString+Additions.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -161,6 +163,7 @@
 				534E2D02101CC7F000AF8170 /* DDXMLElement+Private.h in Headers */,
 				534E2D04101CC7F200AF8170 /* DDXMLDocument.h in Headers */,
 				534E2D06101CC7F300AF8170 /* DDXMLDocument+Private.h in Headers */,
+				534E317D101CD5ED00AF8170 /* NSString+Additions.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -215,6 +218,7 @@
 				534E2D01101CC7F000AF8170 /* DDXMLElement+Private.m in Sources */,
 				534E2D03101CC7F000AF8170 /* DDXMLDocument.m in Sources */,
 				534E2D05101CC7F200AF8170 /* DDXMLDocument+Private.m in Sources */,
+				534E317C101CD5EC00AF8170 /* NSString+Additions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
