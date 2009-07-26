@@ -17,4 +17,10 @@
 	@brief
 	This element is transmitted after the opening of the XML stream to indicate which features the server supports.
  */
-extern NSString *const XMPPStreamFeaturesElementName;
+extern NSString *const XMPPStreamFeaturesLocalElementName;
+
+/*!
+	@brief
+	
+ */
+extern NSString *const XMPPConnectionRegisterLocalElementName;

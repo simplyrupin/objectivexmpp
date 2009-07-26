@@ -10,9 +10,12 @@
 
 #import "AmberFoundation/AmberFoundation.h"
 
+NSString *const XMPPAuthenticationSchemePLAIN = @"PLAIN";
+NSString *const XMPPAuthenticationSchemeDigestMD5 = @"DIGEST-MD5";
+
 @implementation XMPPDigestAuthentication
 
-- (id)initWithChallenge:(CXMLElement *)challenge
+- (id)initWithChallenge:(NSXMLElement *)challenge
 {
 	self = [self init];
 	if (self == nil) return nil;

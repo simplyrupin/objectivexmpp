@@ -8,5 +8,12 @@
 	#import "AmberFoundation/AmberFoundation.h"
 	#import "CoreNetworking/CoreNetworking.h"
 
-	#import "TouchXML/TouchXML.h"
+	#import "KissXML/DDXML.h"
+
+#if TARGET_OS_IPHONE
+#define NSXMLNode DDXMLNode
+#define NSXMLDocument DDXMLDocument
+#define NSXMLElement DDXMLElement
+#endif
+
 #endif

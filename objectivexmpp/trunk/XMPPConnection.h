@@ -8,31 +8,29 @@
 
 #import "CoreNetworking/AFNetworkConnection.h"
 
-@class CXMLElement;
+@class NSXMLElement;
 
 @protocol XMPPConnectionDelegate;
 
-extern NSString *const XMPPAuthenticationSchemePLAIN;
-extern NSString *const XMPPAuthenticationSchemeDigestMD5;
-
 /*!
 	@brief
-	This class implements XML chunk messaging with an XMPP endpoint.
-	It works for both server and serverless messaging.
+	This class implements XML chunk messaging with an XMPP endpoint for both server and serverless messaging.
+ 
+	@detail
+	You can capture all XML element writes by overriding <tt>-performWrite:forTag:withTimeout:</tt>, except for the processing instruction, the opening stream tag and the closing stream tag.
  */
 @interface XMPPConnection : AFNetworkConnection <AFConnectionLayer> {
-	NSString *_peer, *_local;
+	NSXMLElement *_rootStreamElement;
 	
-	NSInteger sendState, receiveState;
-	NSMutableData *_connectionBuffer;
+	NSString *_local;
+	NSUInteger _receiveState;
+	NSMutableData *_receiveBuffer;
+	
+	NSString *_peer;
+	NSInteger _sendState;
 	NSMutableArray *_queuedMessages;
 	
-	NSString *_authUsername, *_authResource, *_tempPassword;
-	BOOL _authenticated;
-	
-	CXMLElement *_rootElement;
-	
-	NSTimer *keepAliveTimer;
+	NSTimer *_keepAliveTimer;
 }
 
 /*!
@@ -51,15 +49,6 @@ extern NSString *const XMPPAuthenticationSchemeDigestMD5;
  */
 @property (assign) id <XMPPConnectionDelegate> delegate;
 
-- (BOOL)supportsInBandRegistration;
-- (void)registerUser:(NSString *)username withPassword:(NSString *)password;
-
-- (BOOL)supportsAuthentication:(NSString *)type;
-- (void)authenticateUser:(NSString *)username withPassword:(NSString *)password resource:(NSString *)resource;
-
-@property (readonly, assign, getter=isAuthenticated) BOOL authenticated;
-@property (readonly, copy) NSString *authenticatedUsername, *authenticatedResource;
-
 /*!
 	@brief
 	XMPPConnection will attempt to handle the response.
@@ -67,7 +56,7 @@ extern NSString *const XMPPAuthenticationSchemeDigestMD5;
 	@result
 	See <tt>-sendElement:forTag:</tt>
  */
-- (NSString *)sendElement:(CXMLElement *)element;
+- (NSString *)sendElement:(NSXMLElement *)element;
 
 /*! 
 	@brief
@@ -76,7 +65,7 @@ extern NSString *const XMPPAuthenticationSchemeDigestMD5;
 	@result
 	The id attribute of the message, allowing you to track the response.
  */
-- (NSString *)sendElement:(CXMLElement *)element forTag:(NSInteger)tag;
+- (NSString *)sendElement:(NSXMLElement *)element forTag:(NSInteger)tag;
 
 /*!
 	@brief
@@ -85,7 +74,7 @@ extern NSString *const XMPPAuthenticationSchemeDigestMD5;
 	@param |JID|
 	If nil this sends the message to the connected endpoint.
  */
-- (CXMLElement *)sendMessage:(NSString *)content to:(NSString *)JID;
+- (NSXMLElement *)sendMessage:(NSString *)content to:(NSString *)JID;
 
 /*!
 	@brief
@@ -107,17 +96,17 @@ extern NSString *const XMPPAuthenticationSchemeDigestMD5;
 	Given an IQ element, you'll typically return a response.
 	This is simply an awknowledgement, no other data is included in the stanza.
  */
-- (void)awknowledgeElement:(CXMLElement *)iq;
+- (void)awknowledgeElement:(NSXMLElement *)iq;
 
 /*
  * Note: override points for XMPP extensions
  */
 
-- (void)connectionDidReceiveElement:(CXMLElement *)element; // Note: general override point, this where the element pattern matching is performed to call the specific handler methods
+- (void)connectionDidReceiveElement:(NSXMLElement *)element; // Note: general override point, this where the element pattern matching is performed to call the specific handler methods
 
-- (void)connectionDidReceiveIQ:(CXMLElement *)iq;
-- (void)connectionDidReceiveMessage:(CXMLElement *)message;
-- (void)connectionDidReceivePresence:(CXMLElement *)presence; // Note: these attempt to call the specific delegate method and fallback to the general one
+- (void)connectionDidReceiveIQ:(NSXMLElement *)iq;
+- (void)connectionDidReceiveMessage:(NSXMLElement *)message;
+- (void)connectionDidReceivePresence:(NSXMLElement *)presence; // Note: these attempt to call the specific delegate method and fallback to the general one
 
 @end
 
@@ -126,38 +115,16 @@ extern NSString *const XMPPAuthenticationSchemeDigestMD5;
  @optional
 
 /**
- * This method is called after registration of a new user has successfully finished.
- * If registration fails for some reason, the connection:didNotRegister: method will be called instead.
-**/
-- (void)connectionDidRegister:(XMPPConnection *)sender;
-
-/**
- * This method is called if registration fails.
-**/
-- (void)connection:(XMPPConnection *)sender didNotRegister:(CXMLElement *)errorElement;
-
-/**
- * This method is called after authentication has successfully finished.
- * If authentication fails for some reason, the connection:didNotAuthenticate: method will be called instead.
-**/
-- (void)connectionDidAuthenticate:(XMPPConnection *)sender;
-
-/**
- * This method is called if authentication fails.
-**/
-- (void)connection:(XMPPConnection *)sender didNotAuthenticate:(CXMLElement *)errorElement;
-
-/**
  * These methods are called after an instance of their respective stanza is received.
 **/
-- (void)connection:(XMPPConnection *)layer didReceiveIQ:(CXMLElement *)iq;
-- (void)connection:(XMPPConnection *)layer didReceiveMessage:(CXMLElement *)message;
-- (void)connection:(XMPPConnection *)layer didReceivePresence:(CXMLElement *)presence;
+- (void)connection:(XMPPConnection *)layer didReceiveIQ:(NSXMLElement *)iq;
+- (void)connection:(XMPPConnection *)layer didReceiveMessage:(NSXMLElement *)message;
+- (void)connection:(XMPPConnection *)layer didReceivePresence:(NSXMLElement *)presence;
 
 /*!
 	@brief
 	This is a fall through and is only called if the specific stanza handling methods aren't implemented.
  */
-- (void)connection:(XMPPConnection *)layer didReceiveElement:(CXMLElement *)element;
+- (void)connection:(XMPPConnection *)layer didReceiveElement:(NSXMLElement *)element;
 
 @end

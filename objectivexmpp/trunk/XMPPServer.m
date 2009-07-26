@@ -8,8 +8,9 @@
 
 #import "XMPPServer.h"
 
+#import "XMPPConstants.h"
+
 #import "AmberFoundation/AmberFoundation.h"
-#import "TouchXML/TouchXML.h"
 
 #import "XMPPConnection.h"
 
@@ -55,14 +56,14 @@
 }
 
 - (void)notifySubscribersForNode:(NSString *)nodeName withPayload:(NSArray *)itemElements {
-	CXMLElement *itemsElement = [CXMLElement elementWithName:@"items"];
-	[itemsElement addAttributeWithName:@"node" stringValue:nodeName];
+	NSXMLElement *itemsElement = [NSXMLElement elementWithName:@"items"];
+	[itemsElement addAttribute:[NSXMLElement attributeWithName:@"node" stringValue:nodeName]];
 	[itemsElement setChildren:itemElements];
 	
-	CXMLElement *eventElement = [CXMLElement elementWithName:@"event" xmlns:@"http://jabber.org/protocol/pubsub#event"];
+	NSXMLElement *eventElement = [NSXMLElement elementWithName:@"event" URI:XMPPNamespacePubSubEventURI];	
 	[eventElement addChild:itemsElement];
 	
-	CXMLElement *messageElement = [CXMLElement elementWithName:@"message"];
+	NSXMLElement *messageElement = [NSXMLElement elementWithName:@"message"];
 	[messageElement addChild:eventElement];
 	
 	NSSet *subscribers = [self _subscriptionsForNodeName:nodeName];
@@ -72,8 +73,8 @@
 		if (connection == nil) continue;
 		
 		[messageElement setAttributes:nil];
-		[messageElement addAttributeWithName:@"from" stringValue:self.hostnode];
-		[messageElement addAttributeWithName:@"to" stringValue:currentJID];
+		[messageElement addAttribute:[NSXMLElement attributeWithName:@"from" stringValue:self.hostnode]];
+		[messageElement addAttribute:[NSXMLElement attributeWithName:@"to" stringValue:currentJID]];
 		
 		[connection sendElement:messageElement];
 	}
@@ -83,14 +84,14 @@
 
 @implementation XMPPServer (Delegate)
 
-- (void)connection:(XMPPConnection *)layer didReceiveIQ:(CXMLElement *)iq {
+- (void)connection:(XMPPConnection *)layer didReceiveIQ:(NSXMLElement *)iq {
 	NSMutableArray *pubsubElements = [[[iq children] mutableCopy] autorelease];
-	for (CXMLElement *currentElement in [[pubsubElements copy] autorelease])
+	for (NSXMLElement *currentElement in [[pubsubElements copy] autorelease])
 		if (![[currentElement name] isEqualToString:@"pubsub"]) continue;
 	
 	if ([pubsubElements count] != 1) return;
 	
-	CXMLElement *pubsubChildElement = [pubsubElements objectAtIndex:0];
+	NSXMLElement *pubsubChildElement = [pubsubElements objectAtIndex:0];
 	if (pubsubChildElement == nil) return;
 	
 	NSString *nodeName = [[pubsubChildElement attributeForName:@"node"] stringValue];
@@ -107,9 +108,9 @@
 	[layer awknowledgeElement:iq];
 }
 
-- (void)connection:(XMPPConnection *)layer didReceiveMessage:(CXMLElement *)message {
+- (void)connection:(XMPPConnection *)layer didReceiveMessage:(NSXMLElement *)message {
 	NSString *fromJID = nil;
-	CXMLNode *fromAttribute = [message attributeForName:@"from"];
+	NSXMLNode *fromAttribute = [message attributeForName:@"from"];
 	
 	if (fromAttribute != nil) {
 		fromJID = [fromAttribute stringValue];
@@ -132,7 +133,7 @@
 	XMPPConnection *remoteConnection = (id)[self.clients layerWithValue:toJID forKey:@"peer"];
 	NSParameterAssert(remoteConnection != nil);
 	
-	if (fromAttribute == nil) [message addAttributeWithName:@"from" stringValue:fromJID];
+	if (fromAttribute == nil) [message addAttribute:[NSXMLElement attributeWithName:@"from" stringValue:fromJID]];
 	
 	[remoteConnection sendElement:message];
 }
