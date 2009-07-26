@@ -7,19 +7,19 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		534E2CF9101CC7E500AF8170 /* DDXML.h in Headers */ = {isa = PBXBuildFile; fileRef = DC5442580E8F336800013051 /* DDXML.h */; };
+		534E2CF9101CC7E500AF8170 /* DDXML.h in Headers */ = {isa = PBXBuildFile; fileRef = DC5442580E8F336800013051 /* DDXML.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		534E2CFA101CC7EC00AF8170 /* DDXMLNode.m in Sources */ = {isa = PBXBuildFile; fileRef = DC54425E0E8F336800013051 /* DDXMLNode.m */; };
-		534E2CFB101CC7EC00AF8170 /* DDXMLNode.h in Headers */ = {isa = PBXBuildFile; fileRef = DC54425D0E8F336800013051 /* DDXMLNode.h */; };
+		534E2CFB101CC7EC00AF8170 /* DDXMLNode.h in Headers */ = {isa = PBXBuildFile; fileRef = DC54425D0E8F336800013051 /* DDXMLNode.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		534E2CFC101CC7ED00AF8170 /* DDXMLNode+Private.m in Sources */ = {isa = PBXBuildFile; fileRef = 534E2CDE101CC67A00AF8170 /* DDXMLNode+Private.m */; };
-		534E2CFD101CC7ED00AF8170 /* DDXMLNode+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 534E2CDD101CC67A00AF8170 /* DDXMLNode+Private.h */; };
-		534E2CFF101CC7EF00AF8170 /* DDXMLElement.h in Headers */ = {isa = PBXBuildFile; fileRef = DC54425B0E8F336800013051 /* DDXMLElement.h */; };
+		534E2CFD101CC7ED00AF8170 /* DDXMLNode+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 534E2CDD101CC67A00AF8170 /* DDXMLNode+Private.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		534E2CFF101CC7EF00AF8170 /* DDXMLElement.h in Headers */ = {isa = PBXBuildFile; fileRef = DC54425B0E8F336800013051 /* DDXMLElement.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		534E2D00101CC7EF00AF8170 /* DDXMLElement.m in Sources */ = {isa = PBXBuildFile; fileRef = DC54425C0E8F336800013051 /* DDXMLElement.m */; };
 		534E2D01101CC7F000AF8170 /* DDXMLElement+Private.m in Sources */ = {isa = PBXBuildFile; fileRef = 534E2CE2101CC6A600AF8170 /* DDXMLElement+Private.m */; };
-		534E2D02101CC7F000AF8170 /* DDXMLElement+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 534E2CE1101CC6A600AF8170 /* DDXMLElement+Private.h */; };
+		534E2D02101CC7F000AF8170 /* DDXMLElement+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 534E2CE1101CC6A600AF8170 /* DDXMLElement+Private.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		534E2D03101CC7F000AF8170 /* DDXMLDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = DC54425A0E8F336800013051 /* DDXMLDocument.m */; };
-		534E2D04101CC7F200AF8170 /* DDXMLDocument.h in Headers */ = {isa = PBXBuildFile; fileRef = DC5442590E8F336800013051 /* DDXMLDocument.h */; };
+		534E2D04101CC7F200AF8170 /* DDXMLDocument.h in Headers */ = {isa = PBXBuildFile; fileRef = DC5442590E8F336800013051 /* DDXMLDocument.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		534E2D05101CC7F200AF8170 /* DDXMLDocument+Private.m in Sources */ = {isa = PBXBuildFile; fileRef = 534E2CE5101CC6D600AF8170 /* DDXMLDocument+Private.m */; };
-		534E2D06101CC7F300AF8170 /* DDXMLDocument+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 534E2CE4101CC6D600AF8170 /* DDXMLDocument+Private.h */; };
+		534E2D06101CC7F300AF8170 /* DDXMLDocument+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 534E2CE4101CC6D600AF8170 /* DDXMLDocument+Private.h */; settings = {ATTRIBUTES = (Private, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
