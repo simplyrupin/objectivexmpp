@@ -121,9 +121,10 @@ enum {
 #pragma mark -
 #pragma mark Connection Methods
 
-- (BOOL)open {
-	if ([self isOpen]) return YES;
-	return [super open];
+- (void)open {
+	if ([self isOpen]) return;
+	
+	[super open];
 }
 
 - (BOOL)isOpen {
@@ -132,13 +133,14 @@ enum {
 }
 
 - (void)close {
-	_sendState = StreamClosing;
+	if ([self isClosed]) return;
 	
 	[self _sendClosingNegotiation];
+	_sendState = StreamClosing;
 }
 
 - (BOOL)isClosed {
-	if (![self.lowerLayer isClosed]) return NO;
+	if (![super isClosed]) return NO;
 	return ((_sendState == StreamDisconnected) && (_receiveState == StreamDisconnected));
 }
 
@@ -386,6 +388,7 @@ enum {
 - (void)layer:(id <AFTransportLayer>)layer didRead:(id)data forTag:(NSUInteger)tag {
 	if (_receiveState == StreamConnecting) {
 		NSString *XMLString = [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease];
+		XMLString = [XMLString stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]];
 		
 #ifdef DEBUG_RECV
 		NSLog(@"RECV: %@", XMLString, nil);
@@ -430,6 +433,7 @@ enum {
 			_receiveState = StreamNegotiating;
 			
 			// We need to read in the stream features now
+			// It's important this times out so that message sending is enabled on timeout in P2P mode
 			[super performRead:[[[AFXMLElementPacket alloc] initWithStringEncoding:NSUTF8StringEncoding] autorelease] forTag:0 withTimeout:TIMEOUT_READ_START];
 		} else {
 			// The server isn't RFC compliant, and won't be sending any stream features
@@ -440,8 +444,12 @@ enum {
 		return;
 	}
 	
+	NSMutableCharacterSet *stripCharacters = [[[NSMutableCharacterSet alloc] init] autorelease];
+	[stripCharacters formUnionWithCharacterSet:[NSCharacterSet whitespaceCharacterSet]];
+	[stripCharacters formUnionWithCharacterSet:[NSCharacterSet newlineCharacterSet]];
+	
 	NSString *XMLString = data;
-	XMLString = [XMLString stringByTrimmingWhiteSpace];
+	XMLString = [XMLString stringByTrimmingCharactersInSet:stripCharacters];
 	
 #ifdef DEBUG_RECV
 	NSLog(@"RECV: %@", data, nil);
