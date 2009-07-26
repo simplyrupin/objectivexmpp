@@ -1,6 +1,8 @@
 
 #import "KissXML/DDXMLNode.h"
 
+@class DDXMLElement;
+
 enum {
 	DDXMLDocumentXMLKind = 0,
 	DDXMLDocumentXHTMLKind,
