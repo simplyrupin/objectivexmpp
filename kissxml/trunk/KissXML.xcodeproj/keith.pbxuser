@@ -131,15 +131,8 @@
 					PBXFileDataSource_Warnings_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 270323062;
-			PBXWorkspaceStateSaveDate = 270323062;
-		};
-		perUserProjectItems = {
-			534E2F21101CCB2A00AF8170 /* PBXTextBookmark */ = 534E2F21101CCB2A00AF8170 /* PBXTextBookmark */;
-			534E2F22101CCB2A00AF8170 /* PBXTextBookmark */ = 534E2F22101CCB2A00AF8170 /* PBXTextBookmark */;
-			534E2F61101CCD9000AF8170 /* PBXTextBookmark */ = 534E2F61101CCD9000AF8170 /* PBXTextBookmark */;
-			534E2F62101CCD9000AF8170 /* PBXBookmark */ = 534E2F62101CCD9000AF8170 /* PBXBookmark */;
-			534E2F63101CCD9000AF8170 /* PBXTextBookmark */ = 534E2F63101CCD9000AF8170 /* PBXTextBookmark */;
+			PBXPerProjectTemplateStateSaveDate = 270323669;
+			PBXWorkspaceStateSaveDate = 270323669;
 		};
 		sourceControlManager = 534E2CD8101CC63B00AF8170 /* Source Control */;
 		userBuildSettings = {
@@ -204,50 +197,6 @@
 	534E2CF0101CC78900AF8170 /* KissXML Touch */ = {
 		activeExec = 0;
 	};
-	534E2F21101CCB2A00AF8170 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = DC5442650E8F338300013051 /* NSString+Additions.m */;
-		name = "NSString+Additions.m: 8";
-		rLen = 0;
-		rLoc = 106;
-		rType = 0;
-		vrLen = 157;
-		vrLoc = 0;
-	};
-	534E2F22101CCB2A00AF8170 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = DC5442640E8F338300013051 /* NSString+Additions.h */;
-		name = "NSString+Additions.h: 14";
-		rLen = 0;
-		rLoc = 185;
-		rType = 0;
-		vrLen = 185;
-		vrLoc = 0;
-	};
-	534E2F61101CCD9000AF8170 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = DC54425E0E8F336800013051 /* DDXMLNode.m */;
-		name = "DDXMLNode.m: 64";
-		rLen = 0;
-		rLoc = 1925;
-		rType = 0;
-		vrLen = 622;
-		vrLoc = 1527;
-	};
-	534E2F62101CCD9000AF8170 /* PBXBookmark */ = {
-		isa = PBXBookmark;
-		fRef = DC54425B0E8F336800013051 /* DDXMLElement.h */;
-	};
-	534E2F63101CCD9000AF8170 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = DC54425B0E8F336800013051 /* DDXMLElement.h */;
-		name = "DDXMLElement.h: 1";
-		rLen = 0;
-		rLoc = 0;
-		rType = 0;
-		vrLen = 621;
-		vrLoc = 0;
-	};
 	DC5442580E8F336800013051 /* DDXML.h */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {709, 300}}";
@@ -257,9 +206,9 @@
 	};
 	DC5442590E8F336800013051 /* DDXMLDocument.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {709, 910}}";
-			sepNavSelRange = "{0, 0}";
-			sepNavVisRange = "{0, 653}";
+			sepNavIntBoundsRect = "{{0, 0}, {796, 832}}";
+			sepNavSelRange = "{223, 0}";
+			sepNavVisRange = "{1376, 624}";
 		};
 	};
 	DC54425A0E8F336800013051 /* DDXMLDocument.m */ = {
@@ -271,9 +220,9 @@
 	};
 	DC54425B0E8F336800013051 /* DDXMLElement.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {709, 715}}";
-			sepNavSelRange = "{0, 0}";
-			sepNavVisRange = "{0, 621}";
+			sepNavIntBoundsRect = "{{0, 0}, {709, 650}}";
+			sepNavSelRange = "{67, 0}";
+			sepNavVisRange = "{0, 542}";
 		};
 	};
 	DC54425C0E8F336800013051 /* DDXMLElement.m */ = {
@@ -292,21 +241,21 @@
 	};
 	DC54425E0E8F336800013051 /* DDXMLNode.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1090, 23647}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1090, 23660}}";
 			sepNavSelRange = "{1925, 0}";
-			sepNavVisRange = "{1527, 622}";
+			sepNavVisRange = "{1532, 614}";
 		};
 	};
 	DC5442640E8F338300013051 /* NSString+Additions.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {709, 300}}";
+			sepNavIntBoundsRect = "{{0, 0}, {709, 232}}";
 			sepNavSelRange = "{185, 0}";
 			sepNavVisRange = "{0, 185}";
 		};
 	};
 	DC5442650E8F338300013051 /* NSString+Additions.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {709, 300}}";
+			sepNavIntBoundsRect = "{{0, 0}, {709, 232}}";
 			sepNavSelRange = "{106, 0}";
 			sepNavVisRange = "{0, 157}";
 		};

@@ -1,10 +1,7 @@
-#import <Foundation/Foundation.h>
-#import "DDXMLNode.h"
 
+#import "KissXML/DDXMLNode.h"
 
 @interface DDXMLElement : DDXMLNode
-{
-}
 
 - (id)initWithName:(NSString *)name;
 - (id)initWithName:(NSString *)name URI:(NSString *)URI;

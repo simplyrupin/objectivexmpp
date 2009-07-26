@@ -1,7 +1,5 @@
-#import <Foundation/Foundation.h>
-#import "DDXMLElement.h"
-#import "DDXMLNode.h"
 
+#import "KissXML/DDXMLNode.h"
 
 enum {
 	DDXMLDocumentXMLKind = 0,
@@ -12,8 +10,6 @@ enum {
 typedef NSUInteger DDXMLDocumentContentKind;
 
 @interface DDXMLDocument : DDXMLNode
-{
-}
 
 - (id)initWithXMLString:(NSString *)string options:(NSUInteger)mask error:(NSError **)error;
 //- (id)initWithContentsOfURL:(NSURL *)url options:(NSUInteger)mask error:(NSError **)error;

@@ -20,6 +20,7 @@
 		534E2D04101CC7F200AF8170 /* DDXMLDocument.h in Headers */ = {isa = PBXBuildFile; fileRef = DC5442590E8F336800013051 /* DDXMLDocument.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		534E2D05101CC7F200AF8170 /* DDXMLDocument+Private.m in Sources */ = {isa = PBXBuildFile; fileRef = 534E2CE5101CC6D600AF8170 /* DDXMLDocument+Private.m */; };
 		534E2D06101CC7F300AF8170 /* DDXMLDocument+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 534E2CE4101CC6D600AF8170 /* DDXMLDocument+Private.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		534E300D101CCF0500AF8170 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29B97325FDCFA39411CA2CEA /* Foundation.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -49,6 +50,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				534E300D101CCF0500AF8170 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -223,10 +225,11 @@
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
+				ONLY_ACTIVE_ARCH = YES;
 				PREBINDING = NO;
 				PRIVATE_HEADERS_FOLDER_PATH = "$(PUBLIC_HEADERS_FOLDER_PATH)/private";
 				PRODUCT_NAME = KissXML;
-				PUBLIC_HEADERS_FOLDER_PATH = "$(CONFIGURATION_BUILD_DIR)/usr/local/include";
+				PUBLIC_HEADERS_FOLDER_PATH = /usr/local/include/KissXML;
 			};
 			name = Debug;
 		};
@@ -240,21 +243,19 @@
 				PREBINDING = NO;
 				PRIVATE_HEADERS_FOLDER_PATH = "$(PUBLIC_HEADERS_FOLDER_PATH)/private";
 				PRODUCT_NAME = KissXML;
-				PUBLIC_HEADERS_FOLDER_PATH = "$(CONFIGURATION_BUILD_DIR)/usr/local/include";
-				ZERO_LINK = NO;
+				PUBLIC_HEADERS_FOLDER_PATH = /usr/local/include/KissXML;
 			};
 			name = Release;
 		};
 		C01FCF4F08A954540054247B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = /usr/include/libxml2;
-				ONLY_ACTIVE_ARCH = YES;
 				PREBINDING = NO;
 				SDKROOT = macosx10.5;
 			};
@@ -263,7 +264,7 @@
 		C01FCF5008A954540054247B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
