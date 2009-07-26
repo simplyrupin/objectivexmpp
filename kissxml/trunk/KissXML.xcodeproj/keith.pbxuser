@@ -131,14 +131,14 @@
 					PBXFileDataSource_Warnings_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 270321184;
-			PBXWorkspaceStateSaveDate = 270321184;
+			PBXPerProjectTemplateStateSaveDate = 270322931;
+			PBXWorkspaceStateSaveDate = 270322931;
 		};
 		perUserProjectItems = {
-			534E2F1D101CCB2800AF8170 /* XCBuildMessageTextBookmark */ = 534E2F1D101CCB2800AF8170 /* XCBuildMessageTextBookmark */;
 			534E2F21101CCB2A00AF8170 /* PBXTextBookmark */ = 534E2F21101CCB2A00AF8170 /* PBXTextBookmark */;
 			534E2F22101CCB2A00AF8170 /* PBXTextBookmark */ = 534E2F22101CCB2A00AF8170 /* PBXTextBookmark */;
 			534E2F23101CCB2A00AF8170 /* PBXTextBookmark */ = 534E2F23101CCB2A00AF8170 /* PBXTextBookmark */;
+			534E2F49101CCD0A00AF8170 /* PBXTextBookmark */ = 534E2F49101CCD0A00AF8170 /* PBXTextBookmark */;
 		};
 		sourceControlManager = 534E2CD8101CC63B00AF8170 /* Source Control */;
 		userBuildSettings = {
@@ -203,15 +203,6 @@
 	534E2CF0101CC78900AF8170 /* KissXML Touch */ = {
 		activeExec = 0;
 	};
-	534E2F1D101CCB2800AF8170 /* XCBuildMessageTextBookmark */ = {
-		isa = PBXTextBookmark;
-		comments = "No '-trimWhitespace' method found";
-		fRef = DC54425E0E8F336800013051 /* DDXMLNode.m */;
-		fallbackIsa = XCBuildMessageTextBookmark;
-		rLen = 1;
-		rLoc = 63;
-		rType = 1;
-	};
 	534E2F21101CCB2A00AF8170 /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
 		fRef = DC5442650E8F338300013051 /* NSString+Additions.m */;
@@ -240,6 +231,16 @@
 		rLoc = 1925;
 		rType = 0;
 		vrLen = 663;
+		vrLoc = 1527;
+	};
+	534E2F49101CCD0A00AF8170 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = DC54425E0E8F336800013051 /* DDXMLNode.m */;
+		name = "DDXMLNode.m: 64";
+		rLen = 0;
+		rLoc = 1925;
+		rType = 0;
+		vrLen = 661;
 		vrLoc = 1527;
 	};
 	DC5442580E8F336800013051 /* DDXML.h */ = {
@@ -279,9 +280,9 @@
 	};
 	DC54425E0E8F336800013051 /* DDXMLNode.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1090, 23543}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1090, 23582}}";
 			sepNavSelRange = "{1925, 0}";
-			sepNavVisRange = "{1527, 663}";
+			sepNavVisRange = "{1527, 661}";
 		};
 	};
 	DC5442640E8F338300013051 /* NSString+Additions.h */ = {
