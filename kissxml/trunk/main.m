@@ -6,7 +6,7 @@
 //  Copyright Deusty Designs, LLC. 2008. All rights reserved.
 //
 
-#import <Cocoa/Cocoa.h>
+#import <Foundation/Foundation.h>
 
 int main(int argc, char *argv[])
 {

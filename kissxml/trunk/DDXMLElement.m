@@ -1,7 +1,9 @@
+
 #import "DDXMLElement.h"
-#import "NSStringAdditions.h"
+
 #import "DDXMLPrivate.h"
 
+#import "NSString+Additions.h"
 
 @implementation DDXMLElement
 

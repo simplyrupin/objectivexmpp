@@ -1,3 +1,4 @@
-#import "DDXMLNode.h"
-#import "DDXMLElement.h"
-#import "DDXMLDocument.h"
+
+#import "KissXML/DDXMLNode.h"
+#import "KissXML/DDXMLElement.h"
+#import "KissXML/DDXMLDocument.h"

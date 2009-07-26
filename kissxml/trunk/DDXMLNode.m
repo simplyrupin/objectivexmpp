@@ -1,32 +1,75 @@
+
 #import "DDXMLNode.h"
+
 #import "DDXMLElement.h"
 #import "DDXMLDocument.h"
-#import "NSStringAdditions.h"
 #import "DDXMLPrivate.h"
 
 #import <libxml/xpath.h>
 #import <libxml/xpathInternals.h>
 
+#import "NSString+Additions.h"
 
 @implementation DDXMLNode
 
-static void MyErrorHandler(void * userData, xmlErrorPtr error);
+static NSString *const DDLastErrorKey = @"DDXMLError";
+
+static void DDXMLErrorHandler(void * userData, xmlErrorPtr error)
+{
+	// This method is called by libxml when an error occurs.
+	// We register for this error in the initialize method below.
+	
+	// Extract error message and store in the current thread's dictionary.
+	// This ensure's thread safey, and easy access for all other DDXML classes.
+	
+	if(error == NULL)
+	{
+		[[[NSThread currentThread] threadDictionary] removeObjectForKey:DDLastErrorKey];
+	}
+	else
+	{
+		NSValue *errorValue = [NSValue valueWithBytes:error objCType:@encode(xmlError)];
+		
+		[[[NSThread currentThread] threadDictionary] setObject:errorValue forKey:DDLastErrorKey];
+	}
+}
 
 + (void)initialize
 {
-	static BOOL initialized = NO;
-	if(!initialized)
+	if (self != [DDXMLNode class]) return;
+	
+	// Redirect error output to our own function (don't clog up the console)
+	initGenericErrorDefaultFunc(NULL);
+	xmlSetStructuredErrorFunc(NULL, DDXMLErrorHandler);
+		
+	// Tell libxml not to keep ignorable whitespace (such as node indentation, formatting, etc).
+	// NSXML ignores such whitespace.
+	// This also has the added benefit of taking up less RAM when parsing formatted XML documents.
+	xmlKeepBlanksDefault(0);
+}
+
+/**
+ * Returns the last error encountered by libxml.
+ * Errors are caught in the MyErrorHandler method within DDXMLDocument.
+ **/
++ (NSError *)lastError
+{
+	NSValue *lastErrorValue = [[[NSThread currentThread] threadDictionary] objectForKey:DDLastErrorKey];
+	if(lastErrorValue)
 	{
-		// Redirect error output to our own function (don't clog up the console)
-		initGenericErrorDefaultFunc(NULL);
-		xmlSetStructuredErrorFunc(NULL, MyErrorHandler);
+		xmlError lastError;
+		[lastErrorValue getValue:&lastError];
 		
-		// Tell libxml not to keep ignorable whitespace (such as node indentation, formatting, etc).
-		// NSXML ignores such whitespace.
-		// This also has the added benefit of taking up less RAM when parsing formatted XML documents.
-		xmlKeepBlanksDefault(0);
+		int errCode = lastError.code;
+		NSString *errMsg = [[NSString stringWithFormat:@"%s", lastError.message] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
 		
-		initialized = YES;
+		NSDictionary *info = [NSDictionary dictionaryWithObject:errMsg forKey:NSLocalizedDescriptionKey];
+		
+		return [NSError errorWithDomain:@"DDXMLErrorDomain" code:errCode userInfo:info];
+	}
+	else
+	{
+		return nil;
 	}
 }
 
@@ -1795,51 +1838,6 @@ static void MyErrorHandler(void * userData, xmlErrorPtr error);
 		{
 			// The node still has a parent, so it's still in use
 		}
-	}
-}
-
-/**
- * Returns the last error encountered by libxml.
- * Errors are caught in the MyErrorHandler method within DDXMLDocument.
-**/
-+ (NSError *)lastError
-{
-	NSValue *lastErrorValue = [[[NSThread currentThread] threadDictionary] objectForKey:DDLastErrorKey];
-	if(lastErrorValue)
-	{
-		xmlError lastError;
-		[lastErrorValue getValue:&lastError];
-		
-		int errCode = lastError.code;
-		NSString *errMsg = [[NSString stringWithFormat:@"%s", lastError.message] trimWhitespace];
-		
-		NSDictionary *info = [NSDictionary dictionaryWithObject:errMsg forKey:NSLocalizedDescriptionKey];
-			
-		return [NSError errorWithDomain:@"DDXMLErrorDomain" code:errCode userInfo:info];
-	}
-	else
-	{
-		return nil;
-	}
-}
-
-static void MyErrorHandler(void * userData, xmlErrorPtr error)
-{
-	// This method is called by libxml when an error occurs.
-	// We register for this error in the initialize method below.
-	
-	// Extract error message and store in the current thread's dictionary.
-	// This ensure's thread safey, and easy access for all other DDXML classes.
-	
-	if(error == NULL)
-	{
-		[[[NSThread currentThread] threadDictionary] removeObjectForKey:DDLastErrorKey];
-	}
-	else
-	{
-		NSValue *errorValue = [NSValue valueWithBytes:error objCType:@encode(xmlError)];
-		
-		[[[NSThread currentThread] threadDictionary] setObject:errorValue forKey:DDLastErrorKey];
 	}
 }
 
