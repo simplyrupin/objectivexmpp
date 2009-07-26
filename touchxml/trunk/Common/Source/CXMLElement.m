@@ -35,25 +35,34 @@
 
 - (NSArray *)elementsForName:(NSString *)name
 {
-NSMutableArray *theElements = [NSMutableArray array];
-
-// TODO -- native xml api?
-const xmlChar *theName = (const xmlChar *)[name UTF8String];
-
-xmlNodePtr theCurrentNode = _node->children;
-while (theCurrentNode != NULL)
-	{
-	if (theCurrentNode->type == XML_ELEMENT_NODE && xmlStrcmp(theName, theCurrentNode->name) == 0)
-		{
-		CXMLNode *theNode = [CXMLNode nodeWithLibXMLNode:(xmlNodePtr)theCurrentNode];
-		[theElements addObject:theNode];
-		}
-	theCurrentNode = theCurrentNode->next;
+	NSString *prefix = [[self class] prefixForName:name];
+	if (prefix != nil) {
+		CXMLNode *namespace = [self resolveNamespaceForName:prefix];
+		return [self elementsForLocalName:[[self class] localNameForName:name] URI:[namespace stringValue]];
 	}
-return(theElements);
+	
+	NSMutableArray *theElements = [NSMutableArray array];
+	
+	// TODO -- native xml api?
+	const xmlChar *theName = (const xmlChar *)[name UTF8String];
+	
+	xmlNodePtr theCurrentNode = _node->children;
+	while (theCurrentNode != NULL)
+	{
+		if (theCurrentNode->type == XML_ELEMENT_NODE && xmlStrcmp(theName, theCurrentNode->name) == 0)
+		{
+			CXMLNode *theNode = [CXMLNode nodeWithLibXMLNode:(xmlNodePtr)theCurrentNode];
+			[theElements addObject:theNode];
+		}
+		theCurrentNode = theCurrentNode->next;
+	}
+	return(theElements);
 }
 
-//- (NSArray *)elementsForLocalName:(NSString *)localName URI:(NSString *)URI;
+- (NSArray *)elementsForLocalName:(NSString *)localName URI:(NSString *)URI {
+	[self doesNotRecognizeSelector:_cmd];
+	return nil;
+}
 
 - (NSArray *)attributes
 {

@@ -46,6 +46,7 @@
 	NSParameterAssert(inAttribute->_node != NULL);
 	
 	xmlNodePtr result = xmlAddChild(self->_node, (xmlNodePtr)inAttribute->_node);
+#pragma unused (result)
 }
 
 - (void)addNamespace:(CXMLNode *)inNamespace

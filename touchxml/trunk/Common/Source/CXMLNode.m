@@ -38,98 +38,241 @@
 
 @implementation CXMLNode
 
+static void CXMLErrorHandler(void *userData, xmlErrorPtr error)
+{
+	// This method is called by libxml when an error occurs.
+	// We register for this error in the initialize method below.
+	
+	// Extract error message and store in the current thread's dictionary.
+	// This ensure's thread safey, and easy access for all other DDXML classes.
+	
+	static NSString *const CXMLLastErrorKey = @"CXMLError";
+	
+	if (error == NULL)
+	{
+		[[[NSThread currentThread] threadDictionary] removeObjectForKey:CXMLLastErrorKey];
+	}
+	else
+	{
+		NSValue *errorValue = [NSValue valueWithBytes:error objCType:@encode(xmlError)];
+		[[[NSThread currentThread] threadDictionary] setObject:errorValue forKey:CXMLLastErrorKey];
+	}
+}
+
++ (void)initialize
+{
+	if (self != [CXMLNode class]) return;
+	
+	// Redirect error output to our own function (don't clog up the console)
+	initGenericErrorDefaultFunc(NULL);
+	xmlSetStructuredErrorFunc(NULL, CXMLErrorHandler);
+	
+	// Tell libxml not to keep ignorable whitespace (such as node indentation, formatting, etc).
+	// NSXML ignores such whitespace.
+	// This also has the added benefit of taking up less RAM when parsing formatted XML documents.
+	xmlKeepBlanksDefault(0);
+}
+
 - (void)dealloc
 {
-//	switch ([self kind]) {
-//		case CXMLInvalidKind = 0,
-//			CXMLElementKind = XML_ELEMENT_NODE,
-//			CXMLAttributeKind = XML_ATTRIBUTE_NODE,
-//			CXMLTextKind = XML_TEXT_NODE,
-//			CXMLProcessingInstructionKind = XML_PI_NODE,
-//			CXMLCommentKind = XML_COMMENT_NODE,
-//			CXMLNotationDeclarationKind = XML_NOTATION_NODE,
-//			CXMLDTDKind = XML_DTD_NODE,
-//			CXMLElementDeclarationKind =  XML_ELEMENT_DECL,
-//			CXMLAttributeDeclarationKind =  XML_ATTRIBUTE_DECL,
-//			CXMLEntityDeclarationKind = XML_ENTITY_DECL,
-//			CXMLNamespaceKind = XML_NAMESPACE_DECL,:
-//			
-//			break;
-//		default:
-//			break;
-//	}
+	// Check if genericPtr is NULL
+	// This may be the case if, eg, DDXMLElement calls [self release] from it's init method
 	
-	if (_node)
+	if (_node != NULL)
 	{
-		if (_node->_private == self)
-			_node->_private = NULL;
-		_node = NULL;
+		[self _nodeRelease];
 	}
 	
 	[super dealloc];
 }
 
-- (id)copyWithZone:(NSZone *)zone;
-{
-	xmlNodePtr theNewNode = xmlCopyNode(_node, 1);
-	CXMLNode *theNode = [[[self class] alloc] initWithLibXMLNode:theNewNode];
-	theNewNode->_private = theNode;
-	return(theNode);
+static BOOL _CXMLKindIsNode(CXMLNodeKind type) {	
+	switch (type) {
+		case XML_ELEMENT_NODE:
+		case XML_PI_NODE: 
+		case XML_COMMENT_NODE: 
+		case XML_TEXT_NODE: 
+		case XML_CDATA_SECTION_NODE:
+			return YES;
+	}
+	
+	return NO;
+}
+
+- (id)copyWithZone:(NSZone *)zone
+{	
+	if ([self kind] == CXMLDocumentKind) {
+		xmlDocPtr copyDocPtr = xmlCopyDoc((xmlDocPtr)_node, 1);
+		return [[CXMLDocument alloc] initWithLibXMLNode:(xmlNodePtr)copyDocPtr];
+	}
+	
+	if (_CXMLKindIsNode([self kind])) {
+		xmlNodePtr copyNodePtr = xmlCopyNode(_node, 1);
+		return [[[self class] alloc] initWithLibXMLNode:copyNodePtr];
+	}
+	
+	if ([self kind] == CXMLAttributeKind) {
+		xmlAttrPtr copyAttrPtr = xmlCopyProp(NULL, (xmlAttrPtr)_node);
+		return [[[self class] alloc] initWithLibXMLNode:(xmlNodePtr)copyAttrPtr];
+	}
+	
+	if ([self kind] == CXMLNamespaceKind) {
+		xmlNsPtr copyNsPtr = xmlCopyNamespace((xmlNsPtr)_node);
+		return [[[self class] alloc] initWithLibXMLNode:(xmlNodePtr)copyNsPtr];
+	}
+	
+	if ([self kind] == CXMLDTDKind) {
+		xmlDtdPtr copyDtdPtr = xmlCopyDtd((xmlDtdPtr)_node);
+		return [[[self class] alloc] initWithLibXMLNode:(xmlNodePtr)copyDtdPtr];
+	}
+	
+	return nil;
 }
 
 #pragma mark -
 
 - (CXMLNodeKind)kind
 {
-	NSAssert(_node != NULL, @"CXMLNode does not have attached libxml2 _node.");
-	return(_node->type); // TODO this isn't 100% accurate!
+	if (_node == NULL) return CXMLInvalidKind;
+	return(_node->type);
 }
 
 - (NSString *)name
 {
-	NSAssert(_node != NULL, @"CXMLNode does not have attached libxml2 _node.");
-	// TODO use xmlCheckUTF8 to check name
-	if (_node->name == NULL)
-		return(NULL);
-	else
-		return([NSString stringWithUTF8String:(const char *)_node->name]);
+	if ([self kind] == CXMLNamespaceKind)
+	{
+		xmlNsPtr ns = (xmlNsPtr)_node;
+		
+		if (ns->prefix != NULL)
+			return [NSString stringWithUTF8String:((const char *)ns->prefix)];
+		else
+			return @"";
+	}
+	
+	const char *name = (const char *)_node->name;
+	return (name != NULL) ? [NSString stringWithUTF8String:name] : nil;
+}
+
+- (void)setName:(NSString *)name
+{
+	if ([self kind] == CXMLNamespaceKind)
+	{
+		xmlNsPtr ns = (xmlNsPtr)_node;
+		
+		xmlFree((xmlChar *)ns->prefix);
+		ns->prefix = xmlStrdup((xmlChar *)[name UTF8String]);
+		
+		return;
+	}
+	
+	// The xmlNodeSetName function works for both nodes and attributes
+	xmlNodeSetName(_node, (xmlChar *)[name UTF8String]);
 }
 
 - (NSString *)stringValue
 {
-	NSAssert(_node != NULL, @"CXMLNode does not have attached libxml2 _node.");
-	xmlChar *theXMLString;
-	BOOL theFreeReminderFlag = NO;
-	if (_node->type == XML_TEXT_NODE || _node->type == XML_CDATA_SECTION_NODE) 
-		theXMLString = _node->content;
-	else
+	if ([self kind] == CXMLNamespaceKind)
 	{
-		theXMLString = xmlNodeListGetString(_node->doc, _node->children, YES);
-		theFreeReminderFlag = YES;
+		return [NSString stringWithUTF8String:((const char *)((xmlNsPtr)_node)->href)];
 	}
 	
-	NSString *theStringValue = NULL;
-	if (theXMLString != NULL)
+	if ([self kind] == CXMLAttributeKind)
 	{
-		theStringValue = [NSString stringWithUTF8String:(const char *)theXMLString];
-		if (theFreeReminderFlag == YES)
+		xmlAttrPtr attr = (xmlAttrPtr)_node;
+		
+		if (attr->children != NULL)
 		{
-			xmlFree(theXMLString);
+			return [NSString stringWithUTF8String:(const char *)attr->children->content];
 		}
+		
+		return nil;
 	}
 	
-	return(theStringValue);
+	if (_CXMLKindIsNode([self kind]))
+	{
+		xmlChar *content = xmlNodeGetContent((xmlNodePtr)_node);
+		
+		NSString *result = [NSString stringWithUTF8String:(const char *)content];
+		xmlFree(content);
+		
+		return result;
+	}
+	
+	return nil;
+}
+
+- (void)setStringValue:(NSString *)string
+{
+	if ([self kind] == CXMLNamespaceKind)
+	{
+		xmlNsPtr ns = (xmlNsPtr)_node;
+		
+		xmlFree((xmlChar *)ns->href);
+		ns->href = xmlEncodeSpecialChars(NULL, (xmlChar *)[string UTF8String]);
+		
+		return;
+	}
+	
+	if ([self kind] == CXMLAttributeKind)
+	{
+		xmlAttrPtr attr = (xmlAttrPtr)_node;
+		
+		if (attr->children != NULL)
+		{
+			xmlChar *escapedString = xmlEncodeSpecialChars(attr->doc, (xmlChar *)[string UTF8String]);
+			xmlNodeSetContent((xmlNodePtr)attr, escapedString);
+			xmlFree(escapedString);
+		}
+		else
+		{
+			xmlNodePtr text = xmlNewText((xmlChar *)[string UTF8String]);
+			attr->children = text;
+		}
+		
+		return;
+	}
+	
+	if (_CXMLKindIsNode([self kind]))
+	{	
+		// Setting the content of a node erases any existing child nodes.
+		// Therefore, we need to remove them properly first.
+		[[self class] removeAllChildrenFromNode:_node];
+		
+		xmlChar *escapedString = xmlEncodeSpecialChars(_node->doc, (xmlChar *)[string UTF8String]);
+		xmlNodeSetContent(_node, escapedString);
+		xmlFree(escapedString);
+		
+		return;
+	}
 }
 
 - (NSUInteger)index
 {
 	NSAssert(_node != NULL, @"CXMLNode does not have attached libxml2 _node.");
 	
-	xmlNodePtr theCurrentNode = _node->prev;
-	NSUInteger N;
-	for (N = 0; theCurrentNode != NULL; ++N, theCurrentNode = theCurrentNode->prev)
-		;
-	return(N);
+	if ([self kind] == CXMLNamespaceKind)
+	{
+		if (_namespaceParent == NULL) return 0;
+		
+		xmlNsPtr currentNamespace = _namespaceParent->nsDef;
+		
+		NSUInteger result = 0;
+		
+		while (currentNamespace != NULL) {
+			if (currentNamespace == (xmlNsPtr)_node) return result;
+			
+			result++;
+			currentNamespace = currentNamespace->next;
+		}
+		
+		return 0;
+	}
+	
+	xmlNodePtr currentNode = _node->prev;
+	
+	NSUInteger index;
+	for (index = 0; currentNode != NULL; ++index, currentNode = currentNode->prev);
+	return index;
 }
 
 - (NSUInteger)level
@@ -137,10 +280,10 @@
 	NSAssert(_node != NULL, @"CXMLNode does not have attached libxml2 _node.");
 	
 	xmlNodePtr theCurrentNode = _node->parent;
-	NSUInteger N;
-	for (N = 0; theCurrentNode != NULL; ++N, theCurrentNode = theCurrentNode->parent)
-		;
-	return(N);
+	
+	NSUInteger level;
+	for (level = 0; theCurrentNode != NULL; ++level, theCurrentNode = theCurrentNode->parent);
+	return level;
 }
 
 - (CXMLDocument *)rootDocument
@@ -225,28 +368,73 @@
 
 - (NSString *)localName
 {
-	NSAssert(_node != NULL, @"CXMLNode does not have attached libxml2 _node.");
-	// TODO use xmlCheckUTF8 to check name
-	if (_node->name == NULL)
-		return(NULL);
-	else
-		return([NSString stringWithUTF8String:(const char *)_node->name]); // TODO this is the same as name. What's up with thaat?
+	if ([self kind] == CXMLNamespaceKind)
+	{
+		// Strangely enough, the localName of a namespace is the prefix, and the prefix is an empty string
+		
+		xmlNsPtr ns = (xmlNsPtr)_node;
+		
+		if (ns->prefix != NULL)
+			return [NSString stringWithUTF8String:((const char *)ns->prefix)];
+		
+		return @"";
+	}
+	
+	return [[self class] localNameForName:[self name]];
 }
 
 - (NSString *)prefix
 {
-	if (_node->ns)
-		return([NSString stringWithUTF8String:(const char *)_node->ns->prefix]);
-	else
-		return(NULL);
+	if ([self kind] == CXMLNamespaceKind)
+	{
+		// Strangely enough, the localName of a namespace is the prefix, and the prefix is an empty string
+		return @"";
+	}
+	
+	return [[self class] prefixForName:[self name]];
 }
 
 - (NSString *)URI
 {
-	if (_node->ns)
-		return([NSString stringWithUTF8String:(const char *)_node->ns->href]);
-	else
-		return(NULL);
+	if ([self kind] == CXMLAttributeKind)
+	{
+		xmlAttrPtr attr = (xmlAttrPtr)_node;
+		
+		if (attr->ns != NULL)
+		{
+			return [NSString stringWithUTF8String:((const char *)attr->ns->href)];
+		}
+	}
+	else if (_CXMLKindIsNode([self kind]))
+	{
+		xmlNodePtr node = (xmlNodePtr)_node;
+		
+		if (node->ns != NULL)
+		{
+			return [NSString stringWithUTF8String:((const char *)node->ns->href)];
+		}
+	}
+	
+	return nil;
+}
+
++ (NSString *)localNameForName:(NSString *)name {
+	if (name == nil) return nil;
+	
+	NSRange range = [name rangeOfString:@":"];
+	if (range.length == 0) return name;
+		
+	return [name substringFromIndex:range.location];
+}
+
++ (NSString *)prefixForName:(NSString *)name
+{
+	if (name == nil) return nil;
+	
+	NSRange range = [name rangeOfString:@":"];
+	if (range.length == 0) return nil;
+		
+	return [name substringToIndex:range.location];
 }
 
 //+ (NSString *)localNameForName:(NSString *)name;

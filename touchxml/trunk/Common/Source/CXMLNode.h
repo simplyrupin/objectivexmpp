@@ -44,19 +44,26 @@ enum {
 	CXMLAttributeDeclarationKind	= XML_ATTRIBUTE_DECL,
 	CXMLEntityDeclarationKind		= XML_ENTITY_DECL,
 	CXMLNamespaceKind				= XML_NAMESPACE_DECL,
+	CXMLDocumentKind				= XML_DOCUMENT_NODE,
 };
 typedef NSInteger CXMLNodeKind;
 
 @class CXMLDocument;
 
-// NSXMLNode
+
 @interface CXMLNode : NSObject <NSCopying> {
 	xmlNodePtr _node;
+	xmlNodePtr _namespaceParent;
 }
 
 - (CXMLNodeKind)kind;
+
 - (NSString *)name;
+- (void)setName:(NSString *)name;
+
 - (NSString *)stringValue;
+- (void)setStringValue:(NSString *)stringValue;
+
 - (NSUInteger)index;
 - (NSUInteger)level;
 - (CXMLDocument *)rootDocument;
@@ -72,9 +79,11 @@ typedef NSInteger CXMLNodeKind;
 - (NSString *)localName;
 - (NSString *)prefix;
 - (NSString *)URI;
-//+ (NSString *)localNameForName:(NSString *)name;
-//+ (NSString *)prefixForName:(NSString *)name;
+
++ (NSString *)localNameForName:(NSString *)name;
++ (NSString *)prefixForName:(NSString *)name;
 //+ (CXMLNode *)predefinedNamespaceForPrefix:(NSString *)name;
+
 - (NSString *)description;
 - (NSString *)XMLString;
 - (NSString *)XMLStringWithOptions:(NSUInteger)options;
