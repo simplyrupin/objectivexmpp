@@ -21,6 +21,9 @@
 @end
 
 @interface XMPPServer (Private)
+- (XMPPConnection *)_connectionForNodeName:(NSString *)name;
+- (NSString *)_nodeNameForConnection:(XMPPConnection *)connection;
+
 - (NSMutableSet *)_subscriptionsForNodeName:(NSString *)name;
 @end
 
@@ -40,7 +43,6 @@
 	if (self == nil) return nil;
 	
 	_connectedNodes = [[NSMutableDictionary alloc] init];
-	
 	_nodeSubscriptions = [[NSMutableDictionary alloc] init];
 	
 	return self;
@@ -48,8 +50,8 @@
 
 - (void)dealloc {
 	[_hostnode release];
-	[_connectedNodes release];
 	
+	[_connectedNodes release];
 	[_nodeSubscriptions release];
 	
 	[super dealloc];
@@ -85,23 +87,17 @@
 @implementation XMPPServer (Delegate)
 
 - (void)connection:(XMPPConnection *)layer didReceiveIQ:(NSXMLElement *)iq {
-	NSMutableArray *pubsubElements = [[[iq children] mutableCopy] autorelease];
-	for (NSXMLElement *currentElement in [[pubsubElements copy] autorelease])
-		if (![[currentElement name] isEqualToString:@"pubsub"]) continue;
+	NSXMLElement *pubsubElement = [[iq elementsForName:@"pubsub"] onlyObject];
+	if (pubsubElement == nil) return;
 	
-	if ([pubsubElements count] != 1) return;
-	
-	NSXMLElement *pubsubChildElement = [pubsubElements objectAtIndex:0];
-	if (pubsubChildElement == nil) return;
-	
-	NSString *nodeName = [[pubsubChildElement attributeForName:@"node"] stringValue];
-	NSString *subscribingNode = [[pubsubChildElement attributeForName:@"jid"] stringValue];
+	NSString *nodeName = [[pubsubElement attributeForName:@"node"] stringValue];
+	NSString *subscribingNode = [[pubsubElement attributeForName:@"jid"] stringValue];
 	
 	NSMutableSet *subscriptions = [self _subscriptionsForNodeName:nodeName];
 	
-	if ([[[pubsubChildElement name] lowercaseString] isEqualToString:@"subscribe"]) {
+	if ([[pubsubElement name] caseInsensitiveCompare:@"subscribe"] == NSOrderedSame) {
 		[subscriptions addObject:subscribingNode];
-	} else if ([[[pubsubChildElement name] lowercaseString] isEqualToString:@"unsubscribe"]) {
+	} else if ([[pubsubElement name] caseInsensitiveCompare:@"unsubscribe"] == NSOrderedSame) {
 		[subscriptions removeObject:subscribingNode];
 	}
 	
@@ -109,31 +105,23 @@
 }
 
 - (void)connection:(XMPPConnection *)layer didReceiveMessage:(NSXMLElement *)message {
-	NSString *fromJID = nil;
-	NSXMLNode *fromAttribute = [message attributeForName:@"from"];
-	
-	if (fromAttribute != nil) {
-		fromJID = [fromAttribute stringValue];
-	} else {
-		NSArray *JIDCollection = (id)[self.connectedNodes allKeysForObject:layer];
-		NSAssert([(id)JIDCollection count] == 1, ([NSString stringWithFormat:@"Connection %p may only register one JID, %d found", layer, [(id)fromJID count], nil]));
-		fromJID = [(id)JIDCollection objectAtIndex:0];
-	}
-	
-	NSAssert(fromJID != nil, ([NSString stringWithFormat:@"%s, couldn't determine the sender of message %p" /* The error string can state 'message', because other types aren't forwarded */ , __PRETTY_FUNCTION__, message, nil]));
+	NSString *fromJID = [self _nodeNameForConnection:layer];
 	
 	NSString *toJID = [[message attributeForName:@"to"] stringValue];
-	NSAssert(toJID != nil, ([NSString stringWithFormat:@"%s, couldn't determine the recipient of message %p" /* The error string can state 'message', because other types aren't forwarded */ , __PRETTY_FUNCTION__, message, nil]));
+	NSParameterAssert(toJID != nil);
 	
 	BOOL shouldForward = YES;
 	if ([self.delegate respondsToSelector:@selector(server:shouldForwardMessage:fromNode:toNode:)]) {
 		shouldForward = [self.delegate server:self shouldForwardMessage:message fromNode:fromJID toNode:toJID];
-	} if (!shouldForward) return;
+	}
+	if (!shouldForward) return;
 	
-	XMPPConnection *remoteConnection = (id)[self.clients layerWithValue:toJID forKey:@"peer"];
-	NSParameterAssert(remoteConnection != nil);
+	XMPPConnection *remoteConnection = [self _connectionForNodeName:toJID];
 	
-	if (fromAttribute == nil) [message addAttribute:[NSXMLElement attributeWithName:@"from" stringValue:fromJID]];
+	if (remoteConnection == nil) {
+#warning implement store and forward
+		return;
+	}
 	
 	[remoteConnection sendElement:message];
 }
@@ -141,6 +129,14 @@
 @end
 
 @implementation XMPPServer (Private)
+
+- (XMPPConnection *)_connectionForNodeName:(NSString *)name {
+	return [[self connectedNodes] objectForKey:name];
+}
+
+- (NSString *)_nodeNameForConnection:(XMPPConnection *)connection {
+	return nil;
+}
 
 - (NSMutableSet *)_subscriptionsForNodeName:(NSString *)name {
 	NSMutableSet *subscriptions = [_nodeSubscriptions objectForKey:name];

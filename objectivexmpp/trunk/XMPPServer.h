@@ -18,7 +18,8 @@
 @interface XMPPServer : AFNetworkServer {
 	NSString *_hostnode;
 	
-	NSMutableDictionary *_connectedNodes, *_nodeSubscriptions;
+	NSMutableDictionary *_connectedNodes;
+	NSMutableDictionary *_nodeSubscriptions;
 }
 
 @property (assign) id <XMPPServerDelegate> delegate;
