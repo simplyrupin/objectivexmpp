@@ -75,7 +75,7 @@ enum {
 
 @synthesize rootStreamElement=_rootStreamElement;
 
-@synthesize peer=_peer, local=_local;
+@synthesize localAddress=_local, peerAddress=_peer;
 @dynamic delegate;
 
 @synthesize keepAliveTimer=_keepAliveTimer;
@@ -160,7 +160,15 @@ enum {
 		[super performWrite:[processingInstruction dataUsingEncoding:NSUTF8StringEncoding] forTag:XCWriteStartTag withTimeout:TIMEOUT_WRITE];
 	}
 		
-	NSString *openingTag = [NSString stringWithFormat:@"<stream:stream xmlns='jabber:client' xmlns:stream='%@' version='%@'>", XMPPNamespaceStreamURI, [[self class] connectionCompatabilityVersion], nil];
+	NSMutableString *openingTag = [NSMutableString stringWithString:@"<stream:stream "];
+	if ([self local] != nil) {
+		[openingTag appendFormat:@"from='%@' ", [self local], nil];
+	}
+	if ([self peer] != nil) {
+		[openingTag appendFormat:@"to='%@' ", [self peer], nil];
+	}
+	[openingTag appendFormat:@"xmlns='jabber:client' xmlns:stream='%@' version='%@'>", XMPPNamespaceStreamURI, [[self class] connectionCompatabilityVersion], nil];
+	
 	[super performWrite:[openingTag dataUsingEncoding:NSUTF8StringEncoding] forTag:XCWriteStartTag withTimeout:TIMEOUT_WRITE];
 }
 
@@ -245,7 +253,7 @@ enum {
 - (NSXMLElement *)_pubsubElement:(NSString *)method node:(NSString *)name {
 	NSXMLElement *methodElement = [NSXMLElement elementWithName:method];
 	[methodElement addAttribute:[NSXMLElement attributeWithName:@"node" stringValue:name]];
-	[methodElement addAttribute:[NSXMLElement attributeWithName:@"jid" stringValue:self.local]];
+	[methodElement addAttribute:[NSXMLElement attributeWithName:@"jid" stringValue:self.localAddress]];
 	
 	NSXMLElement *pubsubElement = [NSXMLElement elementWithName:@"pubsub" URI:XMPPNamespacePubSubURI];
 	[pubsubElement addChild:methodElement];
@@ -381,8 +389,6 @@ enum {
 	
 	[self _sendOpeningNegotiation];
 	[self _readOpeningNegotiation];
-	
-	[self.delegate layerDidOpen:self];
 }
 
 - (void)layer:(id <AFTransportLayer>)layer didRead:(id)data forTag:(NSUInteger)tag {
@@ -421,7 +427,7 @@ enum {
 		}
 		
 		NSString *fromString = [[self.rootStreamElement attributeForName:@"from"] stringValue];
-		if (fromString != nil) self.peer = fromString;
+		if (fromString != nil) self.peerAddress = fromString;
 		
 		// Check for RFC compliance
 		NSString *streamVersion = [self serverConnectionVersion];

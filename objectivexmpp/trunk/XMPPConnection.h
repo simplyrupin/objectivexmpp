@@ -40,9 +40,10 @@
 + (NSString *)connectionCompatabilityVersion;
 
 /*!
-	
+	@brief
+	These addresses are specifically strings, the contain the JID for each endpoint.
  */
-@property (copy) NSString *peer, *local;
+@property (copy) NSString *localAddress, *peerAddress;
 
 /*!
 	
