@@ -161,11 +161,11 @@ enum {
 	}
 		
 	NSMutableString *openingTag = [NSMutableString stringWithString:@"<stream:stream "];
-	if ([self local] != nil) {
-		[openingTag appendFormat:@"from='%@' ", [self local], nil];
+	if (self.localAddress != nil) {
+		[openingTag appendFormat:@"from='%@' ", self.localAddress, nil];
 	}
-	if ([self peer] != nil) {
-		[openingTag appendFormat:@"to='%@' ", [self peer], nil];
+	if (self.peerAddress != nil) {
+		[openingTag appendFormat:@"to='%@' ", self.peerAddress, nil];
 	}
 	[openingTag appendFormat:@"xmlns='jabber:client' xmlns:stream='%@' version='%@'>", XMPPNamespaceStreamURI, [[self class] connectionCompatabilityVersion], nil];
 	
