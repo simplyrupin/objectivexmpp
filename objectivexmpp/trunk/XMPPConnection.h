@@ -43,7 +43,7 @@
 	@brief
 	These addresses are specifically strings, the contain the JID for each endpoint.
  */
-@property (copy) NSString *localAddress, *peerAddress;
+@property (readwrite, copy) NSString *localAddress, *peerAddress;
 
 /*!
 	

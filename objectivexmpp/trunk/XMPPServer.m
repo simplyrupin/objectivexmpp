@@ -86,6 +86,12 @@
 
 @implementation XMPPServer (Delegate)
 
+- (void)layerDidOpen:(id)layer {
+	[super layerDidOpen:layer];
+	
+	[_connectedNodes setObject:layer forKey:[layer peerAddress]];
+}
+
 - (void)connection:(XMPPConnection *)layer didReceiveIQ:(NSXMLElement *)iq {
 	NSXMLElement *pubsubElement = [[iq elementsForName:@"pubsub"] onlyObject];
 	if (pubsubElement == nil) return;
@@ -135,7 +141,7 @@
 }
 
 - (NSString *)_nodeNameForConnection:(XMPPConnection *)connection {
-	return nil;
+	return [connection peerAddress];
 }
 
 - (NSMutableSet *)_subscriptionsForNodeName:(NSString *)name {

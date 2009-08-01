@@ -157,9 +157,9 @@ enum {
 - (void)_sendOpeningNegotiation {
 	if (_sendState == StreamConnecting) {
 		NSString *processingInstruction = @"<?xml version='1.0' encoding='UTF-8'?>";
-		[super performWrite:[processingInstruction dataUsingEncoding:NSUTF8StringEncoding] forTag:XCWriteStartTag withTimeout:TIMEOUT_WRITE];
+		[super performWrite:[processingInstruction dataUsingEncoding:NSUTF8StringEncoding] forTag:0 withTimeout:TIMEOUT_WRITE];
 	}
-		
+	
 	NSMutableString *openingTag = [NSMutableString stringWithString:@"<stream:stream "];
 	if (self.localAddress != nil) {
 		[openingTag appendFormat:@"from='%@' ", self.localAddress, nil];
@@ -219,7 +219,7 @@ enum {
 	NSString *identifier = [self _stanzaIdentifer:element shouldAdd:YES];
 	
 	if ([element attributeForName:@"to"] == nil) {
-		[element addAttribute:[NSXMLElement attributeWithName:@"to" stringValue:self.peer]];
+		[element addAttribute:[NSXMLElement attributeWithName:@"to" stringValue:self.peerAddress]];
 	}
 	
 	[self performWrite:element forTag:tag withTimeout:TIMEOUT_WRITE];
@@ -449,7 +449,7 @@ enum {
 		
 		return;
 	}
-	
+		
 	NSMutableCharacterSet *stripCharacters = [[[NSMutableCharacterSet alloc] init] autorelease];
 	[stripCharacters formUnionWithCharacterSet:[NSCharacterSet whitespaceCharacterSet]];
 	[stripCharacters formUnionWithCharacterSet:[NSCharacterSet newlineCharacterSet]];
@@ -460,17 +460,31 @@ enum {
 #ifdef DEBUG_RECV
 	NSLog(@"RECV: %@", data, nil);
 #endif
-	
+		
 	if ([XMLString hasSuffix:@"</stream:stream>"]) {
 		[self close];
 		return;
 	}
 	
-	NSError *parseError = nil;
-	NSXMLDocument *xmlDoc = [[[NSXMLDocument alloc] initWithXMLString:XMLString options:0 error:&parseError] autorelease];
-	NSParameterAssert(parseError == nil && xmlDoc != nil);
 	
-	[self connectionDidReceiveElement:[xmlDoc rootElement]];
+	NSError *parseError = nil;
+	NSXMLDocument *stanzaDocument = [[[NSXMLDocument alloc] initWithXMLString:XMLString options:0 error:&parseError] autorelease];
+	NSParameterAssert(parseError == nil && stanzaDocument != nil);
+	NSXMLElement *stanza = [stanzaDocument rootElement];
+	
+	
+	if (_receiveState == StreamNegotiating) {
+		if ([[stanza localName] isEqualToString:XMPPStreamFeaturesLocalElementName]) {
+			self.rootStreamElement = stanza;
+			return;
+		}
+		
+		_receiveState = StreamConnected;
+		[self _streamDidOpen];
+	}
+	
+	
+	[self connectionDidReceiveElement:stanza];
 	
 	if (![self isOpen]) return;
 	[self _performRead];
