@@ -66,7 +66,7 @@
 	@result
 	The id attribute of the message, allowing you to track the response.
  */
-- (NSString *)sendElement:(NSXMLElement *)element forTag:(NSInteger)tag;
+- (NSString *)sendElement:(NSXMLElement *)element context:(void *)context;
 
 /*!
 	@brief
@@ -75,7 +75,7 @@
 	@param |JID|
 	If nil this sends the message to the connected endpoint.
  */
-- (NSXMLElement *)sendMessage:(NSString *)content to:(NSString *)JID;
+- (NSXMLElement *)sendMessage:(NSString *)content toEndpoint:(NSString *)JID;
 
 /*!
 	@brief
