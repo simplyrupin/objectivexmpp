@@ -225,7 +225,7 @@ enum {
 	[response addAttribute:[iq attributeForName:@"id"]];
 }
 
-- (NSXMLElement *)sendMessage:(NSString *)content toEndpoint:(NSString *)JID {
+- (NSXMLElement *)sendMessage:(NSString *)content receiver:(NSString *)JID {
 	NSXMLElement *bodyElement = [NSXMLElement elementWithName:@"body" stringValue:content];
 	
 	NSXMLElement *messageElement = [NSXMLElement elementWithName:@"message"];

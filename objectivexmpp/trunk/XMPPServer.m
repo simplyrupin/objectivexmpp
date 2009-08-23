@@ -97,6 +97,7 @@
 			= [self superclass],
 	};
 	(void (*)(id, SEL, id))objc_msgSendSuper(&superclass, _cmd, layer);
+	if (![layer isKindOfClass:[XMPPConnection class]]) return;
 	
 	[_connectedNodes setObject:layer forKey:[layer peerAddress]];
 }

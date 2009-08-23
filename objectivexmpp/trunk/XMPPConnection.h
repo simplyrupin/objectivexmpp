@@ -75,7 +75,7 @@
 	@param |JID|
 	If nil this sends the message to the connected endpoint.
  */
-- (NSXMLElement *)sendMessage:(NSString *)content toEndpoint:(NSString *)JID;
+- (NSXMLElement *)sendMessage:(NSString *)content receiver:(NSString *)JID;
 
 /*!
 	@brief
