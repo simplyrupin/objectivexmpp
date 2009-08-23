@@ -35,6 +35,7 @@
 		532A44270FB4B80E006E409F /* ObjectiveXMPP.h in Headers */ = {isa = PBXBuildFile; fileRef = 532A44230FB4B80E006E409F /* ObjectiveXMPP.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		532A442B0FB4B850006E409F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0867D69BFE84028FC02AAC07 /* Foundation.framework */; };
 		532A442C0FB4B855006E409F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0867D69BFE84028FC02AAC07 /* Foundation.framework */; };
+		53C1600C1041DAD2008D1E82 /* KissXML.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53C15FE81041DA05008D1E82 /* KissXML.framework */; };
 		53D6A3360FEE6FEE00800C37 /* CoreNetworking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 530E26EA0FC890E400DBAB3E /* CoreNetworking.framework */; };
 		53D6A3410FEE701100800C37 /* AmberFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 530E26E60FC890E400DBAB3E /* AmberFoundation.framework */; };
 		53E10AAC0FF968E5006E39CF /* XMPPConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = 53E10AAA0FF968E5006E39CF /* XMPPConstants.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -108,6 +109,20 @@
 			remoteGlobalIDString = 534E2CF0101CC78900AF8170;
 			remoteInfo = "KissXML Touch";
 		};
+		53C15FE71041DA05008D1E82 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 534E2F4D101CCD3700AF8170 /* KissXML.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 53C15FE21041DA04008D1E82 /* KissXML.framework */;
+			remoteInfo = KissXML;
+		};
+		53C1600A1041DAC3008D1E82 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 534E2F4D101CCD3700AF8170 /* KissXML.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 53C15FE11041DA04008D1E82 /* KissXML */;
+			remoteInfo = KissXML;
+		};
 		53D6A3340FEE6FE700800C37 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 532A43FD0FB4B7A3006E409F /* Amber.xcodeproj */;
@@ -171,6 +186,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				53D6A3410FEE701100800C37 /* AmberFoundation.framework in Frameworks */,
+				53C1600C1041DAD2008D1E82 /* KissXML.framework in Frameworks */,
 				53D6A3360FEE6FEE00800C37 /* CoreNetworking.framework in Frameworks */,
 				532A442B0FB4B850006E409F /* Foundation.framework in Frameworks */,
 			);
@@ -263,6 +279,7 @@
 			isa = PBXGroup;
 			children = (
 				534E2F55101CCD3700AF8170 /* libKissXML.a */,
+				53C15FE81041DA05008D1E82 /* KissXML.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -348,6 +365,7 @@
 			dependencies = (
 				53D6A3350FEE6FE700800C37 /* PBXTargetDependency */,
 				53D6A3400FEE700D00800C37 /* PBXTargetDependency */,
+				53C1600B1041DAC3008D1E82 /* PBXTargetDependency */,
 			);
 			name = ObjectiveXMPP;
 			productInstallPath = "$(HOME)/Library/Frameworks";
@@ -437,6 +455,13 @@
 			remoteRef = 534E2F54101CCD3700AF8170 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		53C15FE81041DA05008D1E82 /* KissXML.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = KissXML.framework;
+			remoteRef = 53C15FE71041DA05008D1E82 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 /* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
@@ -491,6 +516,11 @@
 			isa = PBXTargetDependency;
 			name = "KissXML Touch";
 			targetProxy = 534E2F56101CCD4200AF8170 /* PBXContainerItemProxy */;
+		};
+		53C1600B1041DAC3008D1E82 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = KissXML;
+			targetProxy = 53C1600A1041DAC3008D1E82 /* PBXContainerItemProxy */;
 		};
 		53D6A3350FEE6FE700800C37 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
