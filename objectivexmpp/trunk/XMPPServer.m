@@ -9,10 +9,10 @@
 #import "XMPPServer.h"
 
 #import "XMPPConstants.h"
-
-#import "AmberFoundation/AmberFoundation.h"
-
 #import "XMPPConnection.h"
+
+#import <objc/message.h>
+#import "AmberFoundation/AmberFoundation.h"
 
 #warning this class should write to an error log, take a look at ASL
 
@@ -35,11 +35,11 @@
 @synthesize connectedNodes=_connectedNodes;
 
 + (id)server {
-	return [[[self alloc] initWithLowerLayer:[AFNetworkServer server] encapsulationClass:[XMPPConnection class]] autorelease];
+	return [[[self alloc] initWithEncapsulationClass:[XMPPConnection class]] autorelease];
 }
 
-- (id)initWithLowerLayer:(AFNetworkServer *)lowerLayer encapsulationClass:(Class)clientClass {
-	self = [super initWithLowerLayer:lowerLayer encapsulationClass:clientClass];
+- (id)initWithEncapsulationClass:(Class)clientClass {
+	self = [super initWithEncapsulationClass:clientClass];
 	if (self == nil) return nil;
 	
 	_connectedNodes = [[NSMutableDictionary alloc] init];
@@ -87,7 +87,16 @@
 @implementation XMPPServer (Delegate)
 
 - (void)layerDidOpen:(id)layer {
-	[super layerDidOpen:layer];
+	struct objc_super superclass = {
+		.receiver = self,
+#if TARGET_OS_IPHONE
+		.class
+#else 
+		.super_class
+#endif
+			= [self superclass],
+	};
+	(void (*)(id, SEL, id))objc_msgSendSuper(&superclass, _cmd, layer);
 	
 	[_connectedNodes setObject:layer forKey:[layer peerAddress]];
 }
