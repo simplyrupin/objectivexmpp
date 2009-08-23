@@ -368,12 +368,7 @@
 				GCC_PREFIX_HEADER = KissXML_Prefix.pch;
 				INFOPLIST_FILE = "KissXML-Info.plist";
 				INSTALL_PATH = "$(HOME)/Library/Frameworks";
-				OTHER_LDFLAGS = (
-					"-framework",
-					Foundation,
-					"-framework",
-					AppKit,
-				);
+				OTHER_LDFLAGS = "-lxml2";
 				PREBINDING = NO;
 				PRODUCT_NAME = KissXML;
 			};
@@ -394,12 +389,7 @@
 				GCC_PREFIX_HEADER = KissXML_Prefix.pch;
 				INFOPLIST_FILE = "KissXML-Info.plist";
 				INSTALL_PATH = "$(HOME)/Library/Frameworks";
-				OTHER_LDFLAGS = (
-					"-framework",
-					Foundation,
-					"-framework",
-					AppKit,
-				);
+				OTHER_LDFLAGS = "-lxml2";
 				PREBINDING = NO;
 				PRODUCT_NAME = KissXML;
 				ZERO_LINK = NO;
