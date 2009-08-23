@@ -113,14 +113,14 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = 534E2F4D101CCD3700AF8170 /* KissXML.xcodeproj */;
 			proxyType = 2;
-			remoteGlobalIDString = 53C15FE21041DA04008D1E82 /* KissXML.framework */;
+			remoteGlobalIDString = 53C15FE21041DA04008D1E82;
 			remoteInfo = KissXML;
 		};
 		53C1600A1041DAC3008D1E82 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 534E2F4D101CCD3700AF8170 /* KissXML.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = 53C15FE11041DA04008D1E82 /* KissXML */;
+			remoteGlobalIDString = 53C15FE11041DA04008D1E82;
 			remoteInfo = KissXML;
 		};
 		53D6A3340FEE6FE700800C37 /* PBXContainerItemProxy */ = {
@@ -278,8 +278,8 @@
 		534E2F4E101CCD3700AF8170 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				534E2F55101CCD3700AF8170 /* libKissXML.a */,
 				53C15FE81041DA05008D1E82 /* KissXML.framework */,
+				534E2F55101CCD3700AF8170 /* libKissXML.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
