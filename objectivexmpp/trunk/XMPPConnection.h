@@ -50,39 +50,39 @@
  */
 @property (assign) id <XMPPConnectionDelegate> delegate;
 
-/*!
-	@brief
-	XMPPConnection will attempt to handle the response.
- 
-	@result
-	See <tt>-sendElement:forTag:</tt>
- */
-- (NSString *)sendElement:(NSXMLElement *)element;
-
 /*! 
 	@brief
-	You should expect to handle the response.
+	Providing a context, you should expect to handle the response.
  
+	@detail
+	If the connection isn't connected, your element will be enqueued for delivery once connection bookkeeping has been performed.
+	
 	@result
-	The id attribute of the message, allowing you to track the response.
+	The id attribute of the message, allowing you to track a response if appropriate.
  */
 - (NSString *)sendElement:(NSXMLElement *)element context:(void *)context;
 
 /*!
 	@brief
-	This sends a message stanza to the indicated JID
+	This sends a <message/> stanza to the indicated JID
  
+	@detail
+	This method calls <tt>-sendElement:context:</tt> after wrapping the message for you.
+	
 	@param |JID|
-	If nil this sends the message to the connected endpoint.
+	If nil this sends the message to the connected endpoint, if [NSNull null] nothing is added.
+	
+	@result
+	The stanza sent, for including in a conversation list.
  */
 - (NSXMLElement *)sendMessage:(NSString *)content receiver:(NSString *)JID;
 
 /*!
 	@brief
 	This sends a subscription IQ to the connected endpoint.
- 
+	
 	@detail
-	The delegate will receive subsctiption update notifications.
+	The delegate will receive subscription update notifications.
  */
 - (void)subscribe:(NSString *)nodeName;
 
@@ -94,13 +94,12 @@
 
 /*!
 	@brief
-	Given an IQ element, you'll typically return a response.
-	This is simply an awknowledgement, no other data is included in the stanza.
+	Given an IQ element, you'll typically return an awkknowledgement. No other data is included in the stanza.
  */
 - (void)awknowledgeElement:(NSXMLElement *)iq;
 
 /*
- * Note: override points for XMPP extensions
+	Override points for XMPP extensions
  */
 
 - (void)connectionDidReceiveElement:(NSXMLElement *)element; // Note: general override point, this where the element pattern matching is performed to call the specific handler methods
@@ -115,9 +114,9 @@
 
  @optional
 
-/**
- * These methods are called after an instance of their respective stanza is received.
-**/
+/*
+	These methods are called after an instance of their respective stanza is received.
+ */
 - (void)connection:(XMPPConnection *)layer didReceiveIQ:(NSXMLElement *)iq;
 - (void)connection:(XMPPConnection *)layer didReceiveMessage:(NSXMLElement *)message;
 - (void)connection:(XMPPConnection *)layer didReceivePresence:(NSXMLElement *)presence;

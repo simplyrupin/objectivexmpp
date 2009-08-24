@@ -29,6 +29,9 @@ NSSTRING_CONTEXT(XMPPConnectionStartContext);
 NSSTRING_CONTEXT(XMPPConnectionStreamContext);
 NSSTRING_CONTEXT(XMPPConnectionStopContext);
 
+NSSTRING_CONTEXT(XMPPConnectionMessageContext);
+NSSTRING_CONTEXT(XMPPConnectionPubSubContext);
+
 enum {
 	StreamDisconnected	= 1UL << 0,
 	StreamConnecting	= 1UL << 1,
@@ -48,7 +51,8 @@ enum {
 @interface XMPPConnection (PrivateWriting)
 - (void)_sendOpeningNegotiation;
 - (void)_sendClosingNegotiation;
-- (NSString *)_sendElement:(NSXMLElement *)element context:(void *)context;
+- (NSString *)_preprocessStanza:(NSXMLElement *)element;
+- (NSString *)_sendElement:(NSXMLElement *)element context:(void *)context enqueue:(BOOL)waitUntilOpen;
 - (void)_keepAlive:(NSTimer *)timer;
 @end
 
@@ -168,37 +172,25 @@ enum {
 	[super performWrite:[closingTag dataUsingEncoding:NSUTF8StringEncoding] withTimeout:TIMEOUT_WRITE context:&XMPPConnectionStopContext];
 }
 
-- (NSString *)sendElement:(NSXMLElement *)element {
-	return [self sendElement:element context:&XMPPConnectionStreamContext];
+- (NSString *)sendElement:(NSXMLElement *)element context:(void *)context {
+	return [self _sendElement:element context:context enqueue:YES];
 }
 
-- (NSString *)_stanzaIdentifer:(NSXMLElement *)rootElement shouldAdd:(BOOL)shouldAdd {
-	NSString *identifier = [[rootElement attributeForName:@"id"] stringValue];
+- (NSString *)_preprocessStanza:(NSXMLElement *)element {
+	NSString *identifier = [[element attributeForName:@"id"] stringValue];
 	
-	if (identifier == nil && shouldAdd) {
+	if (identifier == nil) {
 		identifier = [[NSProcessInfo processInfo] globallyUniqueString];
 		
 		NSXMLNode *identifierAttribute = [NSXMLNode attributeWithName:@"id" stringValue:identifier];
-		[rootElement addAttribute:identifierAttribute];
+		[element addAttribute:identifierAttribute];
+	}
+	
+	if (self.peerAddress != nil && [element attributeForName:@"to"] == nil) {
+		[element addAttribute:[NSXMLElement attributeWithName:@"to" stringValue:self.peerAddress]];
 	}
 	
 	return identifier;
-}
-
-- (NSString *)sendElement:(NSXMLElement *)element context:(void *)context {
-	NSString *identifier = [self _stanzaIdentifer:element shouldAdd:YES];
-	
-	if (![self isOpen]) {
-		NSDictionary *queuedElement = [NSDictionary dictionaryWithObjectsAndKeys:
-									   element, @"element",
-									   [NSValue valueWithPointer:context], @"tag",
-									   nil];
-		
-		[_queuedMessages addObject:queuedElement];
-		return identifier;
-	}
-	
-	return [self _sendElement:element context:context];
 }
 
 /*!
@@ -206,23 +198,17 @@ enum {
 	This method should be used for internal writes, since it doesn't check to see if the stream is open.
 	External element sends are queued until the stream is opened.
  */
-- (NSString *)_sendElement:(NSXMLElement *)element context:(void *)context {
-	NSString *identifier = [self _stanzaIdentifer:element shouldAdd:YES];
+- (NSString *)_sendElement:(NSXMLElement *)element context:(void *)context enqueue:(BOOL)waitUntilOpen {
+	NSString *identifier = [self _preprocessStanza:element];
 	
-	if ([element attributeForName:@"to"] == nil) {
-		[element addAttribute:[NSXMLElement attributeWithName:@"to" stringValue:self.peerAddress]];
+	if (![self isOpen] && waitUntilOpen) {
+		AFPacketWrite *packet = [[[AFPacketWrite alloc] initWithContext:context timeout:TIMEOUT_WRITE data:[[element XMLString] dataUsingEncoding:NSUTF8StringEncoding]] autorelease];
+		[_queuedMessages addObject:packet];
+	} else {
+		[self performWrite:element withTimeout:TIMEOUT_WRITE context:context];
 	}
 	
-	[self performWrite:element withTimeout:TIMEOUT_WRITE context:context];
-	
 	return identifier;
-}
-
-- (void)awknowledgeElement:(NSXMLElement *)iq {
-	NSAssert([[[iq name] lowercaseString] isEqualToString:@"iq"], ([NSString stringWithFormat:@"%@ shouldn't be attempting to awknowledge a stanza name %@", self, [iq name], nil]));
-	
-	NSXMLElement *response = [NSXMLElement elementWithName:[iq name]];
-	[response addAttribute:[iq attributeForName:@"id"]];
 }
 
 - (NSXMLElement *)sendMessage:(NSString *)content receiver:(NSString *)JID {
@@ -236,7 +222,7 @@ enum {
 		[messageElement addAttribute:toAttribute];
 	}
 	
-	[self sendElement:messageElement];
+	[self _sendElement:messageElement context:&XMPPConnectionMessageContext enqueue:YES];
 	
 	return messageElement;
 }
@@ -258,16 +244,28 @@ enum {
 
 - (void)subscribe:(NSString *)nodeName {
 	NSXMLElement *subscribe = [self _pubsubElement:@"subscribe" node:nodeName];
-	[self sendElement:subscribe];
+	[self sendElement:subscribe context:&XMPPConnectionPubSubContext];
 }
 
 - (void)unsubscribe:(NSString *)nodename {
 	NSXMLElement *unsubscribe = [self _pubsubElement:@"unsubscribe" node:nodename];
-	[self sendElement:unsubscribe];
+	[self sendElement:unsubscribe context:&XMPPConnectionPubSubContext];
+}
+
+- (void)awknowledgeElement:(NSXMLElement *)iq {
+	NSAssert([[[iq name] lowercaseString] isEqualToString:@"iq"], ([NSString stringWithFormat:@"%@ shouldn't be attempting to awknowledge a stanza name %@", self, [iq name], nil]));
+	
+	NSXMLElement *response = [NSXMLElement elementWithName:[iq name]];
+	[response addAttribute:[iq attributeForName:@"id"]];
 }
 
 - (void)performWrite:(id)element withTimeout:(NSTimeInterval)duration context:(void *)context {
-	[super performWrite:[[element XMLString] dataUsingEncoding:NSUTF8StringEncoding] withTimeout:duration context:context];
+	NSParameterAssert([element isKindOfClass:[AFPacket class]] || [element isKindOfClass:[NSXMLNode class]]);
+	
+	if ([element isKindOfClass:[NSXMLNode class]])
+		[super performWrite:[[element XMLString] dataUsingEncoding:NSUTF8StringEncoding] withTimeout:duration context:context];
+	else
+		[super performWrite:element withTimeout:duration context:context];
 }
 
 #pragma mark -
@@ -489,6 +487,10 @@ enum {
 	if (context == &XMPPConnectionStartContext) {
 		_sendState = StreamConnected;
 		[self _streamDidOpen];
+	} else if (context == &XMPPConnectionPubSubContext) {
+		// nop
+	} else if (context == &XMPPConnectionMessageContext) {
+		// nop
 	} else if (context == &XMPPConnectionStopContext) {
 		[self.delegate layerDidClose:self];
 	}

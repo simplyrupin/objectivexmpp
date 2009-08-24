@@ -20,7 +20,13 @@ extern NSString *const XMPPServiceDiscoveryType;
 
 /*!
 	@brief
-	Default URI for document
+	Default URI for the document.
+ */
+extern NSString *const XMPPNamespaceJabberClientURI;
+
+/*!
+	@brief
+	URI for the stream elements document, the prefix is commonly 'stream'.
  */
 extern NSString *const XMPPNamespaceStreamURI;
 

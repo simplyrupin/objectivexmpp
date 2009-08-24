@@ -21,6 +21,6 @@ extern NSString *const XMPPStreamFeaturesLocalElementName;
 
 /*!
 	@brief
-	
+	This element 
  */
 extern NSString *const XMPPConnectionRegisterLocalElementName;
