@@ -388,7 +388,7 @@ enum {
 		XMLString = [XMLString stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]];
 		
 #ifdef DEBUG_RECV
-		printf("RECV: %s", [XMLString UTF8String], nil);
+		printf("RECV: %s\n", [XMLString UTF8String], nil);
 #endif
 		
 		// Could be either one of the following:
@@ -449,7 +449,7 @@ enum {
 	XMLString = [XMLString stringByTrimmingCharactersInSet:stripCharacters];
 	
 #ifdef DEBUG_RECV
-	printf("RECV: %s", [data UTF8String], nil);
+	printf("RECV: %s\n", [data UTF8String], nil);
 #endif
 		
 	if ([XMLString hasSuffix:@"</stream:stream>"]) {
@@ -483,7 +483,7 @@ enum {
 
 - (void)layer:(id <AFTransportLayer>)layer didWrite:(id)data context:(void *)context {
 #ifdef DEBUG_SEND
-	printf("SENT: %s", [[[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease] UTF8String], nil);
+	printf("SENT: %s\n", [[[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease] UTF8String], nil);
 #endif
 	
 	if (context == &XMPPConnectionStartContext) {
