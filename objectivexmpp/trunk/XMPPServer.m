@@ -78,7 +78,7 @@
 		[messageElement addAttribute:[NSXMLElement attributeWithName:@"from" stringValue:self.hostnode]];
 		[messageElement addAttribute:[NSXMLElement attributeWithName:@"to" stringValue:currentJID]];
 		
-		[connection sendElement:messageElement];
+		[connection sendElement:messageElement context:NULL];
 	}
 }
 
@@ -139,7 +139,7 @@
 		return;
 	}
 	
-	[remoteConnection sendElement:message];
+	[remoteConnection sendElement:message context:NULL];
 }
 
 @end
