@@ -18,8 +18,8 @@
 #import "AmberFoundation/AmberFoundation.h"
 #import "CoreNetworking/CoreNetworking.h"
 
-#define DEBUG_SEND
-#define DEBUG_RECV
+#define DEBUG_SEND 1
+#define DEBUG_RECV 1
 
 #define TIMEOUT_WRITE         5
 #define TIMEOUT_READ_START    5
@@ -388,7 +388,7 @@ enum {
 		XMLString = [XMLString stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]];
 		
 #ifdef DEBUG_RECV
-		NSLog(@"RECV: %@", XMLString, nil);
+		printf("RECV: %s", [XMLString UTF8String], nil);
 #endif
 		
 		// Could be either one of the following:
@@ -449,7 +449,7 @@ enum {
 	XMLString = [XMLString stringByTrimmingCharactersInSet:stripCharacters];
 	
 #ifdef DEBUG_RECV
-	NSLog(@"RECV: %@", data, nil);
+	printf("RECV: %s", [data UTF8String], nil);
 #endif
 		
 	if ([XMLString hasSuffix:@"</stream:stream>"]) {
@@ -483,7 +483,7 @@ enum {
 
 - (void)layer:(id <AFTransportLayer>)layer didWrite:(id)data context:(void *)context {
 #ifdef DEBUG_SEND
-	NSLog(@"SENT: %@", [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease], nil);
+	printf("SENT: %s", [[[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease] UTF8String], nil);
 #endif
 	
 	if (context == &XMPPConnectionStartContext) {
