@@ -45,6 +45,7 @@ enum {
 
 @interface XMPPConnection ()
 @property (retain) NSXMLElement *rootStreamElement;
+@property (retain) NSMutableArray *queuedMessages;
 @property (retain) NSTimer *keepAliveTimer;
 @end
 
@@ -68,10 +69,13 @@ enum {
 
 @implementation XMPPConnection
 
+@dynamic delegate;
+
 @synthesize rootStreamElement=_rootStreamElement;
 
 @synthesize localAddress=_local, peerAddress=_peer;
-@dynamic delegate;
+
+@synthesize queuedMessages=_queuedMessages;
 
 @synthesize keepAliveTimer=_keepAliveTimer;
 
@@ -203,7 +207,7 @@ enum {
 	
 	if (![self isOpen] && waitUntilOpen) {
 		AFPacketWrite *packet = [[[AFPacketWrite alloc] initWithContext:context timeout:TIMEOUT_WRITE data:[[element XMLString] dataUsingEncoding:NSUTF8StringEncoding]] autorelease];
-		[_queuedMessages addObject:packet];
+		[self.queuedMessages addObject:packet];
 	} else {
 		[self performWrite:element withTimeout:TIMEOUT_WRITE context:context];
 	}
@@ -214,7 +218,7 @@ enum {
 - (NSXMLElement *)sendMessage:(NSString *)content receiver:(NSString *)JID {
 	NSXMLElement *bodyElement = [NSXMLElement elementWithName:@"body" stringValue:content];
 	
-	NSXMLElement *messageElement = [NSXMLElement elementWithName:@"message"];
+	NSXMLElement *messageElement = [NSXMLElement elementWithName:XMPPStreamMessageElementName];
 	[messageElement addChild:bodyElement];
 	
 	if (JID != nil) {
@@ -235,7 +239,7 @@ enum {
 	NSXMLElement *pubsubElement = [NSXMLElement elementWithName:@"pubsub" URI:XMPPNamespacePubSubURI];
 	[pubsubElement addChild:methodElement];
 	
-	NSXMLElement *iqElement = [NSXMLElement elementWithName:@"iq"];
+	NSXMLElement *iqElement = [NSXMLElement elementWithName:XMPPStreamIQElementName];
 	[iqElement addAttribute:[NSXMLElement attributeWithName:@"type" stringValue:@"set"]];
 	[iqElement addChild:pubsubElement];
 	
@@ -253,7 +257,7 @@ enum {
 }
 
 - (void)awknowledgeElement:(NSXMLElement *)iq {
-	NSAssert([[[iq name] lowercaseString] isEqualToString:@"iq"], ([NSString stringWithFormat:@"%@ shouldn't be attempting to awknowledge a stanza name %@", self, [iq name], nil]));
+	NSAssert(([[iq name] caseInsensitiveCompare:XMPPStreamIQElementName] == NSOrderedSame), ([NSString stringWithFormat:@"%@ cannot awknowledge a stanza name %@", self, [iq name], nil]));
 	
 	NSXMLElement *response = [NSXMLElement elementWithName:[iq name]];
 	[response addAttribute:[iq attributeForName:@"id"]];
@@ -297,11 +301,11 @@ enum {
 }
 
 - (void)connectionDidReceiveElement:(NSXMLElement *)element {
-	if ([[element name] isEqualToString:@"iq"]) {
+	if ([[element name] isEqualToString:XMPPStreamIQElementName]) {
 		[self connectionDidReceiveIQ:element];
-	} else if ([[element name] isEqualToString:@"message"]) {
+	} else if ([[element name] isEqualToString:XMPPStreamMessageElementName]) {
 		[self connectionDidReceiveMessage:element];
-	} else if ([[element name] isEqualToString:@"presence"]) {
+	} else if ([[element name] isEqualToString:XMPPStreamPresenceElementName]) {
 		[self connectionDidReceivePresence:element];
 	} else {
 		if ([self.delegate respondsToSelector:@selector(connection:didReceiveElement:)])
@@ -352,10 +356,10 @@ enum {
 	if ([self.delegate respondsToSelector:@selector(layer:didConnectToPeer:)])
 		[self.delegate layer:self didConnectToPeer:self.peer];
 	
-	for (NSDictionary *queuedMessage in _queuedMessages) {
-		[self sendElement:[queuedMessage objectForKey:@"element"] context:[[queuedMessage objectForKey:@"tag"] pointerValue]];
+	for (AFPacketWrite *queuedPacket in self.queuedMessages) {
+		[self performWrite:queuedPacket withTimeout:[queuedPacket duration] context:[queuedPacket context]];
 	}
-	[_queuedMessages removeAllObjects];
+	self.queuedMessages = nil;
 	
 	[self _performRead];
 }

@@ -9,6 +9,7 @@
 #import "XMPPServer.h"
 
 #import "XMPPConstants.h"
+#import "XMPPMessage.h"
 #import "XMPPConnection.h"
 
 #import <objc/message.h>
@@ -65,7 +66,7 @@
 	NSXMLElement *eventElement = [NSXMLElement elementWithName:@"event" URI:XMPPNamespacePubSubEventURI];	
 	[eventElement addChild:itemsElement];
 	
-	NSXMLElement *messageElement = [NSXMLElement elementWithName:@"message"];
+	NSXMLElement *messageElement = [NSXMLElement elementWithName:XMPPStreamMessageElementName];
 	[messageElement addChild:eventElement];
 	
 	NSSet *subscribers = [self _subscriptionsForNodeName:nodeName];

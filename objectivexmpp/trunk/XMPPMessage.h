@@ -19,8 +19,16 @@
  */
 extern NSString *const XMPPStreamFeaturesLocalElementName;
 
+/*
+	Stanza Names
+ */
+
+extern NSString *const XMPPStreamMessageElementName;
+extern NSString *const XMPPStreamIQElementName;
+extern NSString *const XMPPStreamPresenceElementName;
+
 /*!
 	@brief
-	This element 
+	Use this function to determine if the message represents a message mid-compose.
  */
-extern NSString *const XMPPConnectionRegisterLocalElementName;
+extern BOOL XMPPMessageIsComposing(NSXMLElement *element);

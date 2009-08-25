@@ -10,4 +10,19 @@
 
 NSString *const XMPPStreamFeaturesLocalElementName = @"features";
 
-NSString *const XMPPConnectionRegisterLocalElementName = @"register";
+NSString *const XMPPStreamMessageElementName = @"message";
+NSString *const XMPPStreamIQElementName = @"iq";
+NSString *const XMPPStreamPresenceElementName = @"presence";
+
+BOOL XMPPMessageIsComposing(NSXMLElement *element) {
+	NSCParameterAssert([[element name] caseInsensitiveCompare:XMPPStreamMessageElementName] == NSOrderedSame);
+	
+	NSDictionary *prefixMapping = [NSDictionary dictionaryWithObjectsAndKeys:
+								   @"http://jabber.org/protocol/chatstates", @"a",
+								   nil];
+	
+	NSError *composingXPathError = nil;
+	NSArray *elements = [element nodesForXPath:@"/message/a:composing" namespaces:prefixMapping error:&composingXPathError];
+	
+	return ([elements count] == 1);
+}
