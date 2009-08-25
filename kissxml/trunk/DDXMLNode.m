@@ -1,6 +1,7 @@
 
 #import "DDXMLNode.h"
 
+#import "DDXMLNode+Additions.h"
 #import "DDXMLElement.h"
 #import "DDXMLDocument.h"
 #import "DDXMLPrivate.h"
@@ -1132,98 +1133,9 @@ static void DDXMLErrorHandler(void * userData, xmlErrorPtr error)
 #pragma mark XPath/XQuery
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
--(NSArray *)nodesForXPath:(NSString *)xpath error:(NSError **)error
+-(NSArray *)nodesForXPath:(NSString *)xpath error:(NSError **)errorRef
 {
-	xmlXPathContextPtr xpathCtx;
-	xmlXPathObjectPtr xpathObj;
-	
-	BOOL isTempDoc = NO;
-	xmlDocPtr doc;
-	
-	if([DDXMLNode isXmlDocPtr:genericPtr])
-	{
-		doc = (xmlDocPtr)genericPtr;
-	}
-	else if([DDXMLNode isXmlNodePtr:genericPtr])
-	{
-		doc = ((xmlNodePtr)genericPtr)->doc;
-		
-		if(doc == NULL)
-		{
-			isTempDoc = YES;
-			
-			doc = xmlNewDoc(NULL);
-			xmlDocSetRootElement(doc, (xmlNodePtr)genericPtr);
-		}
-	}
-	else
-	{
-		return nil;
-	}
-	
-	xpathCtx = xmlXPathNewContext(doc);
-	xpathCtx->node = (xmlNodePtr)genericPtr;
-		
-	xmlNodePtr rootNode = (doc)->children;
-	if(rootNode != NULL)
-	{
-		xmlNsPtr ns = rootNode->nsDef;
-		while(ns != NULL)
-		{
-			xmlXPathRegisterNs(xpathCtx, ns->prefix, ns->href);
-			
-			ns = ns->next;
-		}
-	}
-	
-	xpathObj = xmlXPathEvalExpression([xpath xmlChar], xpathCtx);
-	
-	NSArray *result;
-	
-	if(xpathObj == NULL)
-	{
-		if(error) *error = [[self class] lastError];
-		result = nil;
-	}
-	else
-	{
-		if(error) *error = nil;
-		
-		int count = xmlXPathNodeSetGetLength(xpathObj->nodesetval);
-		
-		if(count == 0)
-		{
-			result = [NSArray array];
-		}
-		else
-		{
-			NSMutableArray *mResult = [NSMutableArray arrayWithCapacity:count];
-			
-			int i;
-			for (i = 0; i < count; i++)
-			{
-				xmlNodePtr node = xpathObj->nodesetval->nodeTab[i];
-				
-				[mResult addObject:[DDXMLNode nodeWithPrimitive:(xmlKindPtr)node]];
-			}
-			
-			result = mResult;
-		}
-	}
-	
-	if(xpathObj) xmlXPathFreeObject(xpathObj);
-	if(xpathCtx) xmlXPathFreeContext(xpathCtx);
-	
-	if(isTempDoc)
-	{
-		xmlUnlinkNode((xmlNodePtr)genericPtr);
-		xmlFreeDoc(doc);
-		
-		// xmlUnlinkNode doesn't remove the doc ptr
-		[[self class] recursiveStripDocPointersFromNode:(xmlNodePtr)genericPtr];
-	}
-	
-	return result;
+	return [self nodesForXPath:xpath namespaces:nil error:errorRef];
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

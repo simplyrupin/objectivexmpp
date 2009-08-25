@@ -23,6 +23,10 @@
 		534E300D101CCF0500AF8170 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29B97325FDCFA39411CA2CEA /* Foundation.framework */; };
 		534E317C101CD5EC00AF8170 /* NSString+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = DC5442650E8F338300013051 /* NSString+Additions.m */; };
 		534E317D101CD5ED00AF8170 /* NSString+Additions.h in Headers */ = {isa = PBXBuildFile; fileRef = DC5442640E8F338300013051 /* NSString+Additions.h */; };
+		536B981D1044933700CD81F6 /* DDXMLNode+Additions.h in Headers */ = {isa = PBXBuildFile; fileRef = 536B981B1044933700CD81F6 /* DDXMLNode+Additions.h */; };
+		536B981E1044933700CD81F6 /* DDXMLNode+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 536B981C1044933700CD81F6 /* DDXMLNode+Additions.m */; };
+		536B981F1044933700CD81F6 /* DDXMLNode+Additions.h in Headers */ = {isa = PBXBuildFile; fileRef = 536B981B1044933700CD81F6 /* DDXMLNode+Additions.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		536B98201044933700CD81F6 /* DDXMLNode+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 536B981C1044933700CD81F6 /* DDXMLNode+Additions.m */; };
 		53C15FEB1041DA11008D1E82 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29B97325FDCFA39411CA2CEA /* Foundation.framework */; };
 		53C15FEC1041DA18008D1E82 /* DDXML.h in Headers */ = {isa = PBXBuildFile; fileRef = DC5442580E8F336800013051 /* DDXML.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		53C15FED1041DA1D008D1E82 /* DDXMLElement.m in Sources */ = {isa = PBXBuildFile; fileRef = DC54425C0E8F336800013051 /* DDXMLElement.m */; };
@@ -38,7 +42,7 @@
 		53C15FF71041DA2A008D1E82 /* DDXMLNode+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 534E2CDD101CC67A00AF8170 /* DDXMLNode+Private.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		53C15FF81041DA2A008D1E82 /* DDXMLNode+Private.m in Sources */ = {isa = PBXBuildFile; fileRef = 534E2CDE101CC67A00AF8170 /* DDXMLNode+Private.m */; };
 		53C15FF91041DA2D008D1E82 /* DDXMLPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = DC5442670E8F339000013051 /* DDXMLPrivate.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		53C15FFA1041DA2F008D1E82 /* NSString+Additions.h in Headers */ = {isa = PBXBuildFile; fileRef = DC5442640E8F338300013051 /* NSString+Additions.h */; };
+		53C15FFA1041DA2F008D1E82 /* NSString+Additions.h in Headers */ = {isa = PBXBuildFile; fileRef = DC5442640E8F338300013051 /* NSString+Additions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		53C15FFB1041DA2F008D1E82 /* NSString+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = DC5442650E8F338300013051 /* NSString+Additions.m */; };
 		53C15FFE1041DA72008D1E82 /* DDXMLPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = DC5442670E8F339000013051 /* DDXMLPrivate.h */; settings = {ATTRIBUTES = (Private, ); }; };
 /* End PBXBuildFile section */
@@ -53,6 +57,8 @@
 		534E2CE4101CC6D600AF8170 /* DDXMLDocument+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DDXMLDocument+Private.h"; sourceTree = "<group>"; };
 		534E2CE5101CC6D600AF8170 /* DDXMLDocument+Private.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "DDXMLDocument+Private.m"; sourceTree = "<group>"; };
 		534E2CF1101CC78900AF8170 /* libKissXML.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libKissXML.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		536B981B1044933700CD81F6 /* DDXMLNode+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DDXMLNode+Additions.h"; sourceTree = "<group>"; };
+		536B981C1044933700CD81F6 /* DDXMLNode+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "DDXMLNode+Additions.m"; sourceTree = "<group>"; };
 		53C15FE21041DA04008D1E82 /* KissXML.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = KissXML.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		53C15FE31041DA04008D1E82 /* KissXML-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "KissXML-Info.plist"; sourceTree = "<group>"; };
 		DC5442580E8F336800013051 /* DDXML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDXML.h; sourceTree = "<group>"; };
@@ -166,6 +172,8 @@
 				DC54425E0E8F336800013051 /* DDXMLNode.m */,
 				534E2CDD101CC67A00AF8170 /* DDXMLNode+Private.h */,
 				534E2CDE101CC67A00AF8170 /* DDXMLNode+Private.m */,
+				536B981B1044933700CD81F6 /* DDXMLNode+Additions.h */,
+				536B981C1044933700CD81F6 /* DDXMLNode+Additions.m */,
 			);
 			name = Node;
 			sourceTree = "<group>";
@@ -203,6 +211,7 @@
 				534E2D06101CC7F300AF8170 /* DDXMLDocument+Private.h in Headers */,
 				534E317D101CD5ED00AF8170 /* NSString+Additions.h in Headers */,
 				53C15FFE1041DA72008D1E82 /* DDXMLPrivate.h in Headers */,
+				536B981F1044933700CD81F6 /* DDXMLNode+Additions.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -219,6 +228,7 @@
 				53C15FF71041DA2A008D1E82 /* DDXMLNode+Private.h in Headers */,
 				53C15FF91041DA2D008D1E82 /* DDXMLPrivate.h in Headers */,
 				53C15FFA1041DA2F008D1E82 /* NSString+Additions.h in Headers */,
+				536B981D1044933700CD81F6 /* DDXMLNode+Additions.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -303,6 +313,7 @@
 				534E2D03101CC7F000AF8170 /* DDXMLDocument.m in Sources */,
 				534E2D05101CC7F200AF8170 /* DDXMLDocument+Private.m in Sources */,
 				534E317C101CD5EC00AF8170 /* NSString+Additions.m in Sources */,
+				536B98201044933700CD81F6 /* DDXMLNode+Additions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -317,6 +328,7 @@
 				53C15FF61041DA28008D1E82 /* DDXMLElement+Private.m in Sources */,
 				53C15FF81041DA2A008D1E82 /* DDXMLNode+Private.m in Sources */,
 				53C15FFB1041DA2F008D1E82 /* NSString+Additions.m in Sources */,
+				536B981E1044933700CD81F6 /* DDXMLNode+Additions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
