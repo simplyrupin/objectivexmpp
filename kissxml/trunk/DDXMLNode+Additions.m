@@ -8,6 +8,12 @@
 
 #import "DDXMLNode+Additions.h"
 
+#import "DDXMLNode+Private.h"
+#import "NSString+Additions.h"
+
+#import <libxml/xpath.h>
+#import <libxml/xpathinternals.h>
+
 @implementation DDXMLNode (Additions)
 
 - (NSArray *)nodesForXPath:(NSString *)xpath namespaces:(NSDictionary *)prefixMapping error:(NSError **)errorRef;

@@ -6,7 +6,9 @@
 //  Copyright 2009 thirty-three. All rights reserved.
 //
 
-#import <Cocoa/Cocoa.h>
+#import <Foundation/Foundation.h>
+
+#import "KissXML/DDXMLNode.h"
 
 @interface DDXMLNode (Additions)
 

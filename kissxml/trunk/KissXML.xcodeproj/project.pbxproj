@@ -23,7 +23,7 @@
 		534E300D101CCF0500AF8170 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29B97325FDCFA39411CA2CEA /* Foundation.framework */; };
 		534E317C101CD5EC00AF8170 /* NSString+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = DC5442650E8F338300013051 /* NSString+Additions.m */; };
 		534E317D101CD5ED00AF8170 /* NSString+Additions.h in Headers */ = {isa = PBXBuildFile; fileRef = DC5442640E8F338300013051 /* NSString+Additions.h */; };
-		536B981D1044933700CD81F6 /* DDXMLNode+Additions.h in Headers */ = {isa = PBXBuildFile; fileRef = 536B981B1044933700CD81F6 /* DDXMLNode+Additions.h */; };
+		536B981D1044933700CD81F6 /* DDXMLNode+Additions.h in Headers */ = {isa = PBXBuildFile; fileRef = 536B981B1044933700CD81F6 /* DDXMLNode+Additions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		536B981E1044933700CD81F6 /* DDXMLNode+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 536B981C1044933700CD81F6 /* DDXMLNode+Additions.m */; };
 		536B981F1044933700CD81F6 /* DDXMLNode+Additions.h in Headers */ = {isa = PBXBuildFile; fileRef = 536B981B1044933700CD81F6 /* DDXMLNode+Additions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		536B98201044933700CD81F6 /* DDXMLNode+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 536B981C1044933700CD81F6 /* DDXMLNode+Additions.m */; };
