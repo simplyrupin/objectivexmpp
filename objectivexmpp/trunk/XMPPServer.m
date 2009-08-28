@@ -66,7 +66,7 @@
 	NSXMLElement *eventElement = [NSXMLElement elementWithName:@"event" URI:XMPPNamespacePubSubEventURI];	
 	[eventElement addChild:itemsElement];
 	
-	NSXMLElement *messageElement = [NSXMLElement elementWithName:XMPPStreamMessageElementName];
+	NSXMLElement *messageElement = [NSXMLElement elementWithName:XMPPStanzaMessageElementName];
 	[messageElement addChild:eventElement];
 	
 	NSSet *subscribers = [self _subscriptionsForNodeName:nodeName];

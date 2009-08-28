@@ -37,7 +37,7 @@
 	@brief
 	The connection compatability version
  */
-+ (NSString *)connectionCompatabilityVersion;
++ (NSString *)clientStreamVersion;
 
 /*!
 	@brief

@@ -33,12 +33,13 @@ NSSTRING_CONTEXT(XMPPConnectionMessageContext);
 NSSTRING_CONTEXT(XMPPConnectionPubSubContext);
 
 enum {
-	StreamDisconnected	= 1UL << 0,
-	StreamConnecting	= 1UL << 1,
-	StreamNegotiating	= 1UL << 2,
-	StreamStartTLS		= 1UL << 3,
-	StreamConnected		= 1UL << 9,
-	StreamClosing		= 1UL << 10,
+	StreamNotConnected	= 0,
+	StreamConnecting	= 1UL << 0,
+	StreamNegotiating	= 1UL << 1,
+	StreamStartTLS		= 1UL << 2,
+	StreamConnected		= 1UL << 3,
+	StreamClosing		= 1UL << 4,
+	StreamClosed		= 1UL << 5,
 };
 
 #pragma mark -
@@ -47,6 +48,11 @@ enum {
 @property (retain) NSXMLElement *rootStreamElement;
 @property (retain) NSMutableArray *queuedMessages;
 @property (retain) NSTimer *keepAliveTimer;
+@end
+
+@interface XMPPConnection (Private)
+- (void)_streamDidOpen;
+- (void)_streamDidClose;
 @end
 
 @interface XMPPConnection (PrivateWriting)
@@ -60,9 +66,6 @@ enum {
 @interface XMPPConnection (PrivateReading)
 - (void)_readOpeningNegotiation;
 - (void)_performRead;
-
-- (void)_streamDidOpen;
-- (void)_handleStartTLSResponse:(NSXMLElement *)response;
 @end
 
 #pragma mark -
@@ -87,15 +90,13 @@ enum {
 	return XMPPServiceDiscoveryType;
 }
 
-+ (NSString *)connectionCompatabilityVersion {
++ (NSString *)clientStreamVersion {
 	return @"1.0";
 }
 
 - (id)init {
 	self = [super init];
 	if (self == nil) return nil;
-		
-	_sendState = _receiveState = StreamDisconnected;
 	
 	_receiveBuffer = [[NSMutableData alloc] init];
 	
@@ -118,7 +119,7 @@ enum {
 }
 
 #pragma mark -
-#pragma mark Connection Methods
+#pragma mark Connection
 
 - (void)open {
 	if ([self isOpen]) return;
@@ -127,7 +128,6 @@ enum {
 }
 
 - (BOOL)isOpen {
-	if (![super isOpen]) return NO;
 	return ((_sendState & StreamConnected) == StreamConnected) && ((_receiveState & StreamConnected) == StreamConnected);
 }
 
@@ -135,90 +135,30 @@ enum {
 	if ([self isClosed]) return;
 	
 	[self _sendClosingNegotiation];
-	_sendState = StreamClosing;
 }
 
 - (BOOL)isClosed {
-	if (![super isClosed]) return NO;
-	return ((_sendState == StreamDisconnected) && (_receiveState == StreamDisconnected));
+	return ((_sendState == StreamClosed) && (_receiveState == StreamClosed));
 }
 
 #pragma mark -
-#pragma mark Stream Introspection
+#pragma mark Stream
 
-- (NSString *)serverConnectionVersion {
+- (NSString *)peerStreamVersion {
 	return [[self.rootStreamElement attributeForName:@"version"] stringValue];
 }
 
 #pragma mark -
-#pragma mark Writing Methods
-
-- (void)_sendOpeningNegotiation {
-	if (_sendState == StreamConnecting) {
-		NSString *processingInstruction = @"<?xml version='1.0' encoding='UTF-8'?>";
-		[super performWrite:[processingInstruction dataUsingEncoding:NSUTF8StringEncoding] withTimeout:TIMEOUT_WRITE context:NULL];
-	}
-	
-	NSMutableString *openingTag = [NSMutableString stringWithString:@"<stream:stream "];
-	if (self.localAddress != nil) {
-		[openingTag appendFormat:@"from='%@' ", self.localAddress, nil];
-	}
-	if (self.peerAddress != nil) {
-		[openingTag appendFormat:@"to='%@' ", self.peerAddress, nil];
-	}
-	[openingTag appendFormat:@"xmlns='jabber:client' xmlns:stream='%@' version='%@'>", XMPPNamespaceStreamURI, [[self class] connectionCompatabilityVersion], nil];
-	
-	[super performWrite:[openingTag dataUsingEncoding:NSUTF8StringEncoding] withTimeout:TIMEOUT_WRITE context:&XMPPConnectionStartContext];
-}
-
-- (void)_sendClosingNegotiation {
-	NSString *closingTag = @"</stream:stream>";
-	[super performWrite:[closingTag dataUsingEncoding:NSUTF8StringEncoding] withTimeout:TIMEOUT_WRITE context:&XMPPConnectionStopContext];
-}
+#pragma mark Writing
 
 - (NSString *)sendElement:(NSXMLElement *)element context:(void *)context {
 	return [self _sendElement:element context:context enqueue:YES];
 }
 
-- (NSString *)_preprocessStanza:(NSXMLElement *)element {
-	NSString *identifier = [[element attributeForName:@"id"] stringValue];
-	
-	if (identifier == nil) {
-		identifier = [[NSProcessInfo processInfo] globallyUniqueString];
-		
-		NSXMLNode *identifierAttribute = [NSXMLNode attributeWithName:@"id" stringValue:identifier];
-		[element addAttribute:identifierAttribute];
-	}
-	
-	if (self.peerAddress != nil && [element attributeForName:@"to"] == nil) {
-		[element addAttribute:[NSXMLElement attributeWithName:@"to" stringValue:self.peerAddress]];
-	}
-	
-	return identifier;
-}
-
-/*!
-	@brief
-	This method should be used for internal writes, since it doesn't check to see if the stream is open.
-	External element sends are queued until the stream is opened.
- */
-- (NSString *)_sendElement:(NSXMLElement *)element context:(void *)context enqueue:(BOOL)waitUntilOpen {
-	NSString *identifier = [self _preprocessStanza:element];
-	
-	if (![self isOpen] && waitUntilOpen) {
-		AFPacketWrite *packet = [[[AFPacketWrite alloc] initWithContext:context timeout:TIMEOUT_WRITE data:[[element XMLString] dataUsingEncoding:NSUTF8StringEncoding]] autorelease];
-		[self.queuedMessages addObject:packet];
-	} else {
-		[self performWrite:element withTimeout:TIMEOUT_WRITE context:context];
-	}
-	
-	return identifier;
-}
-
 - (NSXMLElement *)sendMessage:(NSString *)content receiver:(NSString *)JID {
 	NSXMLElement *bodyElement = [NSXMLElement elementWithName:@"body" stringValue:content];
 	
-	NSXMLElement *messageElement = [NSXMLElement elementWithName:XMPPStreamMessageElementName];
+	NSXMLElement *messageElement = [NSXMLElement elementWithName:XMPPStanzaMessageElementName];
 	[messageElement addChild:bodyElement];
 	
 	if (JID != nil) {
@@ -239,7 +179,7 @@ enum {
 	NSXMLElement *pubsubElement = [NSXMLElement elementWithName:@"pubsub" URI:XMPPNamespacePubSubURI];
 	[pubsubElement addChild:methodElement];
 	
-	NSXMLElement *iqElement = [NSXMLElement elementWithName:XMPPStreamIQElementName];
+	NSXMLElement *iqElement = [NSXMLElement elementWithName:XMPPStanzaIQElementName];
 	[iqElement addAttribute:[NSXMLElement attributeWithName:@"type" stringValue:@"set"]];
 	[iqElement addChild:pubsubElement];
 	
@@ -257,7 +197,7 @@ enum {
 }
 
 - (void)awknowledgeElement:(NSXMLElement *)iq {
-	NSAssert(([[iq name] caseInsensitiveCompare:XMPPStreamIQElementName] == NSOrderedSame), ([NSString stringWithFormat:@"%@ cannot awknowledge a stanza name %@", self, [iq name], nil]));
+	NSAssert(([[iq name] caseInsensitiveCompare:XMPPStanzaIQElementName] == NSOrderedSame), ([NSString stringWithFormat:@"%@ cannot awknowledge a stanza name %@", self, [iq name], nil]));
 	
 	NSXMLElement *response = [NSXMLElement elementWithName:[iq name]];
 	[response addAttribute:[iq attributeForName:@"id"]];
@@ -273,17 +213,7 @@ enum {
 }
 
 #pragma mark -
-#pragma mark Reading Methods
-
-- (void)_readOpeningNegotiation {
-	[super performRead:[@">" dataUsingEncoding:NSUTF8StringEncoding] withTimeout:TIMEOUT_READ_START context:NULL];
-}
-
-- (void)_performRead {
-	[super performRead:[[[AFXMLElementPacket alloc] initWithStringEncoding:NSUTF8StringEncoding] autorelease] withTimeout:-1 context:NULL];
-}
-
-#pragma mark -
+#pragma mark Reading
 
 - (void)_connectionDidReceiveElement:(NSXMLElement *)element {
 	if (_receiveState = StreamConnected) {
@@ -296,16 +226,17 @@ enum {
 		
 		self.rootStreamElement = element;
 	} else if (_receiveState == StreamStartTLS) {
-		[self _handleStartTLSResponse:element]; // The response from our starttls message
+		//[self _handleStartTLSResponse:element]; // The response from our starttls message
+		[self doesNotRecognizeSelector:_cmd];
 	}
 }
 
 - (void)connectionDidReceiveElement:(NSXMLElement *)element {
-	if ([[element name] isEqualToString:XMPPStreamIQElementName]) {
+	if ([[element name] isEqualToString:XMPPStanzaIQElementName]) {
 		[self connectionDidReceiveIQ:element];
-	} else if ([[element name] isEqualToString:XMPPStreamMessageElementName]) {
+	} else if ([[element name] isEqualToString:XMPPStanzaMessageElementName]) {
 		[self connectionDidReceiveMessage:element];
-	} else if ([[element name] isEqualToString:XMPPStreamPresenceElementName]) {
+	} else if ([[element name] isEqualToString:XMPPStanzaPresenceElementName]) {
 		[self connectionDidReceivePresence:element];
 	} else {
 		if ([self.delegate respondsToSelector:@selector(connection:didReceiveElement:)])
@@ -364,8 +295,92 @@ enum {
 	[self _performRead];
 }
 
+- (void)_streamDidClose {
+	if (![self isClosed]) return;
+	
+	[self.delegate layerDidClose:self];
+}
+
+@end
+
+@implementation XMPPConnection (PrivateWriting)
+
+- (void)_sendOpeningNegotiation {
+	if (_sendState == StreamConnecting) {
+		NSString *processingInstruction = @"<?xml version='1.0' encoding='UTF-8'?>";
+		[super performWrite:[processingInstruction dataUsingEncoding:NSUTF8StringEncoding] withTimeout:TIMEOUT_WRITE context:NULL];
+	}
+	
+	NSMutableString *openingTag = [NSMutableString stringWithString:@"<stream:stream "];
+	if (self.localAddress != nil) {
+		[openingTag appendFormat:@"from='%@' ", self.localAddress, nil];
+	}
+	if (self.peerAddress != nil) {
+		[openingTag appendFormat:@"to='%@' ", self.peerAddress, nil];
+	}
+	[openingTag appendFormat:@"xmlns='jabber:client' xmlns:stream='%@' version='%@'>", XMPPNamespaceStreamURI, [[self class] clientStreamVersion], nil];
+	
+	[super performWrite:[openingTag dataUsingEncoding:NSUTF8StringEncoding] withTimeout:TIMEOUT_WRITE context:&XMPPConnectionStartContext];
+}
+
+- (void)_sendClosingNegotiation {
+	if (_sendState == StreamClosing) return;
+	_sendState = StreamClosing;
+	
+	NSString *closingTag = @"</stream:stream>";
+	[super performWrite:[closingTag dataUsingEncoding:NSUTF8StringEncoding] withTimeout:TIMEOUT_WRITE context:&XMPPConnectionStopContext];
+}
+
+- (NSString *)_preprocessStanza:(NSXMLElement *)element {
+	NSString *identifier = [[element attributeForName:@"id"] stringValue];
+	
+	if ([[element name] caseInsensitiveCompare:XMPPStanzaIQElementName] == NSOrderedSame && identifier == nil) {
+		identifier = [[NSProcessInfo processInfo] globallyUniqueString];
+		
+		NSXMLNode *identifierAttribute = [NSXMLNode attributeWithName:@"id" stringValue:identifier];
+		[element addAttribute:identifierAttribute];
+	}
+	
+	if (self.peerAddress != nil && [element attributeForName:@"to"] == nil) {
+		[element addAttribute:[NSXMLElement attributeWithName:@"to" stringValue:self.peerAddress]];
+	}
+	
+	return identifier;
+}
+
+
+/*!
+	@brief
+	This method should be used for internal writes, since it doesn't check to see if the stream is open.
+	External element sends are queued until the stream is opened.
+ */
+- (NSString *)_sendElement:(NSXMLElement *)element context:(void *)context enqueue:(BOOL)waitUntilOpen {
+	NSString *identifier = [self _preprocessStanza:element];
+	
+	if (![self isOpen] && waitUntilOpen) {
+		AFPacketWrite *packet = [[[AFPacketWrite alloc] initWithContext:context timeout:TIMEOUT_WRITE data:[[element XMLString] dataUsingEncoding:NSUTF8StringEncoding]] autorelease];
+		[self.queuedMessages addObject:packet];
+	} else {
+		[self performWrite:element withTimeout:TIMEOUT_WRITE context:context];
+	}
+	
+	return identifier;
+}
+
 - (void)_keepAlive:(NSTimer *)timer {	
 	[super performWrite:[@" " dataUsingEncoding:NSUTF8StringEncoding] withTimeout:TIMEOUT_WRITE context:&XMPPConnectionStreamContext];
+}
+
+@end
+
+@implementation XMPPConnection (PrivateReading)
+
+- (void)_readOpeningNegotiation {
+	[super performRead:[@">" dataUsingEncoding:NSUTF8StringEncoding] withTimeout:TIMEOUT_READ_START context:NULL];
+}
+
+- (void)_performRead {
+	[super performRead:[[[AFXMLElementPacket alloc] initWithStringEncoding:NSUTF8StringEncoding] autorelease] withTimeout:-1 context:NULL];
 }
 
 @end
@@ -373,7 +388,7 @@ enum {
 @implementation XMPPConnection (Delegate)
 
 - (void)layerDidOpen:(id <AFConnectionLayer>)layer {
-	if (_sendState != StreamDisconnected) {
+	if (_sendState != StreamNotConnected) {
 		[NSException raise:NSInternalInconsistencyException format:@"%@, has already established an XML stream", self, nil];
 		return;
 	}
@@ -384,6 +399,7 @@ enum {
 	[self _readOpeningNegotiation];
 }
 
+// TODO: refactor this to be context based and to pass packets onto the delegate if not handled
 - (void)layer:(id <AFTransportLayer>)layer didRead:(id)data context:(void *)context {
 	if (_receiveState == StreamConnecting) {
 		NSString *XMLString = [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease];
@@ -423,7 +439,7 @@ enum {
 		if (fromString != nil) self.peerAddress = fromString;
 		
 		// Check for RFC compliance
-		NSString *streamVersion = [self serverConnectionVersion];
+		NSString *streamVersion = [self peerStreamVersion];
 		NSComparisonResult versionComparison = [streamVersion compare:@"1.0" options:NSNumericSearch];
 		BOOL compliantServer = (streamVersion != nil && (versionComparison == NSOrderedSame || versionComparison == NSOrderedDescending));
 		
@@ -455,7 +471,9 @@ enum {
 #endif
 		
 	if ([XMLString hasSuffix:@"</stream:stream>"]) {
-		[self close];
+		_receiveState = StreamClosed;
+		[self _streamDidClose];
+		
 		return;
 	}
 	
@@ -496,14 +514,18 @@ enum {
 	} else if (context == &XMPPConnectionMessageContext) {
 		// nop
 	} else if (context == &XMPPConnectionStopContext) {
-		[self.delegate layerDidClose:self];
+		_sendState = StreamClosed;
+		[self _streamDidClose];
+	} else {
+		if ([self.delegate respondsToSelector:_cmd])
+			[(id)self.delegate layer:self didWrite:data context:context];
 	}
 }
 
 - (void)layer:(id <AFConnectionLayer>)layer didReceiveError:(NSError *)error {
 	if (_receiveState == StreamNegotiating) {
 		if ([[error domain] isEqualToString:AFNetworkingErrorDomain] && [error code] == AFNetworkTransportReadTimeoutError) {
-			NSLog(@"%@, endpoint <stream:features> expected but none received, ignoring.", [super description], nil);
+			NSLog(@"%@, endpoint <stream:features xmlns:stream=\"%@\"> expected but not received, ignoring.", [super description], XMPPNamespaceStreamURI, nil);
 			
 			_receiveState = StreamConnected;
 			[self _streamDidOpen];
@@ -520,7 +542,7 @@ enum {
 }
 
 - (void)layer:(id <AFConnectionLayer>)layer didDisconnectWithError:(NSError *)error {
-	_sendState = _receiveState = StreamDisconnected;
+	_sendState = _receiveState = StreamClosed;
 	
 	self.rootStreamElement = nil;
 	

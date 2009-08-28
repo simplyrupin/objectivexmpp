@@ -8,12 +8,24 @@
 
 #import <Foundation/Foundation.h>
 
-#import "ObjectiveXMPP/XMPPConstants.h"
-#import "ObjectiveXMPP/XMPPMessage.h"
-#import "ObjectiveXMPP/XMPPDigestAuthentication.h"
-
-#import "ObjectiveXMPP/XMPPServer.h"
+/*
+	Client
+ */
 
 #import "ObjectiveXMPP/XMPPChatService.h"
 #import "ObjectiveXMPP/XMPPConnection.h"
 #import "ObjectiveXMPP/XMPPRoster.h"
+
+/*
+	Server
+ */
+
+#import "ObjectiveXMPP/XMPPServer.h"
+
+/*
+	Common
+ */
+
+#import "ObjectiveXMPP/XMPPConstants.h"
+#import "ObjectiveXMPP/XMPPMessage.h"
+#import "ObjectiveXMPP/XMPPDigestAuthentication.h"

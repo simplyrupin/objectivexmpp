@@ -8,6 +8,14 @@
 
 #import <Foundation/Foundation.h>
 
+/*
+	Stanza Names
+ */
+
+extern NSString *const XMPPStanzaMessageElementName;
+extern NSString *const XMPPStanzaIQElementName;
+extern NSString *const XMPPStanzaPresenceElementName;
+
 /*!
 	@header
 	Exposes constants for the construction of XMPP stanza elements.
@@ -19,13 +27,14 @@
  */
 extern NSString *const XMPPStreamFeaturesLocalElementName;
 
-/*
-	Stanza Names
+/*!
+	@brief
+	This function takes either an NSXMLElement representing an HTML body, or a string.
+ 
+	@result
+	A <message/> element suitable for serialising.
  */
-
-extern NSString *const XMPPStreamMessageElementName;
-extern NSString *const XMPPStreamIQElementName;
-extern NSString *const XMPPStreamPresenceElementName;
+extern NSXMLElement *XMPPMessageWithBody(NSString *bodyValue);
 
 /*!
 	@brief
