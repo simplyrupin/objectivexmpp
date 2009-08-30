@@ -10,7 +10,7 @@
 
 @class NSXMLElement;
 
-@protocol XMPPConnectionDelegate;
+@protocol XMPPConnectionDelegate, XMPPConnectionDataSource;
 
 /*!
 	@brief
@@ -48,7 +48,7 @@
 /*!
 	
  */
-@property (assign) id <XMPPConnectionDelegate> delegate;
+@property (assign) id <XMPPConnectionDelegate, XMPPConnectionDataSource> delegate;
 
 /*! 
 	@brief
@@ -102,11 +102,35 @@
 	Override points for XMPP extensions
  */
 
-- (void)connectionDidReceiveElement:(NSXMLElement *)element; // Note: general override point, this where the element pattern matching is performed to call the specific handler methods
-
+/*
+	These methods are called first. The default implementations call <tt>-connectionDidReceiveElement:</tt> on self.
+ */
 - (void)connectionDidReceiveIQ:(NSXMLElement *)iq;
 - (void)connectionDidReceiveMessage:(NSXMLElement *)message;
-- (void)connectionDidReceivePresence:(NSXMLElement *)presence; // Note: these attempt to call the specific delegate method and fallback to the general one
+- (void)connectionDidReceivePresence:(NSXMLElement *)presence;
+
+/*!
+	@brief
+	This forwards the element onto the delegate.
+ */
+- (void)connectionDidReceiveElement:(NSXMLElement *)element;
+
+@end
+
+/*!
+	@brief
+	This class doesn't currently specify a separate dataSource, these methods are just separated from the eventing callbacks in the <tt>XMPPConnectionDelegate</tt>.
+ */
+@protocol XMPPConnectionDataSource <NSObject>
+
+ @optional
+
+/*!
+	@brief
+	After both streams open, the specification dictates that we send a <features xmlns="http://etherx.jabber.org/streams"/> element.
+	Because this is where custom implementations my want to customise a response, we consult the datasource.
+ */
+- (NSArray *)connectionWillSendStreamFeatures:(XMPPConnection *)layer;
 
 @end
 
@@ -114,11 +138,22 @@
 
  @optional
 
-/*
-	These methods are called after an instance of their respective stanza is received.
+/*!
+	@brief
+	This is called with an <iq/> element.
  */
 - (void)connection:(XMPPConnection *)layer didReceiveIQ:(NSXMLElement *)iq;
+
+/*!
+	@brief
+	This is called with a <message/> element.
+ */
 - (void)connection:(XMPPConnection *)layer didReceiveMessage:(NSXMLElement *)message;
+
+/*!
+	@brief
+	This is called with a <presence/> element.
+ */
 - (void)connection:(XMPPConnection *)layer didReceivePresence:(NSXMLElement *)presence;
 
 /*!

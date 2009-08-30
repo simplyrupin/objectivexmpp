@@ -11,6 +11,7 @@
 #import "XMPPConstants.h"
 #import "XMPPDigestAuthentication.h"
 #import "XMPPMessage.h"
+#import "_XMPPForwarder.h"
 
 #if TARGET_OS_IPHONE
 #import <CFNetwork/CFNetwork.h>
@@ -28,6 +29,8 @@
 NSSTRING_CONTEXT(XMPPConnectionStartContext);
 NSSTRING_CONTEXT(XMPPConnectionStreamContext);
 NSSTRING_CONTEXT(XMPPConnectionStopContext);
+
+NSSTRING_CONTEXT(XMPPConnectionFeaturesContext);
 
 NSSTRING_CONTEXT(XMPPConnectionMessageContext);
 NSSTRING_CONTEXT(XMPPConnectionPubSubContext);
@@ -217,11 +220,20 @@ enum {
 
 - (void)_connectionDidReceiveElement:(NSXMLElement *)element {
 	if (_receiveState = StreamConnected) {
-		[self connectionDidReceiveElement:element];
+		if ([[element name] isEqualToString:XMPPStanzaIQElementName]) {
+			[self connectionDidReceiveIQ:element];
+		} else if ([[element name] isEqualToString:XMPPStanzaMessageElementName]) {
+			[self connectionDidReceiveMessage:element];
+		} else if ([[element name] isEqualToString:XMPPStanzaPresenceElementName]) {
+			[self connectionDidReceivePresence:element];
+		} else {
+			[self connectionDidReceiveElement:element];
+		}
 	} else if (_receiveState == StreamNegotiating) {
 		if ([[element name] caseInsensitiveCompare:@"stream:features"] != NSOrderedSame) {
 			_receiveState = StreamConnected;
 			[self _connectionDidReceiveElement:element];
+			return;
 		}
 		
 		self.rootStreamElement = element;
@@ -231,45 +243,20 @@ enum {
 	}
 }
 
-- (void)connectionDidReceiveElement:(NSXMLElement *)element {
-	if ([[element name] isEqualToString:XMPPStanzaIQElementName]) {
-		[self connectionDidReceiveIQ:element];
-	} else if ([[element name] isEqualToString:XMPPStanzaMessageElementName]) {
-		[self connectionDidReceiveMessage:element];
-	} else if ([[element name] isEqualToString:XMPPStanzaPresenceElementName]) {
-		[self connectionDidReceivePresence:element];
-	} else {
-		if ([self.delegate respondsToSelector:@selector(connection:didReceiveElement:)])
-			[self.delegate connection:self didReceiveElement:element];
-	}
-}
-
-- (void)_forwardElement:(NSXMLElement *)element selector:(SEL)selector {
-	if ([self.delegate respondsToSelector:selector]) {
-		NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:[(id)self.delegate methodSignatureForSelector:selector]];
-		
-		[invocation setTarget:self.delegate];
-		[invocation setSelector:selector];
-		[invocation setArgument:&self atIndex:2];
-		[invocation setArgument:&element atIndex:3];
-		
-		[invocation invoke];
-	} else {
-		if ([self.delegate respondsToSelector:@selector(connection:didReceiveElement:)])
-			[self.delegate connection:self didReceiveElement:element];
-	}
-}
-
 - (void)connectionDidReceiveIQ:(NSXMLElement *)iq {
-	[self _forwardElement:iq selector:@selector(connection:didReceiveIQ:)];
+	[self connectionDidReceiveElement:iq];
 }
 
 - (void)connectionDidReceiveMessage:(NSXMLElement *)message {
-	[self _forwardElement:message selector:@selector(connection:didReceiveMessage:)];
+	[self connectionDidReceiveElement:message];
 }
 
 - (void)connectionDidReceivePresence:(NSXMLElement *)presence {
-	[self _forwardElement:presence selector:@selector(connection:didReceivePresence:)];
+	[self connectionDidReceiveElement:presence];
+}
+
+- (void)connectionDidReceiveElement:(NSXMLElement *)element {
+	[_XMPPForwarder forwardElement:element from:self to:self.delegate];
 }
 
 @end
@@ -509,6 +496,13 @@ enum {
 	if (context == &XMPPConnectionStartContext) {
 		_sendState = StreamConnected;
 		[self _streamDidOpen];
+		
+		NSXMLElement *features = [NSXMLElement elementWithName:[NSString stringWithFormat:@"%@:%@", @"stream", XMPPStreamFeaturesLocalElementName, nil]];
+		if ([self.delegate respondsToSelector:@selector(connectionWillSendStreamFeatures:)]) {
+			NSArray *elements = [self.delegate connectionWillSendStreamFeatures:self];
+			[features setChildren:elements];
+		}
+		[self _sendElement:features context:&XMPPConnectionFeaturesContext enqueue:NO];
 	} else if (context == &XMPPConnectionPubSubContext) {
 		// nop
 	} else if (context == &XMPPConnectionMessageContext) {
@@ -525,7 +519,7 @@ enum {
 - (void)layer:(id <AFConnectionLayer>)layer didReceiveError:(NSError *)error {
 	if (_receiveState == StreamNegotiating) {
 		if ([[error domain] isEqualToString:AFNetworkingErrorDomain] && [error code] == AFNetworkTransportReadTimeoutError) {
-			NSLog(@"%@, endpoint <stream:features xmlns:stream=\"%@\"> expected but not received, ignoring.", [super description], XMPPNamespaceStreamURI, nil);
+			printf("%s, endpoint <stream:features xmlns:stream=\"%s\"> expected but not received, ignoring.\n", [[super description] UTF8String], [XMPPNamespaceStreamURI UTF8String], nil);
 			
 			_receiveState = StreamConnected;
 			[self _streamDidOpen];

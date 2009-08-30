@@ -35,6 +35,12 @@
 		532A44270FB4B80E006E409F /* ObjectiveXMPP.h in Headers */ = {isa = PBXBuildFile; fileRef = 532A44230FB4B80E006E409F /* ObjectiveXMPP.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		532A442B0FB4B850006E409F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0867D69BFE84028FC02AAC07 /* Foundation.framework */; };
 		532A442C0FB4B855006E409F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0867D69BFE84028FC02AAC07 /* Foundation.framework */; };
+		535576EE104B03A700CE2C86 /* _XMPPForwarder.h in Headers */ = {isa = PBXBuildFile; fileRef = 535576EC104B03A700CE2C86 /* _XMPPForwarder.h */; };
+		535576EF104B03A700CE2C86 /* _XMPPForwarder.m in Sources */ = {isa = PBXBuildFile; fileRef = 535576ED104B03A700CE2C86 /* _XMPPForwarder.m */; };
+		535576F0104B03A700CE2C86 /* _XMPPForwarder.h in Headers */ = {isa = PBXBuildFile; fileRef = 535576EC104B03A700CE2C86 /* _XMPPForwarder.h */; };
+		535576F1104B03A700CE2C86 /* _XMPPForwarder.m in Sources */ = {isa = PBXBuildFile; fileRef = 535576ED104B03A700CE2C86 /* _XMPPForwarder.m */; };
+		535576F5104B03D700CE2C86 /* ObjectiveXMPP.m in Sources */ = {isa = PBXBuildFile; fileRef = 535576F4104B03D700CE2C86 /* ObjectiveXMPP.m */; };
+		535576F6104B03D700CE2C86 /* ObjectiveXMPP.m in Sources */ = {isa = PBXBuildFile; fileRef = 535576F4104B03D700CE2C86 /* ObjectiveXMPP.m */; };
 		53C1600C1041DAD2008D1E82 /* KissXML.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53C15FE81041DA05008D1E82 /* KissXML.framework */; };
 		53D6A3360FEE6FEE00800C37 /* CoreNetworking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 530E26EA0FC890E400DBAB3E /* CoreNetworking.framework */; };
 		53D6A3410FEE701100800C37 /* AmberFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 530E26E60FC890E400DBAB3E /* AmberFoundation.framework */; };
@@ -166,6 +172,9 @@
 		532A43FD0FB4B7A3006E409F /* Amber.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Amber.xcodeproj; path = ../Amber/framework/Amber.xcodeproj; sourceTree = SOURCE_ROOT; };
 		532A44230FB4B80E006E409F /* ObjectiveXMPP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjectiveXMPP.h; sourceTree = "<group>"; };
 		534E2F4D101CCD3700AF8170 /* KissXML.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = KissXML.xcodeproj; path = ../kissxml/KissXML.xcodeproj; sourceTree = SOURCE_ROOT; };
+		535576EC104B03A700CE2C86 /* _XMPPForwarder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _XMPPForwarder.h; sourceTree = "<group>"; };
+		535576ED104B03A700CE2C86 /* _XMPPForwarder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _XMPPForwarder.m; sourceTree = "<group>"; };
+		535576F4104B03D700CE2C86 /* ObjectiveXMPP.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObjectiveXMPP.m; sourceTree = "<group>"; };
 		53E10AAA0FF968E5006E39CF /* XMPPConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMPPConstants.h; sourceTree = "<group>"; };
 		53E10AAB0FF968E5006E39CF /* XMPPConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XMPPConstants.m; sourceTree = "<group>"; };
 		8DC2EF5A0486A6940098B216 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -207,9 +216,9 @@
 		0867D691FE84028FC02AAC07 /* AmberXMPP */ = {
 			isa = PBXGroup;
 			children = (
-				532A44230FB4B80E006E409F /* ObjectiveXMPP.h */,
 				538FEB0E0FFC1C73002C28D5 /* Networking */,
 				08FB77AEFE84172EC02AAC07 /* Classes */,
+				535576F7104B03DF00CE2C86 /* Private */,
 				32C88DFF0371C24200C91783 /* Other Sources */,
 				089C1665FE841158C02AAC07 /* Resources */,
 				0867D69AFE84028FC02AAC07 /* Frameworks */,
@@ -255,6 +264,8 @@
 		32C88DFF0371C24200C91783 /* Other Sources */ = {
 			isa = PBXGroup;
 			children = (
+				532A44230FB4B80E006E409F /* ObjectiveXMPP.h */,
+				535576F4104B03D700CE2C86 /* ObjectiveXMPP.m */,
 				32DBCF5E0370ADEE00C91783 /* ObjectiveXMPP_Prefix.pch */,
 				53E10AAA0FF968E5006E39CF /* XMPPConstants.h */,
 				53E10AAB0FF968E5006E39CF /* XMPPConstants.m */,
@@ -284,6 +295,15 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		535576F7104B03DF00CE2C86 /* Private */ = {
+			isa = PBXGroup;
+			children = (
+				535576EC104B03A700CE2C86 /* _XMPPForwarder.h */,
+				535576ED104B03A700CE2C86 /* _XMPPForwarder.m */,
+			);
+			name = Private;
+			sourceTree = "<group>";
+		};
 		538FEB0E0FFC1C73002C28D5 /* Networking */ = {
 			isa = PBXGroup;
 			children = (
@@ -310,6 +330,7 @@
 				532A44270FB4B80E006E409F /* ObjectiveXMPP.h in Headers */,
 				53E10AAC0FF968E5006E39CF /* XMPPConstants.h in Headers */,
 				530457581000122F00EA4C1E /* XMPPMessage.h in Headers */,
+				535576F0104B03A700CE2C86 /* _XMPPForwarder.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -325,6 +346,7 @@
 				532A44250FB4B80E006E409F /* ObjectiveXMPP.h in Headers */,
 				53E10AAE0FF968E5006E39CF /* XMPPConstants.h in Headers */,
 				530457561000122F00EA4C1E /* XMPPMessage.h in Headers */,
+				535576EE104B03A700CE2C86 /* _XMPPForwarder.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -487,6 +509,8 @@
 				532A42F40FB4B544006E409F /* XMPPServer.m in Sources */,
 				53E10AAD0FF968E5006E39CF /* XMPPConstants.m in Sources */,
 				530457591000122F00EA4C1E /* XMPPMessage.m in Sources */,
+				535576F1104B03A700CE2C86 /* _XMPPForwarder.m in Sources */,
+				535576F6104B03D700CE2C86 /* ObjectiveXMPP.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -501,6 +525,8 @@
 				532A42A00FB4B4B3006E409F /* XMPPChatService.m in Sources */,
 				53E10AAF0FF968E5006E39CF /* XMPPConstants.m in Sources */,
 				530457571000122F00EA4C1E /* XMPPMessage.m in Sources */,
+				535576EF104B03A700CE2C86 /* _XMPPForwarder.m in Sources */,
+				535576F5104B03D700CE2C86 /* ObjectiveXMPP.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

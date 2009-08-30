@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 
 #import "CoreNetworking/AFNetworkServer.h"
+#import "ObjectiveXMPP/XMPPConnection.h"
 
 @class NSXMLElement;
 @class XMPPConnection;
@@ -32,7 +33,11 @@
 
 @end
 
-@protocol XMPPServerDelegate <AFNetworkServerDelegate>
+/*!
+	@brief
+	XMPPConnectionDelegate methods that are implemented in the server, are forwarded to it's delegate if implemented.
+ */
+@protocol XMPPServerDelegate <AFNetworkServerDelegate, XMPPConnectionDelegate>
 
  @optional
 

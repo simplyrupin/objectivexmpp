@@ -11,6 +11,7 @@
 #import "XMPPConstants.h"
 #import "XMPPMessage.h"
 #import "XMPPConnection.h"
+#import "_XMPPForwarder.h"
 
 #import <objc/message.h>
 #import "AmberFoundation/AmberFoundation.h"
@@ -100,25 +101,29 @@
 	(void (*)(id, SEL, id))objc_msgSendSuper(&superclass, _cmd, layer);
 	if (![layer isKindOfClass:[XMPPConnection class]]) return;
 	
-	[_connectedNodes setObject:layer forKey:[layer peerAddress]];
+	id peerAddress = [layer peerAddress];
+	if (peerAddress != nil) [_connectedNodes setObject:layer forKey:peerAddress];
 }
 
 - (void)connection:(XMPPConnection *)layer didReceiveIQ:(NSXMLElement *)iq {
 	NSXMLElement *pubsubElement = [[iq elementsForName:@"pubsub"] onlyObject];
-	if (pubsubElement == nil) return;
 	
-	NSString *nodeName = [[pubsubElement attributeForName:@"node"] stringValue];
-	NSString *subscribingNode = [[pubsubElement attributeForName:@"jid"] stringValue];
-	
-	NSMutableSet *subscriptions = [self _subscriptionsForNodeName:nodeName];
-	
-	if ([[pubsubElement name] caseInsensitiveCompare:@"subscribe"] == NSOrderedSame) {
-		[subscriptions addObject:subscribingNode];
-	} else if ([[pubsubElement name] caseInsensitiveCompare:@"unsubscribe"] == NSOrderedSame) {
-		[subscriptions removeObject:subscribingNode];
+	if (pubsubElement != nil) {
+		NSString *nodeName = [[pubsubElement attributeForName:@"node"] stringValue];
+		NSString *subscribingNode = [[pubsubElement attributeForName:@"jid"] stringValue];
+		
+		NSMutableSet *subscriptions = [self _subscriptionsForNodeName:nodeName];
+		
+		if ([[pubsubElement name] caseInsensitiveCompare:@"subscribe"] == NSOrderedSame) {
+			[subscriptions addObject:subscribingNode];
+		} else if ([[pubsubElement name] caseInsensitiveCompare:@"unsubscribe"] == NSOrderedSame) {
+			[subscriptions removeObject:subscribingNode];
+		}
+		
+		[layer awknowledgeElement:iq];
 	}
 	
-	[layer awknowledgeElement:iq];
+	[_XMPPForwarder forwardElement:iq from:layer to:self.delegate];
 }
 
 - (void)connection:(XMPPConnection *)layer didReceiveMessage:(NSXMLElement *)message {
@@ -127,20 +132,21 @@
 	NSString *toJID = [[message attributeForName:@"to"] stringValue];
 	NSParameterAssert(toJID != nil);
 	
-	BOOL shouldForward = YES;
+	BOOL shouldForwardToReceiver = YES;
 	if ([self.delegate respondsToSelector:@selector(server:shouldForwardMessage:fromNode:toNode:)]) {
-		shouldForward = [self.delegate server:self shouldForwardMessage:message fromNode:fromJID toNode:toJID];
-	}
-	if (!shouldForward) return;
-	
-	XMPPConnection *remoteConnection = [self _connectionForNodeName:toJID];
-	
-	if (remoteConnection == nil) {
-#warning implement store and forward
-		return;
+		shouldForwardToReceiver = [self.delegate server:self shouldForwardMessage:message fromNode:fromJID toNode:toJID];
 	}
 	
-	[remoteConnection sendElement:message context:NULL];
+	if (shouldForwardToReceiver) {
+		XMPPConnection *remoteConnection = [self _connectionForNodeName:toJID];
+		[remoteConnection sendElement:message context:NULL];
+		
+		if (remoteConnection == nil) {
+			#warning implement store and forward
+		}
+	}
+	
+	[_XMPPForwarder forwardElement:message from:layer to:self.delegate];
 }
 
 @end
