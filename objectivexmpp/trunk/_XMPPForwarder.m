@@ -8,6 +8,8 @@
 
 #import "_XMPPForwarder.h"
 
+#import "XMPPMessage.h"
+
 @implementation _XMPPForwarder
 
 + (void)forwardElement:(NSXMLElement *)element from:(XMPPConnection *)connection to:(id <XMPPConnectionDelegate>)target {

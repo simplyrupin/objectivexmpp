@@ -105,6 +105,11 @@
 	if (peerAddress != nil) [_connectedNodes setObject:layer forKey:peerAddress];
 }
 
+- (void)layer:(id <AFConnectionLayer>)layer didReceiveError:(NSError *)error {
+	[_connectedNodes removeObjectsForKeys:[_connectedNodes allKeysForObject:layer]];
+	[layer close];
+}
+
 - (void)connection:(XMPPConnection *)layer didReceiveIQ:(NSXMLElement *)iq {
 	NSXMLElement *pubsubElement = [[iq elementsForName:@"pubsub"] onlyObject];
 	
@@ -154,7 +159,7 @@
 @implementation XMPPServer (Private)
 
 - (XMPPConnection *)_connectionForNodeName:(NSString *)name {
-	return [[self connectedNodes] objectForKey:name];
+	return [self.connectedNodes objectForKey:name];
 }
 
 - (NSString *)_nodeNameForConnection:(XMPPConnection *)connection {

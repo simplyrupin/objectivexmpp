@@ -220,6 +220,7 @@ enum {
 
 - (void)_connectionDidReceiveElement:(NSXMLElement *)element {
 	if (_receiveState = StreamConnected) {
+		// Note: this doesn't use the _XMPPForwarder since the selectors are different
 		if ([[element name] isEqualToString:XMPPStanzaIQElementName]) {
 			[self connectionDidReceiveIQ:element];
 		} else if ([[element name] isEqualToString:XMPPStanzaMessageElementName]) {
@@ -230,13 +231,14 @@ enum {
 			[self connectionDidReceiveElement:element];
 		}
 	} else if (_receiveState == StreamNegotiating) {
-		if ([[element name] caseInsensitiveCompare:@"stream:features"] != NSOrderedSame) {
-			_receiveState = StreamConnected;
-			[self _connectionDidReceiveElement:element];
-			return;
-		}
+		_receiveState = StreamConnected;
 		
-		self.rootStreamElement = element;
+		if ([[element name] caseInsensitiveCompare:@"stream:features"] == NSOrderedSame) {
+			self.rootStreamElement = element;
+			[self _streamDidOpen];
+		} else {
+			[self _connectionDidReceiveElement:element];
+		}
 	} else if (_receiveState == StreamStartTLS) {
 		//[self _handleStartTLSResponse:element]; // The response from our starttls message
 		[self doesNotRecognizeSelector:_cmd];
@@ -283,6 +285,11 @@ enum {
 }
 
 - (void)_streamDidClose {
+	if (_receiveState == StreamClosed && _sendState != StreamClosed) {
+		[self close];
+		return;
+	}
+	
 	if (![self isClosed]) return;
 	
 	[self.delegate layerDidClose:self];
@@ -464,23 +471,10 @@ enum {
 		return;
 	}
 	
-	
 	NSError *parseError = nil;
 	NSXMLDocument *stanzaDocument = [[[NSXMLDocument alloc] initWithXMLString:XMLString options:0 error:&parseError] autorelease];
 	NSParameterAssert(parseError == nil && stanzaDocument != nil);
 	NSXMLElement *stanza = [stanzaDocument rootElement];
-	
-	
-	if (_receiveState == StreamNegotiating) {
-		if ([[stanza localName] isEqualToString:XMPPStreamFeaturesLocalElementName]) {
-			self.rootStreamElement = stanza;
-			return;
-		}
-		
-		_receiveState = StreamConnected;
-		[self _streamDidOpen];
-	}
-	
 	
 	[self connectionDidReceiveElement:stanza];
 	
