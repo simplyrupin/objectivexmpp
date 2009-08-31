@@ -41,7 +41,8 @@
 		535576F1104B03A700CE2C86 /* _XMPPForwarder.m in Sources */ = {isa = PBXBuildFile; fileRef = 535576ED104B03A700CE2C86 /* _XMPPForwarder.m */; };
 		535576F5104B03D700CE2C86 /* ObjectiveXMPP.m in Sources */ = {isa = PBXBuildFile; fileRef = 535576F4104B03D700CE2C86 /* ObjectiveXMPP.m */; };
 		535576F6104B03D700CE2C86 /* ObjectiveXMPP.m in Sources */ = {isa = PBXBuildFile; fileRef = 535576F4104B03D700CE2C86 /* ObjectiveXMPP.m */; };
-		53C1600C1041DAD2008D1E82 /* KissXML.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53C15FE81041DA05008D1E82 /* KissXML.framework */; };
+		535579BF104C3F3D00CE2C86 /* NSXMLNode+Additions.h in Headers */ = {isa = PBXBuildFile; fileRef = 535579BD104C3F3D00CE2C86 /* NSXMLNode+Additions.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		535579C0104C3F3D00CE2C86 /* NSXMLNode+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 535579BE104C3F3D00CE2C86 /* NSXMLNode+Additions.m */; };
 		53D6A3360FEE6FEE00800C37 /* CoreNetworking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 530E26EA0FC890E400DBAB3E /* CoreNetworking.framework */; };
 		53D6A3410FEE701100800C37 /* AmberFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 530E26E60FC890E400DBAB3E /* AmberFoundation.framework */; };
 		53E10AAC0FF968E5006E39CF /* XMPPConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = 53E10AAA0FF968E5006E39CF /* XMPPConstants.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -122,13 +123,6 @@
 			remoteGlobalIDString = 53C15FE21041DA04008D1E82;
 			remoteInfo = KissXML;
 		};
-		53C1600A1041DAC3008D1E82 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 534E2F4D101CCD3700AF8170 /* KissXML.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 53C15FE11041DA04008D1E82;
-			remoteInfo = KissXML;
-		};
 		53D6A3340FEE6FE700800C37 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 532A43FD0FB4B7A3006E409F /* Amber.xcodeproj */;
@@ -175,6 +169,8 @@
 		535576EC104B03A700CE2C86 /* _XMPPForwarder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _XMPPForwarder.h; sourceTree = "<group>"; };
 		535576ED104B03A700CE2C86 /* _XMPPForwarder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = _XMPPForwarder.m; sourceTree = "<group>"; };
 		535576F4104B03D700CE2C86 /* ObjectiveXMPP.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObjectiveXMPP.m; sourceTree = "<group>"; };
+		535579BD104C3F3D00CE2C86 /* NSXMLNode+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSXMLNode+Additions.h"; sourceTree = "<group>"; };
+		535579BE104C3F3D00CE2C86 /* NSXMLNode+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSXMLNode+Additions.m"; sourceTree = "<group>"; };
 		53E10AAA0FF968E5006E39CF /* XMPPConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMPPConstants.h; sourceTree = "<group>"; };
 		53E10AAB0FF968E5006E39CF /* XMPPConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XMPPConstants.m; sourceTree = "<group>"; };
 		8DC2EF5A0486A6940098B216 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -195,7 +191,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				53D6A3410FEE701100800C37 /* AmberFoundation.framework in Frameworks */,
-				53C1600C1041DAD2008D1E82 /* KissXML.framework in Frameworks */,
 				53D6A3360FEE6FEE00800C37 /* CoreNetworking.framework in Frameworks */,
 				532A442B0FB4B850006E409F /* Foundation.framework in Frameworks */,
 			);
@@ -216,9 +211,10 @@
 		0867D691FE84028FC02AAC07 /* AmberXMPP */ = {
 			isa = PBXGroup;
 			children = (
-				538FEB0E0FFC1C73002C28D5 /* Networking */,
-				08FB77AEFE84172EC02AAC07 /* Classes */,
+				538FEB0E0FFC1C73002C28D5 /* Core */,
+				08FB77AEFE84172EC02AAC07 /* Auxiliary */,
 				535576F7104B03DF00CE2C86 /* Private */,
+				535579BC104C3F2B00CE2C86 /* Categories */,
 				32C88DFF0371C24200C91783 /* Other Sources */,
 				089C1665FE841158C02AAC07 /* Resources */,
 				0867D69AFE84028FC02AAC07 /* Frameworks */,
@@ -246,7 +242,7 @@
 			name = Resources;
 			sourceTree = "<group>";
 		};
-		08FB77AEFE84172EC02AAC07 /* Classes */ = {
+		08FB77AEFE84172EC02AAC07 /* Auxiliary */ = {
 			isa = PBXGroup;
 			children = (
 				532A429D0FB4B4B3006E409F /* XMPPChatService.h */,
@@ -258,7 +254,7 @@
 				530457541000122F00EA4C1E /* XMPPMessage.h */,
 				530457551000122F00EA4C1E /* XMPPMessage.m */,
 			);
-			name = Classes;
+			name = Auxiliary;
 			sourceTree = "<group>";
 		};
 		32C88DFF0371C24200C91783 /* Other Sources */ = {
@@ -304,7 +300,16 @@
 			name = Private;
 			sourceTree = "<group>";
 		};
-		538FEB0E0FFC1C73002C28D5 /* Networking */ = {
+		535579BC104C3F2B00CE2C86 /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+				535579BD104C3F3D00CE2C86 /* NSXMLNode+Additions.h */,
+				535579BE104C3F3D00CE2C86 /* NSXMLNode+Additions.m */,
+			);
+			name = Categories;
+			sourceTree = "<group>";
+		};
+		538FEB0E0FFC1C73002C28D5 /* Core */ = {
 			isa = PBXGroup;
 			children = (
 				532A428C0FB4B495006E409F /* XMPPConnection.h */,
@@ -312,7 +317,7 @@
 				532A428E0FB4B495006E409F /* XMPPServer.h */,
 				532A428F0FB4B495006E409F /* XMPPServer.m */,
 			);
-			name = Networking;
+			name = Core;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -347,6 +352,7 @@
 				53E10AAE0FF968E5006E39CF /* XMPPConstants.h in Headers */,
 				530457561000122F00EA4C1E /* XMPPMessage.h in Headers */,
 				535576EE104B03A700CE2C86 /* _XMPPForwarder.h in Headers */,
+				535579BF104C3F3D00CE2C86 /* NSXMLNode+Additions.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -387,7 +393,6 @@
 			dependencies = (
 				53D6A3350FEE6FE700800C37 /* PBXTargetDependency */,
 				53D6A3400FEE700D00800C37 /* PBXTargetDependency */,
-				53C1600B1041DAC3008D1E82 /* PBXTargetDependency */,
 			);
 			name = ObjectiveXMPP;
 			productInstallPath = "$(HOME)/Library/Frameworks";
@@ -527,6 +532,7 @@
 				530457571000122F00EA4C1E /* XMPPMessage.m in Sources */,
 				535576EF104B03A700CE2C86 /* _XMPPForwarder.m in Sources */,
 				535576F5104B03D700CE2C86 /* ObjectiveXMPP.m in Sources */,
+				535579C0104C3F3D00CE2C86 /* NSXMLNode+Additions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -542,11 +548,6 @@
 			isa = PBXTargetDependency;
 			name = "KissXML Touch";
 			targetProxy = 534E2F56101CCD4200AF8170 /* PBXContainerItemProxy */;
-		};
-		53C1600B1041DAC3008D1E82 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = KissXML;
-			targetProxy = 53C1600A1041DAC3008D1E82 /* PBXContainerItemProxy */;
 		};
 		53D6A3350FEE6FE700800C37 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
