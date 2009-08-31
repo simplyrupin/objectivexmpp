@@ -22,7 +22,7 @@ extern NSString *const XMPPServiceDiscoveryType;
 	@brief
 	Default URI for the document.
  */
-extern NSString *const XMPPNamespaceJabberClientURI;
+extern NSString *const XMPPNamespaceClientDefaultURI;
 
 /*!
 	@brief

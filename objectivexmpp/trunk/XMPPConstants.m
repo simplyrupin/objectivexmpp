@@ -10,7 +10,7 @@
 
 NSString *const XMPPServiceDiscoveryType = @"_presence._tcp.";
 
-NSString *const XMPPNamespaceJabberClientURI = @"jabber:client";
+NSString *const XMPPNamespaceClientDefaultURI = @"jabber:client";
 NSString *const XMPPNamespaceStreamURI = @"http://etherx.jabber.org/streams";
 
 NSString *const XMPPNamespacePubSubURI = @"http://jabber.org/protocol/pubsub";
