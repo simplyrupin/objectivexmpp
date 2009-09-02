@@ -7,7 +7,3 @@
 //
 
 
-
-@implementation ObjectiveXMPP
-
-@end

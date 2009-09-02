@@ -48,7 +48,7 @@ enum {
 #pragma mark -
 
 @interface XMPPConnection ()
-@property (retain) NSXMLElement *rootStreamElement;
+@property (retain) NSXMLElement *receivedStreamElement, *receivedFeatures;
 @property (retain) NSMutableArray *queuedMessages;
 @property (retain) NSTimer *keepAliveTimer;
 @end
@@ -77,7 +77,7 @@ enum {
 
 @dynamic delegate;
 
-@synthesize rootStreamElement=_rootStreamElement;
+@synthesize receivedStreamElement=_receivedStreamElement, receivedFeatures=_receivedFeatures;
 
 @synthesize localAddress=_local, peerAddress=_peer;
 
@@ -148,7 +148,7 @@ enum {
 #pragma mark Stream
 
 - (NSString *)peerStreamVersion {
-	return [[self.rootStreamElement attributeForName:@"version"] stringValue];
+	return [[self.receivedStreamElement attributeForName:@"version"] stringValue];
 }
 
 #pragma mark -
@@ -234,7 +234,7 @@ enum {
 		_receiveState = StreamConnected;
 		
 		if ([[element name] caseInsensitiveCompare:@"stream:features"] == NSOrderedSame) {
-			self.rootStreamElement = element;
+			self.receivedStreamElement = element;
 			[self _streamDidOpen];
 		} else {
 			[self _connectionDidReceiveElement:element];
@@ -299,6 +299,10 @@ enum {
 
 @implementation XMPPConnection (PrivateWriting)
 
+/*
+	@brief
+	The opening negotiation is covered by RFC3920 §4 [http://xmpp.org/rfcs/rfc3920.html#streams]
+ */
 - (void)_sendOpeningNegotiation {
 	if (_sendState == StreamConnecting) {
 		NSString *processingInstruction = @"<?xml version='1.0' encoding='UTF-8'?>";
@@ -306,13 +310,34 @@ enum {
 	}
 	
 	NSMutableString *openingTag = [NSMutableString stringWithString:@"<stream:stream "];
+	
+	// Note: if we've the receiving party we need to perform version matching, otherwise we advertise our maximum version
+	if (_receiveState == StreamConnected) {
+		// Note: if the initiating entity didn't include a version, neither do we
+		if ([self.receivedStreamElement attributeForName:@"version"] != nil) {
+			
+		}
+		[openingTag appendFormat:@"version='%@' ", nil];
+	} else {
+		[openingTag appendFormat:@"version='%@' ", [[self class] clientStreamVersion], nil];
+	}
+	
 	if (self.localAddress != nil) {
+		// Note:
+		// - the 'from' attribute is ignored if inappropriate but my be useful for XEP-0174
+		// - the 'from' attribute SHOULD be included by the receiving entity
 		[openingTag appendFormat:@"from='%@' ", self.localAddress, nil];
 	}
 	if (self.peerAddress != nil) {
 		[openingTag appendFormat:@"to='%@' ", self.peerAddress, nil];
 	}
-	[openingTag appendFormat:@"xmlns='jabber:client' xmlns:stream='%@' version='%@'>", XMPPNamespaceStreamURI, [[self class] clientStreamVersion], nil];
+	
+	// Note: we're sending this in response to an incoming connection
+	if (_receiveState == StreamConnected) {
+		[openingTag appendFormat:@"id='%@' ", [[NSProcessInfo processInfo] globallyUniqueString], nil];
+	}
+	
+	[openingTag appendFormat:@"xmlns='%@' xmlns:stream='%@'>", XMPPNamespaceClientDefaultURI, XMPPNamespaceStreamURI, nil];
 	
 	[super performWrite:[openingTag dataUsingEncoding:NSUTF8StringEncoding] withTimeout:TIMEOUT_WRITE context:&XMPPConnectionStartContext];
 }
@@ -423,13 +448,13 @@ enum {
 		{
 			[_receiveBuffer appendData:[@"</stream:stream>" dataUsingEncoding:NSUTF8StringEncoding]];
 			NSXMLDocument *xmlDoc = [[[NSXMLDocument alloc] initWithData:_receiveBuffer options:0 error:nil] autorelease];
-			self.rootStreamElement = [xmlDoc rootElement];
+			self.receivedStreamElement = [xmlDoc rootElement];
 			
 			[_receiveBuffer release];
 			_receiveBuffer = nil;
 		}
 		
-		NSString *fromString = [[self.rootStreamElement attributeForName:@"from"] stringValue];
+		NSString *fromString = [[self.receivedStreamElement attributeForName:@"from"] stringValue];
 		if (fromString != nil) self.peerAddress = fromString;
 		
 		// Check for RFC compliance
@@ -532,7 +557,8 @@ enum {
 - (void)layer:(id <AFConnectionLayer>)layer didDisconnectWithError:(NSError *)error {
 	_sendState = _receiveState = StreamClosed;
 	
-	self.rootStreamElement = nil;
+	self.receivedStreamElement = nil;
+	self.receivedFeatures = nil;
 	
 	[self.keepAliveTimer invalidate];
 	self.keepAliveTimer = nil;

@@ -14,13 +14,14 @@
 
 /*!
 	@brief
-	This class implements XML chunk messaging with an XMPP endpoint for both server and serverless messaging.
+	This class implements XML chunk messaging with an XMPP endpoint for client->server, server->server and client->client messaging.
  
 	@detail
-	You can capture all XML element writes by overriding <tt>-performWrite:forTag:withTimeout:</tt>, except for the processing instruction, the opening stream tag and the closing stream tag.
+	All XML stanza writes are funneled through <tt>-performWrite:forTag:withTimeout:</tt>, stream setup is handled separately.
  */
 @interface XMPPConnection : AFNetworkConnection <AFConnectionLayer> {
-	NSXMLElement *_rootStreamElement;
+	NSXMLElement *_receivedStreamElement;
+	NSXMLElement *_receivedFeatures;
 	
 	NSString *_local;
 	NSUInteger _receiveState;
