@@ -127,11 +127,11 @@ NSString *const XMPPAuthenticationSchemeDigestMD5 = @"DIGEST-MD5";
 	[HA1data appendData:HA1dataA];
 	[HA1data appendData:HA1dataB];
 	
-	NSString *HA1 = [[HA1data MD5Hash] hexString];
-	NSString *HA2 = [[[HA2str dataUsingEncoding:NSUTF8StringEncoding] MD5Hash] hexString];
+	NSString *HA1 = [[HA1data MD5Hash] base16String];
+	NSString *HA2 = [[[HA2str dataUsingEncoding:NSUTF8StringEncoding] MD5Hash] base16String];
 	
 	NSString *responseStr = [NSString stringWithFormat:@"%@:%@:00000001:%@:auth:%@", HA1, nonce, cnonce, HA2, nil];
-	NSString *response = [[[responseStr dataUsingEncoding:NSUTF8StringEncoding] MD5Hash] hexString];
+	NSString *response = [[[responseStr dataUsingEncoding:NSUTF8StringEncoding] MD5Hash] base16String];
 	
 	return response;
 }
@@ -147,7 +147,6 @@ NSString *const XMPPAuthenticationSchemeDigestMD5 = @"DIGEST-MD5";
 	[buffer appendFormat:@"digest-uri=\"%@\",", digestURI];
 	[buffer appendFormat:@"response=%@,", [self response]];
 	[buffer appendFormat:@"charset=utf-8"];
-	
 	return [[buffer dataUsingEncoding:NSUTF8StringEncoding] base64String];
 }
 
