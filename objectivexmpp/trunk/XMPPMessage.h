@@ -8,36 +8,33 @@
 
 #import <Foundation/Foundation.h>
 
+/*!
+	\file
+	Exposes constants for the construction of XMPP stanza elements.
+ */
+
 /*
 	Stanza Names
  */
 
-extern NSString *const XMPPStanzaMessageElementName;
-extern NSString *const XMPPStanzaIQElementName;
-extern NSString *const XMPPStanzaPresenceElementName;
-
-/*!
-	@header
-	Exposes constants for the construction of XMPP stanza elements.
- */
+extern NSString *const AFXMPPStanzaMessageElementName;
+extern NSString *const AFXMPPStanzaIQElementName;
+extern NSString *const AFXMPPStanzaPresenceElementName;
 
 /*!
 	\brief
 	This element is transmitted after the opening of the XML stream to indicate which features the server supports.
  */
-extern NSString *const XMPPStreamFeaturesLocalElementName;
+extern NSString *const AFXMPPStreamFeaturesLocalElementName;
 
 /*!
 	\brief
-	This function takes either an NSXMLElement representing an HTML body, or a string.
- 
-	\return
 	A <message/> element suitable for serialising.
  */
-extern NSXMLElement *XMPPMessageWithBody(NSString *bodyValue);
+extern NSXMLElement *AFXMPPMessageWithBody(NSString *bodyValue);
 
 /*!
 	\brief
-	Use this function to determine if the message represents a message mid-compose.
+	Determines if a <message/> is mid-composition.
  */
-extern BOOL XMPPMessageIsComposing(NSXMLElement *element);
+extern BOOL AFXMPPMessageIsComposing(NSXMLElement *element);

@@ -6,45 +6,46 @@
 //  Copyright 2009 thirty-three software. All rights reserved.
 //
 
-#import "XMPPRoster.h"
+#import "AFXMPPRoster.h"
 
-#import "XMPPChatService.h"
+#import "AFXMPPChatService.h"
 #import "XMPPConstants.h"
 
 #import "AmberFoundation/AmberFoundation.h"
+#import "CoreNetworking/CoreNetworking.h"
 
 NSString *const kXMPPRosterBonjourDomain = @"local.";
 
-@interface XMPPRoster ()
+@interface AFXMPPRoster ()
 @property (readwrite, retain) NSNetServiceBrowser *browser;
 @end
 
-@implementation XMPPRoster
+@implementation AFXMPPRoster
 
-@synthesize browser;
-@synthesize bonjourServices;
+@synthesize browser=_browser;
+@synthesize bonjourServices=_bonjourServices;
 
-+ (XMPPRoster *)sharedRoster {
-	static XMPPRoster *sharedRoster = nil;
-	if (sharedRoster == nil) sharedRoster = [[XMPPRoster alloc] init];
++ (AFXMPPRoster *)sharedRoster {
+	static AFXMPPRoster *sharedRoster = nil;
+	if (sharedRoster == nil) sharedRoster = [[AFXMPPRoster alloc] init];
 	return sharedRoster;
 }
 
 - (id)init {
 	self = [super init];
 	
-	browser = [[NSNetServiceBrowser alloc] init];
-	[browser setDelegate:(id)self];
+	_browser = [[NSNetServiceBrowser alloc] init];
+	[_browser setDelegate:(id)self];
 	
-	bonjourServices = [[AFKeyIndexedSet alloc] initWithKeyPath:@"name"];
+	_bonjourServices = [[AFKeyIndexedSet alloc] initWithKeyPath:@"name"];
 	
 	return self;
 }
 
 - (void)dealloc {
-	[browser release];
+	[_browser release];
 	
-	[bonjourServices release];
+	[_bonjourServices release];
 	
 	[super dealloc];
 }
@@ -53,20 +54,20 @@ NSString *const kXMPPRosterBonjourDomain = @"local.";
 	[self.browser searchForServicesOfType:XMPPServiceDiscoveryType inDomain:kXMPPRosterBonjourDomain];
 }
 
-- (void)addBonjourServicesObject:(XMPPChatService *)object {
+- (void)addBonjourServicesObject:(AFXMPPChatService *)object {
 	[bonjourServices addObject:object];
 }
 
-- (void)removeBonjourServicesObject:(XMPPChatService *)object {
+- (void)removeBonjourServicesObject:(AFXMPPChatService *)object {
 	[bonjourServices removeObject:object];
 }
 
 @end
 
-@implementation XMPPRoster (Delegate)
+@implementation AFXMPPRoster (Delegate)
 
 - (void)netServiceBrowser:(NSNetServiceBrowser *)netServiceBrowser didFindService:(NSNetService *)netService moreComing:(BOOL)moreComing {	
-	XMPPChatService *service = [[XMPPChatService alloc] initWithNetService:netService];
+	AFXMPPChatService *service = [[AFXMPPChatService alloc] initWithNetService:netService];
 	[self addBonjourServicesObject:service];
 	[service release];
 }

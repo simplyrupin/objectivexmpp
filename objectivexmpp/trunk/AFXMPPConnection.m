@@ -6,12 +6,12 @@
 //  Copyright 2009 thirty-three software. All rights reserved.
 //
 
-#import "XMPPConnection.h"
+#import "AFXMPPConnection.h"
 
 #import "XMPPConstants.h"
 #import "XMPPDigestAuthentication.h"
 #import "XMPPMessage.h"
-#import "_XMPPForwarder.h"
+#import "_AFXMPPForwarder.h"
 
 #if TARGET_OS_IPHONE
 #import <CFNetwork/CFNetwork.h>
@@ -47,18 +47,18 @@ enum {
 
 #pragma mark -
 
-@interface XMPPConnection ()
+@interface AFXMPPConnection ()
 @property (retain) NSXMLElement *receivedStreamElement, *receivedFeatures;
 @property (retain) NSMutableArray *queuedMessages;
 @property (retain) NSTimer *keepAliveTimer;
 @end
 
-@interface XMPPConnection (Private)
+@interface AFXMPPConnection (Private)
 - (void)_streamDidOpen;
 - (void)_streamDidClose;
 @end
 
-@interface XMPPConnection (PrivateWriting)
+@interface AFXMPPConnection (PrivateWriting)
 - (void)_sendOpeningNegotiation;
 - (void)_sendClosingNegotiation;
 - (NSString *)_preprocessStanza:(NSXMLElement *)element;
@@ -66,14 +66,14 @@ enum {
 - (void)_keepAlive:(NSTimer *)timer;
 @end
 
-@interface XMPPConnection (PrivateReading)
+@interface AFXMPPConnection (PrivateReading)
 - (void)_readOpeningNegotiation;
 - (void)_performRead;
 @end
 
 #pragma mark -
 
-@implementation XMPPConnection
+@implementation AFXMPPConnection
 
 @dynamic delegate;
 
@@ -161,7 +161,7 @@ enum {
 - (NSXMLElement *)sendMessage:(NSString *)content receiver:(NSString *)JID {
 	NSXMLElement *bodyElement = [NSXMLElement elementWithName:@"body" stringValue:content];
 	
-	NSXMLElement *messageElement = [NSXMLElement elementWithName:XMPPStanzaMessageElementName];
+	NSXMLElement *messageElement = [NSXMLElement elementWithName:AFXMPPStanzaMessageElementName];
 	[messageElement addChild:bodyElement];
 	
 	if (JID != nil) {
@@ -182,7 +182,7 @@ enum {
 	NSXMLElement *pubsubElement = [NSXMLElement elementWithName:@"pubsub" URI:XMPPNamespacePubSubURI];
 	[pubsubElement addChild:methodElement];
 	
-	NSXMLElement *iqElement = [NSXMLElement elementWithName:XMPPStanzaIQElementName];
+	NSXMLElement *iqElement = [NSXMLElement elementWithName:AFXMPPStanzaIQElementName];
 	[iqElement addAttribute:[NSXMLElement attributeWithName:@"type" stringValue:@"set"]];
 	[iqElement addChild:pubsubElement];
 	
@@ -199,8 +199,8 @@ enum {
 	[self sendElement:unsubscribe context:&XMPPConnectionPubSubContext];
 }
 
-- (void)awknowledgeElement:(NSXMLElement *)iq {
-	NSAssert(([[iq name] caseInsensitiveCompare:XMPPStanzaIQElementName] == NSOrderedSame), ([NSString stringWithFormat:@"%@ cannot awknowledge a stanza name %@", self, [iq name], nil]));
+- (void)awknowledgeIQElement:(NSXMLElement *)iq {
+	NSAssert(([[iq name] caseInsensitiveCompare:AFXMPPStanzaIQElementName] == NSOrderedSame), ([NSString stringWithFormat:@"%@ cannot awknowledge a stanza name %@", self, [iq name], nil]));
 	
 	NSXMLElement *response = [NSXMLElement elementWithName:[iq name]];
 	[response addAttribute:[iq attributeForName:@"id"]];
@@ -221,11 +221,11 @@ enum {
 - (void)_connectionDidReceiveElement:(NSXMLElement *)element {
 	if (_receiveState = StreamConnected) {
 		// Note: this doesn't use the _XMPPForwarder since the selectors are different
-		if ([[element name] isEqualToString:XMPPStanzaIQElementName]) {
+		if ([[element name] isEqualToString:AFXMPPStanzaIQElementName]) {
 			[self connectionDidReceiveIQ:element];
-		} else if ([[element name] isEqualToString:XMPPStanzaMessageElementName]) {
+		} else if ([[element name] isEqualToString:AFXMPPStanzaMessageElementName]) {
 			[self connectionDidReceiveMessage:element];
-		} else if ([[element name] isEqualToString:XMPPStanzaPresenceElementName]) {
+		} else if ([[element name] isEqualToString:AFXMPPStanzaPresenceElementName]) {
 			[self connectionDidReceivePresence:element];
 		} else {
 			[self connectionDidReceiveElement:element];
@@ -258,14 +258,14 @@ enum {
 }
 
 - (void)connectionDidReceiveElement:(NSXMLElement *)element {
-	[_XMPPForwarder forwardElement:element from:self to:self.delegate];
+	[_AFXMPPForwarder forwardElement:element from:self to:self.delegate];
 }
 
 @end
 
 #pragma mark -
 
-@implementation XMPPConnection (Private)
+@implementation AFXMPPConnection (Private)
 
 - (void)_streamDidOpen {
 	// Note: we wait until both XML streams are connected before informing the delegate
@@ -297,7 +297,7 @@ enum {
 
 @end
 
-@implementation XMPPConnection (PrivateWriting)
+@implementation AFXMPPConnection (PrivateWriting)
 
 /*
 	\brief
@@ -353,7 +353,7 @@ enum {
 - (NSString *)_preprocessStanza:(NSXMLElement *)element {
 	NSString *identifier = [[element attributeForName:@"id"] stringValue];
 	
-	if ([[element name] caseInsensitiveCompare:XMPPStanzaIQElementName] == NSOrderedSame && identifier == nil) {
+	if ([[element name] caseInsensitiveCompare:AFXMPPStanzaIQElementName] == NSOrderedSame && identifier == nil) {
 		identifier = [[NSProcessInfo processInfo] globallyUniqueString];
 		
 		NSXMLNode *identifierAttribute = [NSXMLNode attributeWithName:@"id" stringValue:identifier];
@@ -392,7 +392,7 @@ enum {
 
 @end
 
-@implementation XMPPConnection (PrivateReading)
+@implementation AFXMPPConnection (PrivateReading)
 
 - (void)_readOpeningNegotiation {
 	[super performRead:[@">" dataUsingEncoding:NSUTF8StringEncoding] withTimeout:TIMEOUT_READ_START context:NULL];
@@ -404,7 +404,7 @@ enum {
 
 @end
 
-@implementation XMPPConnection (Delegate)
+@implementation AFXMPPConnection (Delegate)
 
 - (void)layerDidOpen:(id <AFConnectionLayer>)layer {
 	if (_sendState != StreamNotConnected) {
@@ -516,7 +516,7 @@ enum {
 		_sendState = StreamConnected;
 		[self _streamDidOpen];
 		
-		NSXMLElement *features = [NSXMLElement elementWithName:[NSString stringWithFormat:@"%@:%@", @"stream", XMPPStreamFeaturesLocalElementName, nil]];
+		NSXMLElement *features = [NSXMLElement elementWithName:[NSString stringWithFormat:@"%@:%@", @"stream", AFXMPPStreamFeaturesLocalElementName, nil]];
 		if ([self.delegate respondsToSelector:@selector(connectionWillSendStreamFeatures:)]) {
 			NSArray *elements = [self.delegate connectionWillSendStreamFeatures:self];
 			[features setChildren:elements];
@@ -537,8 +537,9 @@ enum {
 
 - (void)layer:(id <AFConnectionLayer>)layer didReceiveError:(NSError *)error {
 	if (_receiveState == StreamNegotiating) {
-		if ([[error domain] isEqualToString:AFNetworkingErrorDomain] && [error code] == AFNetworkTransportReadTimeoutError) {
-			printf("%s, endpoint <stream:features xmlns:stream=\"%s\"> expected but not received, ignoring.\n", [[super description] UTF8String], [XMPPNamespaceStreamURI UTF8String], nil);
+#warning check this error parsing, ensure the domain and code are correct
+		if ([[error domain] isEqualToString:AFCoreNetworkingBundleIdentifier] && [error code] == AFNetworkTransportErrorTimeout) {
+			printf("%s, endpoint <stream:features xmlns:stream=\"%s\"> expected but not received, ignoring\n", [[super description] UTF8String], [XMPPNamespaceStreamURI UTF8String], nil);
 			
 			_receiveState = StreamConnected;
 			[self _streamDidOpen];

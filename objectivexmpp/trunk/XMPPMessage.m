@@ -8,14 +8,16 @@
 
 #import "XMPPMessage.h"
 
-NSString *const XMPPStanzaMessageElementName = @"message";
-NSString *const XMPPStanzaIQElementName = @"iq";
-NSString *const XMPPStanzaPresenceElementName = @"presence";
+#import "NSXMLNode+AFXMPPAdditions.h"
 
-NSString *const XMPPStreamFeaturesLocalElementName = @"features";
+NSString *const AFXMPPStanzaMessageElementName = @"message";
+NSString *const AFXMPPStanzaIQElementName = @"iq";
+NSString *const AFXMPPStanzaPresenceElementName = @"presence";
 
-NSXMLElement *XMPPMessageWithBody(NSString *bodyValue) {
-	NSXMLElement *message = [NSXMLElement elementWithName:XMPPStanzaMessageElementName];
+NSString *const AFXMPPStreamFeaturesLocalElementName = @"features";
+
+NSXMLElement *AFXMPPMessageWithBody(NSString *bodyValue) {
+	NSXMLElement *message = [NSXMLElement elementWithName:AFXMPPStanzaMessageElementName];
 	[message addAttribute:[NSXMLNode attributeWithName:@"type" stringValue:@"chat"]];
 	
 	NSXMLElement *body = [NSXMLElement elementWithName:@"body" stringValue:bodyValue];
@@ -24,8 +26,8 @@ NSXMLElement *XMPPMessageWithBody(NSString *bodyValue) {
 	return message;
 }
 
-BOOL XMPPMessageIsComposing(NSXMLElement *element) {
-	NSCParameterAssert([[element name] caseInsensitiveCompare:XMPPStanzaMessageElementName] == NSOrderedSame);
+BOOL AFXMPPMessageIsComposing(NSXMLElement *element) {
+	if ([[element name] caseInsensitiveCompare:AFXMPPStanzaMessageElementName] != NSOrderedSame) return NO;
 	
 	NSDictionary *prefixMapping = [NSDictionary dictionaryWithObjectsAndKeys:
 								   @"http://jabber.org/protocol/chatstates", @"a",

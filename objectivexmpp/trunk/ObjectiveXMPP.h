@@ -30,6 +30,4 @@
 #import "ObjectiveXMPP/XMPPMessage.h"
 #import "ObjectiveXMPP/XMPPDigestAuthentication.h"
 
-#if !TARGET_OS_IPHONE
 #import "ObjectiveXMPP/NSXMLNode+Additions.h"
-#endif

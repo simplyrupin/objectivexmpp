@@ -8,14 +8,14 @@
 
 #import <Foundation/Foundation.h>
 
-#import "XMPPConnection.h"
+#import "AFXMPPConnection.h"
 
 /*!
 	\brief
 	This class introspects an element and attempts to forward it to an appropriate handler method.
  */
-@interface _XMPPForwarder : NSProxy
+@interface _AFXMPPForwarder : NSProxy
 
-+ (void)forwardElement:(NSXMLElement *)element from:(XMPPConnection *)connection to:(id <XMPPConnectionDelegate>)target;
++ (void)forwardElement:(NSXMLElement *)element from:(AFXMPPConnection *)connection to:(id <AFXMPPConnectionDelegate>)target;
 
 @end

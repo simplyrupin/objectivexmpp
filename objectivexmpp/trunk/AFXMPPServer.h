@@ -9,14 +9,14 @@
 #import <Foundation/Foundation.h>
 
 #import "CoreNetworking/CoreNetworking.h"
-#import "ObjectiveXMPP/XMPPConnection.h"
+#import "ObjectiveXMPP/AFXMPPConnection.h"
 
 @class NSXMLElement;
-@class XMPPConnection;
+@class AFXMPPConnection;
 
-@protocol XMPPServerDelegate;
+@protocol AFXMPPServerDelegate;
 
-@interface XMPPServer : AFNetworkServer {
+@interface AFXMPPServer : AFNetworkServer {
  @private
 	NSString *_hostnode;
 	
@@ -24,7 +24,7 @@
 	NSMutableDictionary *_nodeSubscriptions;
 }
 
-@property (assign) id <XMPPServerDelegate> delegate;
+@property (assign) id <AFXMPPServerDelegate> delegate;
 
 @property (copy) NSString *hostnode;
 
@@ -42,7 +42,7 @@
 	\brief
 	XMPPConnectionDelegate methods that are implemented in the server, are forwarded to it's delegate if implemented.
  */
-@protocol XMPPServerDelegate <AFNetworkServerDelegate, XMPPConnectionDelegate>
+@protocol AFXMPPServerDelegate <AFNetworkServerDelegate, XMPPConnectionDelegate>
 
  @optional
 
@@ -50,6 +50,6 @@
 	\brief
 	Assumes YES if unimplemented.
  */
-- (BOOL)server:(XMPPServer *)server shouldForwardMessage:(NSXMLElement *)message fromNode:(NSString *)JID toNode:(NSString *)JID;
+- (BOOL)server:(AFXMPPServer *)server shouldForwardMessage:(NSXMLElement *)message fromNode:(NSString *)JID toNode:(NSString *)JID;
 
 @end

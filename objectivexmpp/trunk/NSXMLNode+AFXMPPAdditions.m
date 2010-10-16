@@ -6,7 +6,7 @@
 //  Copyright 2009 thirty-three. All rights reserved.
 //
 
-#import "NSXMLNode+Additions.h"
+#import "NSXMLNode+AFXMPPAdditions.h"
 
 @implementation NSXMLNode (ObjectiveXMPPAdditions)
 

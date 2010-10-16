@@ -6,30 +6,30 @@
 //  Copyright 2008 thirty-three software. All rights reserved.
 //
 
-#import "XMPPServer.h"
+#import "AFXMPPServer.h"
 
 #import "XMPPConstants.h"
 #import "XMPPMessage.h"
 #import "XMPPConnection.h"
-#import "_XMPPForwarder.h"
+#import "_AFXMPPForwarder.h"
 
 #import <objc/message.h>
 #import "AmberFoundation/AmberFoundation.h"
 
 #warning this class should write to an error log, take a look at ASL
 
-@interface XMPPServer ()
+@interface AFXMPPServer ()
 @property (readwrite, retain) NSDictionary *connectedNodes;
 @end
 
-@interface XMPPServer (Private)
+@interface AFXMPPServer (Private)
 - (XMPPConnection *)_connectionForNodeName:(NSString *)name;
 - (NSString *)_nodeNameForConnection:(XMPPConnection *)connection;
 
 - (NSMutableSet *)_subscriptionsForNodeName:(NSString *)name;
 @end
 
-@implementation XMPPServer
+@implementation AFXMPPServer
 
 @dynamic delegate;
 
@@ -67,7 +67,7 @@
 	NSXMLElement *eventElement = [NSXMLElement elementWithName:@"event" URI:XMPPNamespacePubSubEventURI];	
 	[eventElement addChild:itemsElement];
 	
-	NSXMLElement *messageElement = [NSXMLElement elementWithName:XMPPStanzaMessageElementName];
+	NSXMLElement *messageElement = [NSXMLElement elementWithName:AFXMPPStanzaMessageElementName];
 	[messageElement addChild:eventElement];
 	
 	NSSet *subscribers = [self _subscriptionsForNodeName:nodeName];
@@ -86,7 +86,7 @@
 
 @end
 
-@implementation XMPPServer (Delegate)
+@implementation AFXMPPServer (Delegate)
 
 - (void)layerDidOpen:(id)layer {
 	struct objc_super superclass = {
@@ -128,7 +128,7 @@
 		[layer awknowledgeElement:iq];
 	}
 	
-	[_XMPPForwarder forwardElement:iq from:layer to:self.delegate];
+	[_AFXMPPForwarder forwardElement:iq from:layer to:self.delegate];
 }
 
 - (void)connection:(XMPPConnection *)layer didReceiveMessage:(NSXMLElement *)message {
@@ -151,12 +151,12 @@
 		}
 	}
 	
-	[_XMPPForwarder forwardElement:message from:layer to:self.delegate];
+	[_AFXMPPForwarder forwardElement:message from:layer to:self.delegate];
 }
 
 @end
 
-@implementation XMPPServer (Private)
+@implementation AFXMPPServer (Private)
 
 - (XMPPConnection *)_connectionForNodeName:(NSString *)name {
 	return [self.connectedNodes objectForKey:name];

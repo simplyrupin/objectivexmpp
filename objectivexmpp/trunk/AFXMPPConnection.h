@@ -10,7 +10,7 @@
 
 @class NSXMLElement;
 
-@protocol XMPPConnectionDelegate, XMPPConnectionDataSource;
+@protocol AFXMPPConnectionDelegate, AFXMPPConnectionDataSource;
 
 /*!
 	\brief
@@ -19,7 +19,7 @@
 	\details
 	All XML stanza writes are funneled through <tt>-performWrite:forTag:withTimeout:</tt>, stream setup is handled separately.
  */
-@interface XMPPConnection : AFNetworkConnection <AFConnectionLayer> {
+@interface AFXMPPConnection : AFNetworkConnection <AFConnectionLayer> {
  @private
 	NSXMLElement *_receivedStreamElement;
 	NSXMLElement *_receivedFeatures;
@@ -50,7 +50,7 @@
 /*!
 	
  */
-@property (assign) id <XMPPConnectionDelegate, XMPPConnectionDataSource> delegate;
+@property (assign) id <AFXMPPConnectionDelegate, AFXMPPConnectionDataSource> delegate;
 
 /*! 
 	\brief
@@ -96,9 +96,9 @@
 
 /*!
 	\brief
-	Given an IQ element, you'll typically return an awkknowledgement. No other data is included in the stanza.
+	Given an IQ element, you'll typically return an awknowledgement. No other data is included in the stanza.
  */
-- (void)awknowledgeElement:(NSXMLElement *)iq;
+- (void)awknowledgeIQElement:(NSXMLElement *)iq;
 
 /*
 	Override points for XMPP extensions
@@ -113,7 +113,7 @@
 
 /*!
 	\brief
-	This forwards the element onto the delegate.
+	Forwards the element onto the delegate.
  */
 - (void)connectionDidReceiveElement:(NSXMLElement *)element;
 
@@ -123,7 +123,7 @@
 	\brief
 	This class doesn't currently specify a separate dataSource, these methods are just separated from the eventing callbacks in the <tt>XMPPConnectionDelegate</tt>.
  */
-@protocol XMPPConnectionDataSource <NSObject>
+@protocol AFXMPPConnectionDataSource <NSObject>
 
  @optional
 
@@ -132,11 +132,11 @@
 	After both streams open, the specification dictates that we send a <features xmlns="http://etherx.jabber.org/streams"/> element.
 	Clients may wish to customise the response.
  */
-- (NSArray *)connectionWillSendStreamFeatures:(XMPPConnection *)layer;
+- (NSArray *)connectionWillSendStreamFeatures:(AFXMPPConnection *)layer;
 
 @end
 
-@protocol XMPPConnectionDelegate <AFConnectionLayerControlDelegate>
+@protocol AFXMPPConnectionDelegate <AFConnectionLayerControlDelegate>
 
  @optional
 
@@ -144,24 +144,24 @@
 	\brief
 	This is called with an <iq/> element.
  */
-- (void)connection:(XMPPConnection *)layer didReceiveIQ:(NSXMLElement *)iq;
+- (void)connection:(AFXMPPConnection *)layer didReceiveIQ:(NSXMLElement *)iq;
 
 /*!
 	\brief
 	This is called with a <message/> element.
  */
-- (void)connection:(XMPPConnection *)layer didReceiveMessage:(NSXMLElement *)message;
+- (void)connection:(AFXMPPConnection *)layer didReceiveMessage:(NSXMLElement *)message;
 
 /*!
 	\brief
 	This is called with a <presence/> element.
  */
-- (void)connection:(XMPPConnection *)layer didReceivePresence:(NSXMLElement *)presence;
+- (void)connection:(AFXMPPConnection *)layer didReceivePresence:(NSXMLElement *)presence;
 
 /*!
 	\brief
 	This is a fall through and is only called if the specific stanza handling methods aren't implemented.
  */
-- (void)connection:(XMPPConnection *)layer didReceiveElement:(NSXMLElement *)element;
+- (void)connection:(AFXMPPConnection *)layer didReceiveElement:(NSXMLElement *)element;
 
 @end

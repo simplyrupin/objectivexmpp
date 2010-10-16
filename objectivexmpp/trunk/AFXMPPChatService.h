@@ -13,7 +13,7 @@
 @class AFServiceDiscoveryRunLoopSource;
 
 /*
- *	Local-Link TXT Record Keys and Values
+	Local-Link TXT Record Keys and Values
  */
 
 extern NSString *const XMPPServicePresenceStatusKey;
@@ -28,10 +28,11 @@ extern NSString *const XMPPServicePresenceFirstNameKey;
 extern NSString *const XMPPServicePresenceLastNameKey;
 
 /*!
-	@class
+	\brief
 	This service subclass encapsualtes an advertised _presence._tcp service and the behaviours accociated.
  */
-@interface XMPPChatService : AFNetService {
+@interface AFXMPPChatService : AFNetService {
+ @private
 	NSData *_avatarData;
 	
 	DNSServiceRef avatarQuery;
@@ -47,7 +48,10 @@ extern NSString *const XMPPServicePresenceLastNameKey;
 /*!
 	\brief
 	This property returns the image data rather than the image itself so that it is presentation-layer portable.
+	
+	\details
+	This is KVO compliant, when the service changes it's avatar, this property will auto-update.
  */
-@property (readonly, retain) NSData *avatarData; // Note: KVO compliant
+@property (readonly, retain) NSData *avatarData;
 
 @end
