@@ -43,65 +43,17 @@
 		535576F6104B03D700CE2C86 /* ObjectiveXMPP.m in Sources */ = {isa = PBXBuildFile; fileRef = 535576F4104B03D700CE2C86 /* ObjectiveXMPP.m */; };
 		535579BF104C3F3D00CE2C86 /* NSXMLNode+Additions.h in Headers */ = {isa = PBXBuildFile; fileRef = 535579BD104C3F3D00CE2C86 /* NSXMLNode+Additions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		535579C0104C3F3D00CE2C86 /* NSXMLNode+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 535579BE104C3F3D00CE2C86 /* NSXMLNode+Additions.m */; };
-		53D6A3360FEE6FEE00800C37 /* CoreNetworking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 530E26EA0FC890E400DBAB3E /* CoreNetworking.framework */; };
-		53D6A3410FEE701100800C37 /* AmberFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 530E26E60FC890E400DBAB3E /* AmberFoundation.framework */; };
 		53E10AAC0FF968E5006E39CF /* XMPPConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = 53E10AAA0FF968E5006E39CF /* XMPPConstants.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		53E10AAD0FF968E5006E39CF /* XMPPConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E10AAB0FF968E5006E39CF /* XMPPConstants.m */; };
 		53E10AAE0FF968E5006E39CF /* XMPPConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = 53E10AAA0FF968E5006E39CF /* XMPPConstants.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		53E10AAF0FF968E5006E39CF /* XMPPConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E10AAB0FF968E5006E39CF /* XMPPConstants.m */; };
+		53E650FE1269D69C0071D8F1 /* AmberFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53E650E41269D6740071D8F1 /* AmberFoundation.framework */; };
+		53E650FF1269D69C0071D8F1 /* CoreNetworking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53E650F11269D67F0071D8F1 /* CoreNetworking.framework */; };
+		53E651001269D69C0071D8F1 /* KissXML.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53C15FE81041DA05008D1E82 /* KissXML.framework */; };
 		8DC2EF530486A6940098B216 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C1666FE841158C02AAC07 /* InfoPlist.strings */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		530E26E10FC890E400DBAB3E /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 532A43FD0FB4B7A3006E409F /* Amber.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 53EE97470F190070008AD8C0;
-			remoteInfo = AmberKit;
-		};
-		530E26E30FC890E400DBAB3E /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 532A43FD0FB4B7A3006E409F /* Amber.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 537917750F7FC43B0064EB92;
-			remoteInfo = "AmberKit (Additions)";
-		};
-		530E26E50FC890E400DBAB3E /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 532A43FD0FB4B7A3006E409F /* Amber.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 539A60C30D2698B7001CD14A;
-			remoteInfo = AmberFoundation;
-		};
-		530E26E70FC890E400DBAB3E /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 532A43FD0FB4B7A3006E409F /* Amber.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 532F73DE0F0EB1AA004D6056;
-			remoteInfo = "AmberFoundation Touch";
-		};
-		530E26E90FC890E400DBAB3E /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 532A43FD0FB4B7A3006E409F /* Amber.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 5370E0710F5B0571008F5991;
-			remoteInfo = CoreNetworking;
-		};
-		530E26EB0FC890E400DBAB3E /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 532A43FD0FB4B7A3006E409F /* Amber.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 53BEF6A10F5B6A2700063B8D;
-			remoteInfo = "CoreNetworking Touch";
-		};
-		530E26F10FC890F400DBAB3E /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 532A43FD0FB4B7A3006E409F /* Amber.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 53BEF6A00F5B6A2700063B8D;
-			remoteInfo = "CoreNetworking Touch";
-		};
 		534E2F54101CCD3700AF8170 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 534E2F4D101CCD3700AF8170 /* KissXML.xcodeproj */;
@@ -123,26 +75,68 @@
 			remoteGlobalIDString = 53C15FE21041DA04008D1E82;
 			remoteInfo = KissXML;
 		};
-		53D6A3340FEE6FE700800C37 /* PBXContainerItemProxy */ = {
+		53E650E31269D6740071D8F1 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 532A43FD0FB4B7A3006E409F /* Amber.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 5370E0700F5B0571008F5991;
-			remoteInfo = CoreNetworking;
-		};
-		53D6A33F0FEE700D00800C37 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 532A43FD0FB4B7A3006E409F /* Amber.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 539A60C20D2698B7001CD14A;
+			containerPortal = 53E650D21269D6740071D8F1 /* AmberFoundation.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 539A60C30D2698B7001CD14A /* AmberFoundation.framework */;
 			remoteInfo = AmberFoundation;
 		};
-		53D6A3420FEE701A00800C37 /* PBXContainerItemProxy */ = {
+		53E650E51269D6740071D8F1 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 532A43FD0FB4B7A3006E409F /* Amber.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 532F73DD0F0EB1AA004D6056;
+			containerPortal = 53E650D21269D6740071D8F1 /* AmberFoundation.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 532F73DE0F0EB1AA004D6056 /* libAmberFoundation.a */;
 			remoteInfo = "AmberFoundation Touch";
+		};
+		53E650F01269D67F0071D8F1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 53E650E71269D67F0071D8F1 /* CoreNetworking.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 5370E0710F5B0571008F5991 /* CoreNetworking.framework */;
+			remoteInfo = CoreNetworking;
+		};
+		53E650F21269D67F0071D8F1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 53E650E71269D67F0071D8F1 /* CoreNetworking.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 53BEF6A10F5B6A2700063B8D /* libCoreNetworking.a */;
+			remoteInfo = "CoreNetworking Touch";
+		};
+		53E650F41269D6890071D8F1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 53E650D21269D6740071D8F1 /* AmberFoundation.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 532F73DD0F0EB1AA004D6056 /* AmberFoundation Touch */;
+			remoteInfo = "AmberFoundation Touch";
+		};
+		53E650F61269D6890071D8F1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 53E650E71269D67F0071D8F1 /* CoreNetworking.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 53BEF6A00F5B6A2700063B8D /* CoreNetworking Touch */;
+			remoteInfo = "CoreNetworking Touch";
+		};
+		53E650F81269D6910071D8F1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 534E2F4D101CCD3700AF8170 /* KissXML.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 53C15FE11041DA04008D1E82 /* KissXML */;
+			remoteInfo = KissXML;
+		};
+		53E650FA1269D6910071D8F1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 53E650D21269D6740071D8F1 /* AmberFoundation.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 539A60C20D2698B7001CD14A /* AmberFoundation */;
+			remoteInfo = AmberFoundation;
+		};
+		53E650FC1269D6910071D8F1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 53E650E71269D67F0071D8F1 /* CoreNetworking.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 5370E0700F5B0571008F5991 /* CoreNetworking */;
+			remoteInfo = CoreNetworking;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -163,7 +157,6 @@
 		532A429D0FB4B4B3006E409F /* XMPPChatService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMPPChatService.h; sourceTree = "<group>"; };
 		532A429E0FB4B4B3006E409F /* XMPPChatService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XMPPChatService.m; sourceTree = "<group>"; };
 		532A42DC0FB4B519006E409F /* libObjectiveXMPP.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libObjectiveXMPP.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		532A43FD0FB4B7A3006E409F /* Amber.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Amber.xcodeproj; path = ../Amber/framework/Amber.xcodeproj; sourceTree = SOURCE_ROOT; };
 		532A44230FB4B80E006E409F /* ObjectiveXMPP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjectiveXMPP.h; sourceTree = "<group>"; };
 		534E2F4D101CCD3700AF8170 /* KissXML.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = KissXML.xcodeproj; path = ../kissxml/KissXML.xcodeproj; sourceTree = SOURCE_ROOT; };
 		535576EC104B03A700CE2C86 /* _XMPPForwarder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _XMPPForwarder.h; sourceTree = "<group>"; };
@@ -173,6 +166,8 @@
 		535579BE104C3F3D00CE2C86 /* NSXMLNode+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSXMLNode+Additions.m"; sourceTree = "<group>"; };
 		53E10AAA0FF968E5006E39CF /* XMPPConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XMPPConstants.h; sourceTree = "<group>"; };
 		53E10AAB0FF968E5006E39CF /* XMPPConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XMPPConstants.m; sourceTree = "<group>"; };
+		53E650D21269D6740071D8F1 /* AmberFoundation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = AmberFoundation.xcodeproj; path = ../Amber/AmberFoundation/AmberFoundation.xcodeproj; sourceTree = SOURCE_ROOT; };
+		53E650E71269D67F0071D8F1 /* CoreNetworking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CoreNetworking.xcodeproj; path = ../Amber/CoreNetworking/CoreNetworking.xcodeproj; sourceTree = SOURCE_ROOT; };
 		8DC2EF5A0486A6940098B216 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8DC2EF5B0486A6940098B216 /* ObjectiveXMPP.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ObjectiveXMPP.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -190,8 +185,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				53D6A3410FEE701100800C37 /* AmberFoundation.framework in Frameworks */,
-				53D6A3360FEE6FEE00800C37 /* CoreNetworking.framework in Frameworks */,
+				53E650FE1269D69C0071D8F1 /* AmberFoundation.framework in Frameworks */,
+				53E650FF1269D69C0071D8F1 /* CoreNetworking.framework in Frameworks */,
+				53E651001269D69C0071D8F1 /* KissXML.framework in Frameworks */,
 				532A442B0FB4B850006E409F /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -226,7 +222,8 @@
 		0867D69AFE84028FC02AAC07 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				532A43FD0FB4B7A3006E409F /* Amber.xcodeproj */,
+				53E650D21269D6740071D8F1 /* AmberFoundation.xcodeproj */,
+				53E650E71269D67F0071D8F1 /* CoreNetworking.xcodeproj */,
 				534E2F4D101CCD3700AF8170 /* KissXML.xcodeproj */,
 				0867D69BFE84028FC02AAC07 /* Foundation.framework */,
 			);
@@ -269,19 +266,6 @@
 			name = "Other Sources";
 			sourceTree = "<group>";
 		};
-		530E26D60FC890E400DBAB3E /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				530E26E20FC890E400DBAB3E /* AmberKit.framework */,
-				530E26E40FC890E400DBAB3E /* libAmberKit.a */,
-				530E26E60FC890E400DBAB3E /* AmberFoundation.framework */,
-				530E26E80FC890E400DBAB3E /* libAmberFoundation.a */,
-				530E26EA0FC890E400DBAB3E /* CoreNetworking.framework */,
-				530E26EC0FC890E400DBAB3E /* libCoreNetworking.a */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		534E2F4E101CCD3700AF8170 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -318,6 +302,24 @@
 				532A428F0FB4B495006E409F /* XMPPServer.m */,
 			);
 			name = Core;
+			sourceTree = "<group>";
+		};
+		53E650D31269D6740071D8F1 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				53E650E41269D6740071D8F1 /* AmberFoundation.framework */,
+				53E650E61269D6740071D8F1 /* libAmberFoundation.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		53E650E81269D67F0071D8F1 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				53E650F11269D67F0071D8F1 /* CoreNetworking.framework */,
+				53E650F31269D67F0071D8F1 /* libCoreNetworking.a */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -370,9 +372,9 @@
 			buildRules = (
 			);
 			dependencies = (
-				530E26F20FC890F400DBAB3E /* PBXTargetDependency */,
-				53D6A3430FEE701A00800C37 /* PBXTargetDependency */,
 				534E2F57101CCD4200AF8170 /* PBXTargetDependency */,
+				53E650F51269D6890071D8F1 /* PBXTargetDependency */,
+				53E650F71269D6890071D8F1 /* PBXTargetDependency */,
 			);
 			name = "ObjectiveXMPP Touch";
 			productName = "AmberXMPP Touch";
@@ -391,8 +393,9 @@
 			buildRules = (
 			);
 			dependencies = (
-				53D6A3350FEE6FE700800C37 /* PBXTargetDependency */,
-				53D6A3400FEE700D00800C37 /* PBXTargetDependency */,
+				53E650F91269D6910071D8F1 /* PBXTargetDependency */,
+				53E650FB1269D6910071D8F1 /* PBXTargetDependency */,
+				53E650FD1269D6910071D8F1 /* PBXTargetDependency */,
 			);
 			name = ObjectiveXMPP;
 			productInstallPath = "$(HOME)/Library/Frameworks";
@@ -424,8 +427,12 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = 530E26D60FC890E400DBAB3E /* Products */;
-					ProjectRef = 532A43FD0FB4B7A3006E409F /* Amber.xcodeproj */;
+					ProductGroup = 53E650D31269D6740071D8F1 /* Products */;
+					ProjectRef = 53E650D21269D6740071D8F1 /* AmberFoundation.xcodeproj */;
+				},
+				{
+					ProductGroup = 53E650E81269D67F0071D8F1 /* Products */;
+					ProjectRef = 53E650E71269D67F0071D8F1 /* CoreNetworking.xcodeproj */;
 				},
 				{
 					ProductGroup = 534E2F4E101CCD3700AF8170 /* Products */;
@@ -441,48 +448,6 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		530E26E20FC890E400DBAB3E /* AmberKit.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = AmberKit.framework;
-			remoteRef = 530E26E10FC890E400DBAB3E /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		530E26E40FC890E400DBAB3E /* libAmberKit.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libAmberKit.a;
-			remoteRef = 530E26E30FC890E400DBAB3E /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		530E26E60FC890E400DBAB3E /* AmberFoundation.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = AmberFoundation.framework;
-			remoteRef = 530E26E50FC890E400DBAB3E /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		530E26E80FC890E400DBAB3E /* libAmberFoundation.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libAmberFoundation.a;
-			remoteRef = 530E26E70FC890E400DBAB3E /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		530E26EA0FC890E400DBAB3E /* CoreNetworking.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = CoreNetworking.framework;
-			remoteRef = 530E26E90FC890E400DBAB3E /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		530E26EC0FC890E400DBAB3E /* libCoreNetworking.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libCoreNetworking.a;
-			remoteRef = 530E26EB0FC890E400DBAB3E /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
 		534E2F55101CCD3700AF8170 /* libKissXML.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -495,6 +460,34 @@
 			fileType = wrapper.framework;
 			path = KissXML.framework;
 			remoteRef = 53C15FE71041DA05008D1E82 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		53E650E41269D6740071D8F1 /* AmberFoundation.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = AmberFoundation.framework;
+			remoteRef = 53E650E31269D6740071D8F1 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		53E650E61269D6740071D8F1 /* libAmberFoundation.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libAmberFoundation.a;
+			remoteRef = 53E650E51269D6740071D8F1 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		53E650F11269D67F0071D8F1 /* CoreNetworking.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = CoreNetworking.framework;
+			remoteRef = 53E650F01269D67F0071D8F1 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		53E650F31269D67F0071D8F1 /* libCoreNetworking.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libCoreNetworking.a;
+			remoteRef = 53E650F21269D67F0071D8F1 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -547,30 +540,35 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		530E26F20FC890F400DBAB3E /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = "CoreNetworking Touch";
-			targetProxy = 530E26F10FC890F400DBAB3E /* PBXContainerItemProxy */;
-		};
 		534E2F57101CCD4200AF8170 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = "KissXML Touch";
 			targetProxy = 534E2F56101CCD4200AF8170 /* PBXContainerItemProxy */;
 		};
-		53D6A3350FEE6FE700800C37 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = CoreNetworking;
-			targetProxy = 53D6A3340FEE6FE700800C37 /* PBXContainerItemProxy */;
-		};
-		53D6A3400FEE700D00800C37 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = AmberFoundation;
-			targetProxy = 53D6A33F0FEE700D00800C37 /* PBXContainerItemProxy */;
-		};
-		53D6A3430FEE701A00800C37 /* PBXTargetDependency */ = {
+		53E650F51269D6890071D8F1 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = "AmberFoundation Touch";
-			targetProxy = 53D6A3420FEE701A00800C37 /* PBXContainerItemProxy */;
+			targetProxy = 53E650F41269D6890071D8F1 /* PBXContainerItemProxy */;
+		};
+		53E650F71269D6890071D8F1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "CoreNetworking Touch";
+			targetProxy = 53E650F61269D6890071D8F1 /* PBXContainerItemProxy */;
+		};
+		53E650F91269D6910071D8F1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = KissXML;
+			targetProxy = 53E650F81269D6910071D8F1 /* PBXContainerItemProxy */;
+		};
+		53E650FB1269D6910071D8F1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = AmberFoundation;
+			targetProxy = 53E650FA1269D6910071D8F1 /* PBXContainerItemProxy */;
+		};
+		53E650FD1269D6910071D8F1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = CoreNetworking;
+			targetProxy = 53E650FC1269D6910071D8F1 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
