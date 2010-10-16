@@ -6,7 +6,7 @@
 //  Copyright 2010 Keith Duncan. All rights reserved.
 //
 
-#import "AFXMPPServer+AFPubSubAdditions.h"
+#import "AFXMPPPubSubModule.h"
 
 #import "objc/runtime.h"
 #import "AmberFoundation/AmberFoundation.h"
@@ -15,7 +15,37 @@
 #import "AFXMPPConstants.h"
 #import "AFXMPPMessage.h"
 
+@interface AFXMPPServer (AFXMPPPubSubAdditionsPrivate)
+- (NSMutableDictionary *)_mutableNotificationSubscribers;
+- (NSDictionary *)notificationSubscribers;
+- (NSMutableSet *)_subscriptionsForNodeName:(NSString *)name;
+@end
+
 @implementation AFXMPPServer (AFPubSubAdditions)
+
+- (BOOL)server:(AFXMPPServer *)server shouldHandleElement:(NSXMLElement *)element fromConnection:(AFXMPPConnection *)connection {
+	NSXMLElement *pubsubElement = [[iq elementsForName:@"pubsub"] onlyObject];
+	if (pubsubElement == nil) return NO;
+	
+	NSString *nodeName = [[pubsubElement attributeForName:@"node"] stringValue];
+	NSString *subscribingNode = [[pubsubElement attributeForName:@"jid"] stringValue];
+	
+	NSMutableSet *subscriptions = [self _subscriptionsForNodeName:nodeName];
+	
+	if ([[pubsubElement name] caseInsensitiveCompare:@"subscribe"] == NSOrderedSame) {
+		[subscriptions addObject:subscribingNode];
+	} else if ([[pubsubElement name] caseInsensitiveCompare:@"unsubscribe"] == NSOrderedSame) {
+		[subscriptions removeObject:subscribingNode];
+	}
+	
+	[connection awknowledgeIQElement:element];
+	
+	return YES;
+}
+
+@end
+
+@implementation AFXMPPServer (AFXMPPPubSubAdditionsPrivate)
 
 NSSTRING_CONTEXT(AFXMPPServerPubSubAdditionsSubscribersAssociationContext);
 
@@ -25,14 +55,6 @@ NSSTRING_CONTEXT(AFXMPPServerPubSubAdditionsSubscribersAssociationContext);
 
 - (NSDictionary *)notificationSubscribers {
 	return [[[self _mutableNotificationSubscribers] copy] autorelease];
-}
-
-- (AFXMPPConnection *)_connectionForNodeName:(NSString *)name {
-	return [[self connectedNodes] objectForKey:name];
-}
-
-- (NSString *)_nodeNameForConnection:(AFXMPPConnection *)connection {
-	return [connection peerAddress];
 }
 
 - (NSMutableSet *)_subscriptionsForNodeName:(NSString *)name {
@@ -47,6 +69,10 @@ NSSTRING_CONTEXT(AFXMPPServerPubSubAdditionsSubscribersAssociationContext);
 	
 	return subscriptions;
 }
+
+@end
+
+@implementation AFXMPPServer (AFXMPPPubSubAdditions)
 
 - (void)notifySubscribersForNode:(NSString *)nodeName withPayload:(NSArray *)itemElements {
 	NSXMLElement *itemsElement = [NSXMLElement elementWithName:@"items"];

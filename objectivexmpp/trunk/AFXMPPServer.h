@@ -29,6 +29,8 @@
 
 @property (readonly, retain) NSDictionary *connectedNodes;
 
+- (AFXMPPConnection *)connectionForNodeName:(NSString *)nodeName;
+
 @end
 
 /*!

@@ -43,10 +43,14 @@
 		535576F6104B03D700CE2C86 /* ObjectiveXMPP.m in Sources */ = {isa = PBXBuildFile; fileRef = 535576F4104B03D700CE2C86 /* ObjectiveXMPP.m */; };
 		535579BF104C3F3D00CE2C86 /* NSXMLNode+AFXMPPAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 535579BD104C3F3D00CE2C86 /* NSXMLNode+AFXMPPAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		535579C0104C3F3D00CE2C86 /* NSXMLNode+AFXMPPAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 535579BE104C3F3D00CE2C86 /* NSXMLNode+AFXMPPAdditions.m */; };
-		535672A8126A0B94002872B2 /* AFXMPPServer+AFPubSubAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 535672A6126A0B94002872B2 /* AFXMPPServer+AFPubSubAdditions.h */; };
-		535672A9126A0B94002872B2 /* AFXMPPServer+AFPubSubAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 535672A7126A0B94002872B2 /* AFXMPPServer+AFPubSubAdditions.m */; };
-		535672AA126A0B94002872B2 /* AFXMPPServer+AFPubSubAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 535672A6126A0B94002872B2 /* AFXMPPServer+AFPubSubAdditions.h */; };
-		535672AB126A0B94002872B2 /* AFXMPPServer+AFPubSubAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 535672A7126A0B94002872B2 /* AFXMPPServer+AFPubSubAdditions.m */; };
+		535672A8126A0B94002872B2 /* AFXMPPPubSubModule.h in Headers */ = {isa = PBXBuildFile; fileRef = 535672A6126A0B94002872B2 /* AFXMPPPubSubModule.h */; };
+		535672A9126A0B94002872B2 /* AFXMPPPubSubModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 535672A7126A0B94002872B2 /* AFXMPPPubSubModule.m */; };
+		535672AA126A0B94002872B2 /* AFXMPPPubSubModule.h in Headers */ = {isa = PBXBuildFile; fileRef = 535672A6126A0B94002872B2 /* AFXMPPPubSubModule.h */; };
+		535672AB126A0B94002872B2 /* AFXMPPPubSubModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 535672A7126A0B94002872B2 /* AFXMPPPubSubModule.m */; };
+		535672B4126A0E2D002872B2 /* AFXMPPServerModule.h in Headers */ = {isa = PBXBuildFile; fileRef = 535672B2126A0E2D002872B2 /* AFXMPPServerModule.h */; };
+		535672B5126A0E2D002872B2 /* AFXMPPServerModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 535672B3126A0E2D002872B2 /* AFXMPPServerModule.m */; };
+		535672B6126A0E2D002872B2 /* AFXMPPServerModule.h in Headers */ = {isa = PBXBuildFile; fileRef = 535672B2126A0E2D002872B2 /* AFXMPPServerModule.h */; };
+		535672B7126A0E2D002872B2 /* AFXMPPServerModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 535672B3126A0E2D002872B2 /* AFXMPPServerModule.m */; };
 		53E10AAC0FF968E5006E39CF /* AFXMPPConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = 53E10AAA0FF968E5006E39CF /* AFXMPPConstants.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		53E10AAD0FF968E5006E39CF /* AFXMPPConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 53E10AAB0FF968E5006E39CF /* AFXMPPConstants.m */; };
 		53E10AAE0FF968E5006E39CF /* AFXMPPConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = 53E10AAA0FF968E5006E39CF /* AFXMPPConstants.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -138,8 +142,10 @@
 		535576F4104B03D700CE2C86 /* ObjectiveXMPP.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObjectiveXMPP.m; sourceTree = "<group>"; };
 		535579BD104C3F3D00CE2C86 /* NSXMLNode+AFXMPPAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSXMLNode+AFXMPPAdditions.h"; sourceTree = "<group>"; };
 		535579BE104C3F3D00CE2C86 /* NSXMLNode+AFXMPPAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSXMLNode+AFXMPPAdditions.m"; sourceTree = "<group>"; };
-		535672A6126A0B94002872B2 /* AFXMPPServer+AFPubSubAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AFXMPPServer+AFPubSubAdditions.h"; sourceTree = "<group>"; };
-		535672A7126A0B94002872B2 /* AFXMPPServer+AFPubSubAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "AFXMPPServer+AFPubSubAdditions.m"; sourceTree = "<group>"; };
+		535672A6126A0B94002872B2 /* AFXMPPPubSubModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFXMPPPubSubModule.h; sourceTree = "<group>"; };
+		535672A7126A0B94002872B2 /* AFXMPPPubSubModule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFXMPPPubSubModule.m; sourceTree = "<group>"; };
+		535672B2126A0E2D002872B2 /* AFXMPPServerModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFXMPPServerModule.h; sourceTree = "<group>"; };
+		535672B3126A0E2D002872B2 /* AFXMPPServerModule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFXMPPServerModule.m; sourceTree = "<group>"; };
 		53E10AAA0FF968E5006E39CF /* AFXMPPConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFXMPPConstants.h; sourceTree = "<group>"; };
 		53E10AAB0FF968E5006E39CF /* AFXMPPConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFXMPPConstants.m; sourceTree = "<group>"; };
 		53E650D21269D6740071D8F1 /* AmberFoundation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = AmberFoundation.xcodeproj; path = ../Amber/AmberFoundation/AmberFoundation.xcodeproj; sourceTree = SOURCE_ROOT; };
@@ -262,6 +268,8 @@
 		53567299126A0B42002872B2 /* Modules */ = {
 			isa = PBXGroup;
 			children = (
+				535672B2126A0E2D002872B2 /* AFXMPPServerModule.h */,
+				535672B3126A0E2D002872B2 /* AFXMPPServerModule.m */,
 				535672A5126A0B60002872B2 /* PubSub XEP 0060 */,
 			);
 			name = Modules;
@@ -270,8 +278,8 @@
 		535672A5126A0B60002872B2 /* PubSub XEP 0060 */ = {
 			isa = PBXGroup;
 			children = (
-				535672A6126A0B94002872B2 /* AFXMPPServer+AFPubSubAdditions.h */,
-				535672A7126A0B94002872B2 /* AFXMPPServer+AFPubSubAdditions.m */,
+				535672A6126A0B94002872B2 /* AFXMPPPubSubModule.h */,
+				535672A7126A0B94002872B2 /* AFXMPPPubSubModule.m */,
 			);
 			name = "PubSub XEP 0060";
 			sourceTree = "<group>";
@@ -321,7 +329,8 @@
 				53E10AAC0FF968E5006E39CF /* AFXMPPConstants.h in Headers */,
 				530457581000122F00EA4C1E /* AFXMPPMessage.h in Headers */,
 				535576F0104B03A700CE2C86 /* _AFXMPPForwarder.h in Headers */,
-				535672AA126A0B94002872B2 /* AFXMPPServer+AFPubSubAdditions.h in Headers */,
+				535672AA126A0B94002872B2 /* AFXMPPPubSubModule.h in Headers */,
+				535672B6126A0E2D002872B2 /* AFXMPPServerModule.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -339,7 +348,8 @@
 				530457561000122F00EA4C1E /* AFXMPPMessage.h in Headers */,
 				535576EE104B03A700CE2C86 /* _AFXMPPForwarder.h in Headers */,
 				535579BF104C3F3D00CE2C86 /* NSXMLNode+AFXMPPAdditions.h in Headers */,
-				535672A8126A0B94002872B2 /* AFXMPPServer+AFPubSubAdditions.h in Headers */,
+				535672A8126A0B94002872B2 /* AFXMPPPubSubModule.h in Headers */,
+				535672B4126A0E2D002872B2 /* AFXMPPServerModule.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -482,7 +492,8 @@
 				530457591000122F00EA4C1E /* AFXMPPMessage.m in Sources */,
 				535576F1104B03A700CE2C86 /* _AFXMPPForwarder.m in Sources */,
 				535576F6104B03D700CE2C86 /* ObjectiveXMPP.m in Sources */,
-				535672AB126A0B94002872B2 /* AFXMPPServer+AFPubSubAdditions.m in Sources */,
+				535672AB126A0B94002872B2 /* AFXMPPPubSubModule.m in Sources */,
+				535672B7126A0E2D002872B2 /* AFXMPPServerModule.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -500,7 +511,8 @@
 				535576EF104B03A700CE2C86 /* _AFXMPPForwarder.m in Sources */,
 				535576F5104B03D700CE2C86 /* ObjectiveXMPP.m in Sources */,
 				535579C0104C3F3D00CE2C86 /* NSXMLNode+AFXMPPAdditions.m in Sources */,
-				535672A9126A0B94002872B2 /* AFXMPPServer+AFPubSubAdditions.m in Sources */,
+				535672A9126A0B94002872B2 /* AFXMPPPubSubModule.m in Sources */,
+				535672B5126A0E2D002872B2 /* AFXMPPServerModule.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -51,6 +51,10 @@
 	[super dealloc];
 }
 
+- (AFXMPPConnection *)connectionForNodeName:(NSString *)nodeName {
+	return [[self connectedNodes] objectForKey:nodeName];
+}
+
 @end
 
 @implementation AFXMPPServer (Delegate)
@@ -78,28 +82,13 @@
 }
 
 - (void)connection:(AFXMPPConnection *)layer didReceiveIQ:(NSXMLElement *)iq {
-	NSXMLElement *pubsubElement = [[iq elementsForName:@"pubsub"] onlyObject];
+#warning pass through the modules
 	
-	if (pubsubElement != nil) {
-		NSString *nodeName = [[pubsubElement attributeForName:@"node"] stringValue];
-		NSString *subscribingNode = [[pubsubElement attributeForName:@"jid"] stringValue];
-		
-		NSMutableSet *subscriptions = [self _subscriptionsForNodeName:nodeName];
-		
-		if ([[pubsubElement name] caseInsensitiveCompare:@"subscribe"] == NSOrderedSame) {
-			[subscriptions addObject:subscribingNode];
-		} else if ([[pubsubElement name] caseInsensitiveCompare:@"unsubscribe"] == NSOrderedSame) {
-			[subscriptions removeObject:subscribingNode];
-		}
-		
-		[layer awknowledgeIQElement:iq];
-	}
-	
-	[_AFXMPPForwarder forwardElement:iq from:layer to:self.delegate];
+	[_AFXMPPForwarder forwardElement:iq from:layer to:[self delegate]];
 }
 
 - (void)connection:(AFXMPPConnection *)layer didReceiveMessage:(NSXMLElement *)message {
-	NSString *fromJID = [self _nodeNameForConnection:layer];
+	NSString *fromJID = [layer peerAddress];
 	
 	NSString *toJID = [[message attributeForName:@"to"] stringValue];
 	NSParameterAssert(toJID != nil);
@@ -110,7 +99,7 @@
 	}
 	
 	if (shouldForwardToReceiver) {
-		AFXMPPConnection *remoteConnection = [self _connectionForNodeName:toJID];
+		AFXMPPConnection *remoteConnection = [self connectionForNodeName:toJID];
 		[remoteConnection sendElement:message context:NULL];
 		
 		if (remoteConnection == nil) {

@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
+#import "AFXMPPServerModule.h"
 #import "AFXMPPServer.h"
 
 /*
@@ -15,13 +16,17 @@
 	PubSub is documented in XEP-0060 
  */
 
-@interface AFXMPPServer (AFPubSubAdditions)
+@interface AFXMPPPubSubModule : AFXMPPServerModule
 
 /*!
 	\brief
 	
  */
 @property (readonly) NSDictionary *notificationSubscribers;
+
+@end
+
+@interface AFXMPPServer (AFXMPPPubSubAdditions)
 
 /*!
 	\brief
