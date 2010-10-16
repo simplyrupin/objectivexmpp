@@ -87,7 +87,7 @@ static void ImageQueryReply(DNSServiceRef serviceRef, DNSServiceFlags flags, uin
 	error = DNSServiceQueryRecord(&avatarQuery, 0, kDNSServiceInterfaceIndexAny, [[self fullName] UTF8String], kDNSServiceType_NULL, kDNSServiceClass_IN, ImageQueryReply, self);
 	if (error != kDNSServiceErr_NoError) return;
 	
-	avatarQuerySource = [[AFServiceDiscoveryRunLoopSource alloc] initWithService:avatarQuery];
+	avatarQuerySource = [[AFServiceDiscoveryRunLoopSource alloc] initWithDNSService:avatarQuery];
 	[avatarQuerySource scheduleInRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
 }
 
