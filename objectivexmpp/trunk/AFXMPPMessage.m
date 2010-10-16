@@ -6,7 +6,7 @@
 //  Copyright 2009 thirty-three. All rights reserved.
 //
 
-#import "XMPPMessage.h"
+#import "AFXMPPMessage.h"
 
 #import "NSXMLNode+AFXMPPAdditions.h"
 

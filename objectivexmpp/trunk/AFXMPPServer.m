@@ -8,13 +8,14 @@
 
 #import "AFXMPPServer.h"
 
-#import "XMPPConstants.h"
-#import "XMPPMessage.h"
-#import "XMPPConnection.h"
-#import "_AFXMPPForwarder.h"
-
 #import <objc/message.h>
 #import "AmberFoundation/AmberFoundation.h"
+
+#import "AFXMPPConstants.h"
+#import "AFXMPPMessage.h"
+#import "AFXMPPConnection.h"
+
+#import "_AFXMPPForwarder.h"
 
 #warning this class should write to an error log, take a look at ASL
 
@@ -23,8 +24,8 @@
 @end
 
 @interface AFXMPPServer (Private)
-- (XMPPConnection *)_connectionForNodeName:(NSString *)name;
-- (NSString *)_nodeNameForConnection:(XMPPConnection *)connection;
+- (AFXMPPConnection *)_connectionForNodeName:(NSString *)name;
+- (NSString *)_nodeNameForConnection:(AFXMPPConnection *)connection;
 
 - (NSMutableSet *)_subscriptionsForNodeName:(NSString *)name;
 @end
@@ -37,7 +38,7 @@
 @synthesize connectedNodes=_connectedNodes;
 
 + (id)server {
-	return [[[self alloc] initWithEncapsulationClass:[XMPPConnection class]] autorelease];
+	return [[[self alloc] initWithEncapsulationClass:[AFXMPPConnection class]] autorelease];
 }
 
 - (id)initWithEncapsulationClass:(Class)clientClass {
@@ -64,7 +65,7 @@
 	[itemsElement addAttribute:[NSXMLElement attributeWithName:@"node" stringValue:nodeName]];
 	[itemsElement setChildren:itemElements];
 	
-	NSXMLElement *eventElement = [NSXMLElement elementWithName:@"event" URI:XMPPNamespacePubSubEventURI];	
+	NSXMLElement *eventElement = [NSXMLElement elementWithName:@"event" URI:AFXMPPNamespacePubSubEventURI];
 	[eventElement addChild:itemsElement];
 	
 	NSXMLElement *messageElement = [NSXMLElement elementWithName:AFXMPPStanzaMessageElementName];
@@ -73,7 +74,7 @@
 	NSSet *subscribers = [self _subscriptionsForNodeName:nodeName];
 	
 	for (NSString *currentJID in subscribers) {
-		XMPPConnection *connection = [self.connectedNodes objectForKey:currentJID];
+		AFXMPPConnection *connection = [self.connectedNodes objectForKey:currentJID];
 		if (connection == nil) continue;
 		
 		[messageElement setAttributes:nil];
@@ -98,8 +99,8 @@
 #endif
 			= [self superclass],
 	};
-	(void (*)(id, SEL, id))objc_msgSendSuper(&superclass, _cmd, layer);
-	if (![layer isKindOfClass:[XMPPConnection class]]) return;
+	(void (*)(struct objc_super *, SEL, id))objc_msgSendSuper(&superclass, _cmd, layer);
+	if (![layer isKindOfClass:[AFXMPPConnection class]]) return;
 	
 	id peerAddress = [layer peerAddress];
 	if (peerAddress != nil) [_connectedNodes setObject:layer forKey:peerAddress];
@@ -110,7 +111,7 @@
 	[layer close];
 }
 
-- (void)connection:(XMPPConnection *)layer didReceiveIQ:(NSXMLElement *)iq {
+- (void)connection:(AFXMPPConnection *)layer didReceiveIQ:(NSXMLElement *)iq {
 	NSXMLElement *pubsubElement = [[iq elementsForName:@"pubsub"] onlyObject];
 	
 	if (pubsubElement != nil) {
@@ -125,13 +126,13 @@
 			[subscriptions removeObject:subscribingNode];
 		}
 		
-		[layer awknowledgeElement:iq];
+		[layer awknowledgeIQElement:iq];
 	}
 	
 	[_AFXMPPForwarder forwardElement:iq from:layer to:self.delegate];
 }
 
-- (void)connection:(XMPPConnection *)layer didReceiveMessage:(NSXMLElement *)message {
+- (void)connection:(AFXMPPConnection *)layer didReceiveMessage:(NSXMLElement *)message {
 	NSString *fromJID = [self _nodeNameForConnection:layer];
 	
 	NSString *toJID = [[message attributeForName:@"to"] stringValue];
@@ -143,7 +144,7 @@
 	}
 	
 	if (shouldForwardToReceiver) {
-		XMPPConnection *remoteConnection = [self _connectionForNodeName:toJID];
+		AFXMPPConnection *remoteConnection = [self _connectionForNodeName:toJID];
 		[remoteConnection sendElement:message context:NULL];
 		
 		if (remoteConnection == nil) {
@@ -158,11 +159,11 @@
 
 @implementation AFXMPPServer (Private)
 
-- (XMPPConnection *)_connectionForNodeName:(NSString *)name {
+- (AFXMPPConnection *)_connectionForNodeName:(NSString *)name {
 	return [self.connectedNodes objectForKey:name];
 }
 
-- (NSString *)_nodeNameForConnection:(XMPPConnection *)connection {
+- (NSString *)_nodeNameForConnection:(AFXMPPConnection *)connection {
 	return [connection peerAddress];
 }
 

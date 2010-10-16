@@ -42,7 +42,7 @@
 	\brief
 	XMPPConnectionDelegate methods that are implemented in the server, are forwarded to it's delegate if implemented.
  */
-@protocol AFXMPPServerDelegate <AFNetworkServerDelegate, XMPPConnectionDelegate>
+@protocol AFXMPPServerDelegate <AFNetworkServerDelegate, AFXMPPConnectionDelegate>
 
  @optional
 

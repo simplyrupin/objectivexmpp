@@ -12,7 +12,7 @@
 	\brief
 	Bonjour service discovery type for browsing
  */
-extern NSString *const XMPPServiceDiscoveryType;
+extern NSString *const AFXMPPServiceDiscoveryType;
 
 /*
 	Namespaces
@@ -22,21 +22,21 @@ extern NSString *const XMPPServiceDiscoveryType;
 	\brief
 	Default URI for the document.
  */
-extern NSString *const XMPPNamespaceClientDefaultURI;
+extern NSString *const AFXMPPNamespaceClientDefaultURI;
 
 /*!
 	\brief
 	URI for the stream elements document, the prefix is commonly 'stream'.
  */
-extern NSString *const XMPPNamespaceStreamURI;
+extern NSString *const AFXMPPNamespaceStreamURI;
 
 /*!
 	
  */
-extern NSString *const XMPPNamespaceRegistrationURI;
+extern NSString *const AFXMPPNamespaceRegistrationURI;
 
 /*!
  
  */
-extern NSString *const XMPPNamespacePubSubURI;
-extern NSString *const XMPPNamespacePubSubEventURI;
+extern NSString *const AFXMPPNamespacePubSubURI;
+extern NSString *const AFXMPPNamespacePubSubEventURI;

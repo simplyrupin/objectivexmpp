@@ -9,7 +9,7 @@
 #import "AFXMPPRoster.h"
 
 #import "AFXMPPChatService.h"
-#import "XMPPConstants.h"
+#import "AFXMPPConstants.h"
 
 #import "AmberFoundation/AmberFoundation.h"
 #import "CoreNetworking/CoreNetworking.h"
@@ -51,15 +51,15 @@ NSString *const kXMPPRosterBonjourDomain = @"local.";
 }
 
 - (void)searchForBonjourServices {
-	[self.browser searchForServicesOfType:XMPPServiceDiscoveryType inDomain:kXMPPRosterBonjourDomain];
+	[self.browser searchForServicesOfType:AFXMPPServiceDiscoveryType inDomain:kXMPPRosterBonjourDomain];
 }
 
 - (void)addBonjourServicesObject:(AFXMPPChatService *)object {
-	[bonjourServices addObject:object];
+	[self.bonjourServices addObject:object];
 }
 
 - (void)removeBonjourServicesObject:(AFXMPPChatService *)object {
-	[bonjourServices removeObject:object];
+	[self.bonjourServices removeObject:object];
 }
 
 @end

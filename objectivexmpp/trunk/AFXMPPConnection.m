@@ -8,16 +8,18 @@
 
 #import "AFXMPPConnection.h"
 
-#import "XMPPConstants.h"
-#import "XMPPDigestAuthentication.h"
-#import "XMPPMessage.h"
-#import "_AFXMPPForwarder.h"
-
 #if TARGET_OS_IPHONE
 #import <CFNetwork/CFNetwork.h>
 #endif
+
 #import "AmberFoundation/AmberFoundation.h"
 #import "CoreNetworking/CoreNetworking.h"
+
+#import "AFXMPPConstants.h"
+#import "AFXMPPDigestAuthentication.h"
+#import "AFXMPPMessage.h"
+
+#import "_AFXMPPForwarder.h"
 
 #define DEBUG_SEND 1
 #define DEBUG_RECV 1
@@ -90,7 +92,7 @@ enum {
 }
 
 + (NSString *)serviceDiscoveryType {
-	return XMPPServiceDiscoveryType;
+	return AFXMPPServiceDiscoveryType;
 }
 
 + (NSString *)clientStreamVersion {
@@ -179,7 +181,7 @@ enum {
 	[methodElement addAttribute:[NSXMLElement attributeWithName:@"node" stringValue:name]];
 	[methodElement addAttribute:[NSXMLElement attributeWithName:@"jid" stringValue:self.localAddress]];
 	
-	NSXMLElement *pubsubElement = [NSXMLElement elementWithName:@"pubsub" URI:XMPPNamespacePubSubURI];
+	NSXMLElement *pubsubElement = [NSXMLElement elementWithName:@"pubsub" URI:AFXMPPNamespacePubSubURI];
 	[pubsubElement addChild:methodElement];
 	
 	NSXMLElement *iqElement = [NSXMLElement elementWithName:AFXMPPStanzaIQElementName];
@@ -337,7 +339,7 @@ enum {
 		[openingTag appendFormat:@"id='%@' ", [[NSProcessInfo processInfo] globallyUniqueString], nil];
 	}
 	
-	[openingTag appendFormat:@"xmlns='%@' xmlns:stream='%@'>", XMPPNamespaceClientDefaultURI, XMPPNamespaceStreamURI, nil];
+	[openingTag appendFormat:@"xmlns='%@' xmlns:stream='%@'>", AFXMPPNamespaceClientDefaultURI, AFXMPPNamespaceStreamURI, nil];
 	
 	[super performWrite:[openingTag dataUsingEncoding:NSUTF8StringEncoding] withTimeout:TIMEOUT_WRITE context:&XMPPConnectionStartContext];
 }
@@ -539,7 +541,7 @@ enum {
 	if (_receiveState == StreamNegotiating) {
 #warning check this error parsing, ensure the domain and code are correct
 		if ([[error domain] isEqualToString:AFCoreNetworkingBundleIdentifier] && [error code] == AFNetworkTransportErrorTimeout) {
-			printf("%s, endpoint <stream:features xmlns:stream=\"%s\"> expected but not received, ignoring\n", [[super description] UTF8String], [XMPPNamespaceStreamURI UTF8String], nil);
+			printf("%s, endpoint <stream:features xmlns:stream=\"%s\"> expected but not received, ignoring\n", [[super description] UTF8String], [AFXMPPNamespaceStreamURI UTF8String], nil);
 			
 			_receiveState = StreamConnected;
 			[self _streamDidOpen];
