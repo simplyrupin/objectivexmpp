@@ -8,7 +8,7 @@
 
 #import "_AFXMPPForwarder.h"
 
-#import "XMPPMessage.h"
+#import "AFXMPPMessage.h"
 
 @implementation _AFXMPPForwarder
 
