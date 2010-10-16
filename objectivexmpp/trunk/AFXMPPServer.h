@@ -21,7 +21,6 @@
 	NSString *_hostnode;
 	
 	NSMutableDictionary *_connectedNodes;
-	NSMutableDictionary *_nodeSubscriptions;
 }
 
 @property (assign) id <AFXMPPServerDelegate> delegate;
@@ -29,12 +28,6 @@
 @property (copy) NSString *hostnode;
 
 @property (readonly, retain) NSDictionary *connectedNodes;
-
-/*!
-	\brief
-	For XEP-0060.
- */
-- (void)notifySubscribersForNode:(NSString *)nodeName withPayload:(NSArray *)itemElements;
 
 @end
 

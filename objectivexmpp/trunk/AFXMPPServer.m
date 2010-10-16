@@ -23,13 +23,6 @@
 @property (readwrite, retain) NSDictionary *connectedNodes;
 @end
 
-@interface AFXMPPServer (Private)
-- (AFXMPPConnection *)_connectionForNodeName:(NSString *)name;
-- (NSString *)_nodeNameForConnection:(AFXMPPConnection *)connection;
-
-- (NSMutableSet *)_subscriptionsForNodeName:(NSString *)name;
-@end
-
 @implementation AFXMPPServer
 
 @dynamic delegate;
@@ -46,7 +39,6 @@
 	if (self == nil) return nil;
 	
 	_connectedNodes = [[NSMutableDictionary alloc] init];
-	_nodeSubscriptions = [[NSMutableDictionary alloc] init];
 	
 	return self;
 }
@@ -55,34 +47,8 @@
 	[_hostnode release];
 	
 	[_connectedNodes release];
-	[_nodeSubscriptions release];
 	
 	[super dealloc];
-}
-
-- (void)notifySubscribersForNode:(NSString *)nodeName withPayload:(NSArray *)itemElements {
-	NSXMLElement *itemsElement = [NSXMLElement elementWithName:@"items"];
-	[itemsElement addAttribute:[NSXMLElement attributeWithName:@"node" stringValue:nodeName]];
-	[itemsElement setChildren:itemElements];
-	
-	NSXMLElement *eventElement = [NSXMLElement elementWithName:@"event" URI:AFXMPPNamespacePubSubEventURI];
-	[eventElement addChild:itemsElement];
-	
-	NSXMLElement *messageElement = [NSXMLElement elementWithName:AFXMPPStanzaMessageElementName];
-	[messageElement addChild:eventElement];
-	
-	NSSet *subscribers = [self _subscriptionsForNodeName:nodeName];
-	
-	for (NSString *currentJID in subscribers) {
-		AFXMPPConnection *connection = [self.connectedNodes objectForKey:currentJID];
-		if (connection == nil) continue;
-		
-		[messageElement setAttributes:nil];
-		[messageElement addAttribute:[NSXMLElement attributeWithName:@"from" stringValue:self.hostnode]];
-		[messageElement addAttribute:[NSXMLElement attributeWithName:@"to" stringValue:currentJID]];
-		
-		[connection sendElement:messageElement context:NULL];
-	}
 }
 
 @end
@@ -153,29 +119,6 @@
 	}
 	
 	[_AFXMPPForwarder forwardElement:message from:layer to:self.delegate];
-}
-
-@end
-
-@implementation AFXMPPServer (Private)
-
-- (AFXMPPConnection *)_connectionForNodeName:(NSString *)name {
-	return [self.connectedNodes objectForKey:name];
-}
-
-- (NSString *)_nodeNameForConnection:(AFXMPPConnection *)connection {
-	return [connection peerAddress];
-}
-
-- (NSMutableSet *)_subscriptionsForNodeName:(NSString *)name {
-	NSMutableSet *subscriptions = [_nodeSubscriptions objectForKey:name];
-	
-	if (subscriptions == nil) {
-		subscriptions = [NSMutableDictionary dictionaryWithCapacity:1];
-		[_nodeSubscriptions setObject:subscriptions forKey:name];
-	}
-	
-	return subscriptions;
 }
 
 @end
