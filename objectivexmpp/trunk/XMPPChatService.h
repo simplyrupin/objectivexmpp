@@ -39,13 +39,13 @@ extern NSString *const XMPPServicePresenceLastNameKey;
 }
 
 /*!
-	@brief
+	\brief
 	This is the JID of the endpoint, identifier just sounds nicer than JID.
  */
 @property (readonly) NSString *identifier;
 
 /*!
-	@brief
+	\brief
 	This property returns the image data rather than the image itself so that it is presentation-layer portable.
  */
 @property (readonly, retain) NSData *avatarData; // Note: KVO compliant

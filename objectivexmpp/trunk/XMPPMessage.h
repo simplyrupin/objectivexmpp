@@ -22,22 +22,22 @@ extern NSString *const XMPPStanzaPresenceElementName;
  */
 
 /*!
-	@brief
+	\brief
 	This element is transmitted after the opening of the XML stream to indicate which features the server supports.
  */
 extern NSString *const XMPPStreamFeaturesLocalElementName;
 
 /*!
-	@brief
+	\brief
 	This function takes either an NSXMLElement representing an HTML body, or a string.
  
-	@result
+	\return
 	A <message/> element suitable for serialising.
  */
 extern NSXMLElement *XMPPMessageWithBody(NSString *bodyValue);
 
 /*!
-	@brief
+	\brief
 	Use this function to determine if the message represents a message mid-compose.
  */
 extern BOOL XMPPMessageIsComposing(NSXMLElement *element);

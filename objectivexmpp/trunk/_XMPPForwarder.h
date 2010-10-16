@@ -11,7 +11,7 @@
 #import "XMPPConnection.h"
 
 /*!
-	@brief
+	\brief
 	This class introspects an element and attempts to forward it to an appropriate handler method.
  */
 @interface _XMPPForwarder : NSProxy

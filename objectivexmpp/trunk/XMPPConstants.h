@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 
 /*!
-	@brief
+	\brief
 	Bonjour service discovery type for browsing
  */
 extern NSString *const XMPPServiceDiscoveryType;
@@ -19,13 +19,13 @@ extern NSString *const XMPPServiceDiscoveryType;
  */
 
 /*!
-	@brief
+	\brief
 	Default URI for the document.
  */
 extern NSString *const XMPPNamespaceClientDefaultURI;
 
 /*!
-	@brief
+	\brief
 	URI for the stream elements document, the prefix is commonly 'stream'.
  */
 extern NSString *const XMPPNamespaceStreamURI;

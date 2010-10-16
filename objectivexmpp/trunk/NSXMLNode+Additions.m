@@ -8,7 +8,7 @@
 
 #import "NSXMLNode+Additions.h"
 
-@implementation NSXMLNode (Additions)
+@implementation NSXMLNode (ObjectiveXMPPAdditions)
 
 
 

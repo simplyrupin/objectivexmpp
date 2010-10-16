@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-#import "CoreNetworking/AFNetworkServer.h"
+#import "CoreNetworking/CoreNetworking.h"
 #import "ObjectiveXMPP/XMPPConnection.h"
 
 @class NSXMLElement;
@@ -17,6 +17,7 @@
 @protocol XMPPServerDelegate;
 
 @interface XMPPServer : AFNetworkServer {
+ @private
 	NSString *_hostnode;
 	
 	NSMutableDictionary *_connectedNodes;
@@ -29,12 +30,16 @@
 
 @property (readonly, retain) NSDictionary *connectedNodes;
 
+/*!
+	\brief
+	For XEP-0060.
+ */
 - (void)notifySubscribersForNode:(NSString *)nodeName withPayload:(NSArray *)itemElements;
 
 @end
 
 /*!
-	@brief
+	\brief
 	XMPPConnectionDelegate methods that are implemented in the server, are forwarded to it's delegate if implemented.
  */
 @protocol XMPPServerDelegate <AFNetworkServerDelegate, XMPPConnectionDelegate>
@@ -42,8 +47,9 @@
  @optional
 
 /*!
-	@brief
+	\brief
+	Assumes YES if unimplemented.
  */
-- (BOOL)server:(XMPPServer *)server shouldForwardMessage:(NSXMLElement *)message fromNode:(NSString *)JID toNode:(NSString *)JID; // Note: assumes YES if unimplemented
+- (BOOL)server:(XMPPServer *)server shouldForwardMessage:(NSXMLElement *)message fromNode:(NSString *)JID toNode:(NSString *)JID;
 
 @end

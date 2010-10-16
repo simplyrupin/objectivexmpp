@@ -300,7 +300,7 @@ enum {
 @implementation XMPPConnection (PrivateWriting)
 
 /*
-	@brief
+	\brief
 	The opening negotiation is covered by RFC3920 §4 [http://xmpp.org/rfcs/rfc3920.html#streams]
  */
 - (void)_sendOpeningNegotiation {
@@ -369,7 +369,7 @@ enum {
 
 
 /*!
-	@brief
+	\brief
 	This method should be used for internal writes, since it doesn't check to see if the stream is open.
 	External element sends are queued until the stream is opened.
  */

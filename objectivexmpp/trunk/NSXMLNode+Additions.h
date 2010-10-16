@@ -8,7 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface NSXMLNode (Additions)
+@interface NSXMLNode (ObjectiveXMPPAdditions)
 
 - (NSArray *)nodesForXPath:(NSString *)xpath namespaces:(NSDictionary *)prefixMappings error:(NSError **)error;
 
